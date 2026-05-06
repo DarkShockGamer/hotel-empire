@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Grand — Hotel Empire</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+:root {
+  --ivory:    #f9f5ef;
+  --linen:    #f2ece0;
+  --linen2:   #e8dfd0;
+  --linen3:   #d9cdb8;
+  --brass:    #b8965a;
+  --brass-lt: #d4b07a;
+  --brass-dk: #8a6a35;
+  --espresso: #2c1f0e;
+  --espresso2:#3d2d16;
+  --brown:    #6b4c28;
+  --brown-lt: #9a7248;
+  --text:     #2c1f0e;
+  --text-md:  #6b4c28;
+  --text-lt:  #a08060;
+  --text-fnt: #c4aa88;
+  --white:    #ffffff;
+  --green:    #4a7c59;
+  --green-lt: #e8f0eb;
+  --red-lt:   #f5e8e8;
+  --red:      #8b3a3a;
+  --radius:   4px;
+  --radius-lg:10px;
+  --shadow:   0 2px 16px rgba(44,31,14,0.10);
+  --shadow-lg:0 8px 40px rgba(44,31,14,0.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--linen);
+  color: var(--text);
+  /* Subtle linen texture via repeating gradient */
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(184,150,90,0.03) 2px,
+      rgba(184,150,90,0.03) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 8px,
+      rgba(184,150,90,0.02) 8px,
+      rgba(184,150,90,0.02) 9px
+    );
+}
+
+/* ══════════════════════════════
+   LAYOUT
+══════════════════════════════ */
+#app {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ══════════════════════════════
+   HEADER — hotel letterhead style
+══════════════════════════════ */
+#header {
+  background: var(--espresso);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  min-height: 56px;
+  position: relative;
+  overflow: hidden;
+}
+/* Brass ornament lines */
+#header::before, #header::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brass), var(--brass-lt), var(--brass), transparent);
+}
+#header::before { top: 8px; }
+#header::after  { bottom: 8px; }
+
+.hotel-wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+  padding-right: 20px;
+  border-right: 1px solid rgba(184,150,90,0.25);
+}
+.wordmark-the {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.68rem;
+  color: var(--brass-lt);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.wordmark-grand {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--ivory);
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.wordmark-sub {
+  font-size: 0.52rem;
+  letter-spacing: 3px;
+  color: var(--brass);
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+
+.hdr-stats {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex: 1;
+}
+.hdr-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 12px;
+  border-right: 1px solid rgba(184,150,90,0.15);
+  min-width: 70px;
+}
+.hdr-stat-label {
+  font-size: 0.52rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 1px;
+}
+.hdr-stat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  color: var(--ivory);
+  font-weight: 500;
+  line-height: 1;
+}
+.spacer { flex: 1; }
+#save-btn {
+  background: transparent;
+  border: 1px solid var(--brass);
+  color: var(--brass-lt);
+  padding: 6px 16px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: all 0.2s;
+}
+#save-btn:hover { background: var(--brass); color: var(--espresso); }
+
+/* ══════════════════════════════
+   NAV TABS — hotel concierge bar
+══════════════════════════════ */
+#tabs {
+  background: var(--white);
+  border-bottom: 1px solid var(--linen3);
+  display: flex;
+  padding: 0 20px;
+  gap: 0;
+  box-shadow: 0 1px 0 var(--linen2);
+}
+.tab {
+  padding: 10px 18px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-lt);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: -1px;
+}
+.tab-icon { font-size: 0.85rem; }
+.tab:hover { color: var(--brown); }
+.tab.active { color: var(--espresso); border-bottom-color: var(--brass); font-weight: 600; }
+
+/* ══════════════════════════════
+   PANELS
+══════════════════════════════ */
+#main { overflow: hidden; position: relative; }
+.panel { position: absolute; inset: 0; overflow-y: auto; display: none; }
+.panel.active { display: flex; flex-direction: column; }
+
+/* ══════════════════════════════
+   HOTEL DASHBOARD
+══════════════════════════════ */
+#hotel-panel { display: none; padding: 16px; gap: 12px; }
+#hotel-panel.active { display: flex; flex-direction: column; }
+
+/* KPI row */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--linen2);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+.kpi-card.k1::after { background: linear-gradient(90deg, var(--brass), var(--brass-lt)); }
+.kpi-card.k2::after { background: linear-gradient(90deg, var(--green), #6aaa80); }
+.kpi-card.k3::after { background: linear-gradient(90deg, var(--brown-lt), var(--brass-lt)); }
+.kpi-card.k4::after { background: linear-gradient(90deg, #a07050, var(--brown-lt)); }
+
+.kpi-label {
+  font-size: 0.58rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-lt);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.kpi-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--espresso);
+  line-height: 1;
+}
+.kpi-val.brass { color: var(--brass-dk); }
+.kpi-val.green { color: var(--green); }
+.kpi-sub { font-size: 0.62rem; color: var(--text-fnt); margin-top: 4px; }
+
+/* Content row */
+.content-row {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Section card */
+.section-card {
+  background: var(--white);
+  border: 1px solid var(--linen2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.section-header {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--linen2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ivory);
+}
+.section-title {
+  font-size: 0.6rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-md);
+  font-weight: 600;
+}
+.live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  margin-left: auto;
+  box-shadow: 0 0 0 2px rgba(74,124,89,0.2);
+  animation: livePulse 2s infinite;
+}
+@keyframes livePulse { 0%,100%{box-shadow:0 0 0 2px rgba(74,124,89,0.2)} 50%{box-shadow:0 0 0 5px rgba(74,124,89,0.08)} }
+
+/* Desk log */
+#desk-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.log-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--radius);
+  font-size: 0.68rem;
+  color: var(--text-md);
+  line-height: 1.4;
+  transition: background 0.15s;
+  animation: entrySlide 0.3s ease;
+}
+.log-entry:hover { background: var(--ivory); }
+@keyframes entrySlide { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+.log-tag {
+  font-size: 0.55rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.log-tag.in  { background: var(--green-lt);  color: var(--green); }
+.log-tag.out { background: #fdf6e8; color: var(--brass-dk); }
+.log-msg { flex: 1; }
+.log-time { font-size: 0.58rem; color: var(--text-fnt); margin-left: auto; white-space: nowrap; flex-shrink: 0; }
+
+/* Room grid */
+#room-grid {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 6px;
+  overflow-y: auto;
+}
+.room-cell {
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  background: var(--linen);
+  border: 1px solid var(--linen3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  position: relative;
+  transition: all 0.25s;
+  cursor: default;
+}
+.room-cell .rn {
+  position: absolute; bottom: 2px;
+  font-size: 0.5rem;
+  color: var(--text-fnt);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.room-cell.occupied {
+  background: var(--green-lt);
+  border-color: #a8d4b4;
+  box-shadow: 0 0 0 1px rgba(74,124,89,0.15);
+}
+.room-cell.dirty {
+  background: var(--red-lt);
+  border-color: #e0bbbb;
+}
+.room-cell.suite-empty {
+  background: #f5f0ff;
+  border-color: #c8b8e8;
+}
+.room-cell.suite-occ {
+  background: #ede5ff;
+  border-color: #b8a0e0;
+  box-shadow: 0 0 0 1px rgba(140,100,200,0.15);
+}
+
+/* ══════════════════════════════
+   UPGRADE TREE
+══════════════════════════════ */
+#tree-panel { padding: 16px; }
+
+.tree-card {
+  background: var(--white);
+  border: 1px solid var(--linen2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.tree-topbar {
+  padding: 10px 16px;
+  background: var(--ivory);
+  border-bottom: 1px solid var(--linen2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tree-topbar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--espresso);
+  font-weight: 400;
+}
+.branch-pills {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.branch-pill {
+  font-size: 0.55rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+#tree-svg-wrap { overflow: auto; flex: 1; }
+#tree-svg { display: block; margin: 0 auto; }
+
+/* Tooltip */
+#tooltip {
+  position: fixed;
+  background: var(--espresso);
+  color: var(--ivory);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  font-size: 0.72rem;
+  pointer-events: none;
+  z-index: 100;
+  max-width: 190px;
+  box-shadow: var(--shadow-lg);
+  display: none;
+  border: 1px solid rgba(184,150,90,0.3);
+}
+#tooltip .tt-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--ivory);
+  margin-bottom: 4px;
+}
+#tooltip .tt-desc { color: rgba(249,245,239,0.7); line-height: 1.5; font-size: 0.68rem; }
+#tooltip .tt-cost { color: var(--brass-lt); margin-top: 6px; font-weight: 500; }
+#tooltip .tt-status { margin-top: 4px; font-size: 0.62rem; }
+#tooltip .tt-status.locked { color: #e07070; }
+#tooltip .tt-status.owned { color: #80cc90; }
+
+/* ══════════════════════════════
+   SAVES
+══════════════════════════════ */
+#saves-panel {
+  display: none;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 20px 16px;
+  gap: 10px;
+}
+#saves-panel.active { display: flex; }
+
+.saves-eyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-lt);
+  margin-bottom: 4px;
+  align-self: flex-start;
+  max-width: 380px;
+  width: 100%;
+}
+.saves-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--espresso);
+  align-self: flex-start;
+  max-width: 380px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.save-slot {
+  width: 100%;
+  max-width: 380px;
+  background: var(--white);
+  border: 1px solid var(--linen2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.save-slot:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+.save-slot.active-save { border-color: var(--brass); }
+
+.save-slot-body {
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.slot-index {
+  width: 36px; height: 36px;
+  border-radius: var(--radius);
+  background: var(--linen);
+  border: 1px solid var(--linen3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  color: var(--text-md);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.active-save .slot-index {
+  background: #fdf6e4;
+  border-color: var(--brass);
+  color: var(--brass-dk);
+}
+.slot-info { flex: 1; }
+.slot-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--espresso);
+  display: flex; align-items: center; gap: 7px;
+}
+.active-badge {
+  font-size: 0.52rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: #fdf6e4;
+  color: var(--brass-dk);
+  border: 1px solid var(--brass-lt);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-weight: 600;
+}
+.slot-meta { font-size: 0.65rem; color: var(--text-lt); margin-top: 3px; line-height: 1.5; }
+.slot-star { color: var(--brass); }
+
+.save-slot-footer {
+  display: flex;
+  border-top: 1px solid var(--linen2);
+}
+.sf-btn {
+  flex: 1;
+  padding: 9px 0;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--linen2);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--text-md);
+  transition: all 0.15s;
+}
+.sf-btn:last-child { border-right: none; }
+.sf-btn:hover { background: var(--ivory); color: var(--espresso); }
+.sf-btn.load:hover { color: var(--green); }
+.sf-btn.del:hover { color: var(--red); background: var(--red-lt); }
+.sf-btn.save:hover { color: var(--brass-dk); background: #fdf6e4; }
+.sf-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Money float */
+.money-pop {
+  position: fixed;
+  pointer-events: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--brass-dk);
+  font-weight: 500;
+  z-index: 999;
+  animation: mfloat 1.4s ease forwards;
+}
+@keyframes mfloat {
+  0%   { opacity:1; transform:translateY(0); }
+  100% { opacity:0; transform:translateY(-45px); }
+}
+
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--espresso);
+  color: var(--ivory);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.25s;
+  pointer-events: none;
+  border: 1px solid rgba(184,150,90,0.3);
+  box-shadow: var(--shadow-lg);
+}
+#toast.show { opacity: 1; }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--linen3); border-radius: 4px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <div id="header">
+    <div class="hotel-wordmark">
+      <div class="wordmark-the">The</div>
+      <div class="wordmark-grand">Grand</div>
+      <div class="wordmark-sub">Hotel Empire</div>
+    </div>
+
+    <div class="hdr-stats">
+      <div class="hdr-stat">
+        <div class="hdr-stat-label">Balance</div>
+        <div class="hdr-stat-val" id="hdr-money">$50</div>
+      </div>
+      <div class="hdr-stat">
+        <div class="hdr-stat-label">Rating</div>
+        <div class="hdr-stat-val" id="hdr-stars">★</div>
+      </div>
+      <div class="hdr-stat">
+        <div class="hdr-stat-label">Guests</div>
+        <div class="hdr-stat-val" id="hdr-guests">0</div>
+      </div>
+      <div class="hdr-stat">
+        <div class="hdr-stat-label">Revenue</div>
+        <div class="hdr-stat-val" id="hdr-rev">$0</div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <button id="save-btn">Save Property</button>
+  </div>
+
+  <!-- TABS -->
+  <div id="tabs">
+    <div class="tab active" data-tab="hotel-panel"><span class="tab-icon">🏨</span>Lobby</div>
+    <div class="tab" data-tab="tree-panel"><span class="tab-icon">✦</span>Investments</div>
+    <div class="tab" data-tab="saves-panel"><span class="tab-icon">🗝</span>Properties</div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- HOTEL LOBBY -->
+    <div class="panel active" id="hotel-panel">
+      <div class="kpi-row">
+        <div class="kpi-card k1">
+          <div class="kpi-label">Treasury</div>
+          <div class="kpi-val brass" id="kpi-money">$50</div>
+          <div class="kpi-sub" id="kpi-earned">$0 total revenue</div>
+        </div>
+        <div class="kpi-card k2">
+          <div class="kpi-label">Occupancy</div>
+          <div class="kpi-val green" id="kpi-occ">0%</div>
+          <div class="kpi-sub" id="kpi-rooms">1 room · 0 occupied</div>
+        </div>
+        <div class="kpi-card k3">
+          <div class="kpi-label">Guests Served</div>
+          <div class="kpi-val" id="kpi-guests">0</div>
+          <div class="kpi-sub">all time</div>
+        </div>
+        <div class="kpi-card k4">
+          <div class="kpi-label">Amenity Income</div>
+          <div class="kpi-val" id="kpi-amenity">$0</div>
+          <div class="kpi-sub">per cycle</div>
+        </div>
+      </div>
+
+      <div class="content-row" style="flex:1;min-height:0">
+        <!-- Concierge log -->
+        <div class="section-card">
+          <div class="section-header">
+            <span class="section-title">Concierge Desk</span>
+            <div class="live-dot"></div>
+          </div>
+          <div id="desk-log"></div>
+        </div>
+
+        <!-- Rooms -->
+        <div class="section-card">
+          <div class="section-header">
+            <span class="section-title">Room Status</span>
+            <span style="margin-left:auto;font-size:0.58rem;color:var(--text-fnt);letter-spacing:1px">
+              <span style="color:var(--green)">●</span> occupied &ensp;
+              <span style="color:#c04040">●</span> service &ensp;
+              <span style="color:#9060d0">●</span> suite &ensp;
+              <span style="color:var(--linen3)">●</span> vacant
+            </span>
+          </div>
+          <div id="room-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVESTMENTS (upgrade tree) -->
+    <div class="panel" id="tree-panel">
+      <div class="tree-card">
+        <div class="tree-topbar">
+          <div class="tree-topbar-title">Investment Portfolio</div>
+          <div class="branch-pills">
+            <div class="branch-pill" style="background:#f0faf2;color:#3a7a50;border-color:#a8d4b8">Rooms</div>
+            <div class="branch-pill" style="background:#fdf6e8;color:#8a6030;border-color:#d4b88a">Amenities</div>
+            <div class="branch-pill" style="background:#f5f0ff;color:#6040a0;border-color:#c0a8e8">Staff</div>
+            <div class="branch-pill" style="background:#fff8ed;color:#8a6030;border-color:#d4b060">Prestige</div>
+          </div>
+        </div>
+        <div id="tree-svg-wrap">
+          <svg id="tree-svg" width="380" height="1130"></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROPERTIES (saves) -->
+    <div class="panel" id="saves-panel">
+      <div class="saves-eyebrow">Your Properties</div>
+      <div class="saves-heading">Choose a Save Slot</div>
+      <div id="save-slots-container" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px"></div>
+    </div>
+
+  </div>
+</div>
+
+<div id="tooltip">
+  <div class="tt-name" id="tt-name"></div>
+  <div class="tt-desc" id="tt-desc"></div>
+  <div class="tt-cost" id="tt-cost"></div>
+  <div class="tt-status" id="tt-status"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ════════════════════════════
+// UPGRADE DATA
+// ════════════════════════════
+const TREE = [
+  { id:'root',      label:'Grand\nOpening',  icon:'🏨', cost:0,     x:190, y:55,   branch:'root',     children:['room2','amenity1','staff1','prestige1'], desc:'Your empire begins here.', unlocked:true, purchased:true },
+
+  // ROOMS
+  { id:'room2',     label:'2nd Room',    icon:'🛏', cost:150,   x:55,  y:155,  branch:'rooms',    children:['room4'],         desc:'Add a second guest room.',        unlocked:false, purchased:false },
+  { id:'room4',     label:'4 Rooms',     icon:'🛏', cost:400,   x:55,  y:265,  branch:'rooms',    children:['room8','suite1'],desc:'Expand to four rooms.',            unlocked:false, purchased:false },
+  { id:'room8',     label:'8 Rooms',     icon:'🏠', cost:900,   x:30,  y:385,  branch:'rooms',    children:['room16'],        desc:'A proper hotel floor.',           unlocked:false, purchased:false },
+  { id:'room16',    label:'16 Rooms',    icon:'🏠', cost:2500,  x:30,  y:510,  branch:'rooms',    children:['room32'],        desc:'Two full floors of accommodation.',unlocked:false, purchased:false },
+  { id:'room32',    label:'32 Rooms',    icon:'🏗', cost:7000,  x:30,  y:635,  branch:'rooms',    children:['room64'],        desc:'A major expansion wing.',         unlocked:false, purchased:false },
+  { id:'room64',    label:'64 Rooms',    icon:'🏢', cost:20000, x:30,  y:760,  branch:'rooms',    children:[],                desc:'Grand tower — fully realized.',   unlocked:false, purchased:false },
+  { id:'suite1',    label:'Suites',      icon:'✨', cost:1200,  x:100, y:510,  branch:'rooms',    children:['suite2'],        desc:'Luxury suites. +$80 per stay.',   unlocked:false, purchased:false },
+  { id:'suite2',    label:'Penthouse',   icon:'👑', cost:5000,  x:100, y:650,  branch:'rooms',    children:[],                desc:'The penthouse suite. +$200/stay.',unlocked:false, purchased:false },
+
+  // AMENITIES
+  { id:'amenity1',  label:'Vending',     icon:'🥤', cost:120,   x:190, y:155,  branch:'amenity',  children:['amenity2'],      desc:'Vending machine. +$10 per cycle.',unlocked:false, purchased:false },
+  { id:'amenity2',  label:'Café',        icon:'☕', cost:500,   x:190, y:265,  branch:'amenity',  children:['amenity3'],      desc:'In-house café. +$30 per cycle.',  unlocked:false, purchased:false },
+  { id:'amenity3',  label:'Restaurant',  icon:'🍽', cost:1500,  x:190, y:385,  branch:'amenity',  children:['amenity4'],      desc:'Fine dining. +$80 per cycle.',    unlocked:false, purchased:false },
+  { id:'amenity4',  label:'Rooftop Bar', icon:'🍸', cost:4000,  x:190, y:510,  branch:'amenity',  children:['amenity5'],      desc:'Rooftop bar. +$150 per cycle.',   unlocked:false, purchased:false },
+  { id:'amenity5',  label:'Spa & Pool',  icon:'🏊', cost:10000, x:190, y:635,  branch:'amenity',  children:[],                desc:'Luxury spa complex. +$300/cycle.',unlocked:false, purchased:false },
+
+  // STAFF
+  { id:'staff1',    label:'Bellhop',     icon:'🧳', cost:200,   x:325, y:155,  branch:'staff',    children:['staff2'],        desc:'Faster guest check-in.',          unlocked:false, purchased:false },
+  { id:'staff2',    label:'Concierge',   icon:'🎩', cost:600,   x:325, y:265,  branch:'staff',    children:['staff3'],        desc:'Guest satisfaction +15%.',        unlocked:false, purchased:false },
+  { id:'staff3',    label:'Housekeeping',icon:'🧹', cost:1100,  x:325, y:385,  branch:'staff',    children:['staff4'],        desc:'Rooms clean instantly.',          unlocked:false, purchased:false },
+  { id:'staff4',    label:'Manager',     icon:'👔', cost:3000,  x:325, y:510,  branch:'staff',    children:['staff5'],        desc:'Auto-assigns guests to rooms.',   unlocked:false, purchased:false },
+  { id:'staff5',    label:'Full Team',   icon:'👥', cost:8000,  x:325, y:635,  branch:'staff',    children:[],                desc:'All staff bonuses +20%.',         unlocked:false, purchased:false },
+
+  // PRESTIGE
+  { id:'prestige1', label:'2-Star',      icon:'⭐', cost:800,   x:190, y:800,  branch:'prestige', children:['prestige2'],     desc:'Rated 2 stars. More guests arrive.',  unlocked:false, purchased:false },
+  { id:'prestige2', label:'3-Star',      icon:'⭐', cost:3000,  x:190, y:910,  branch:'prestige', children:['prestige3'],     desc:'Business travelers seek you out.',    unlocked:false, purchased:false },
+  { id:'prestige3', label:'5-Star',      icon:'🏆', cost:15000, x:190, y:1020, branch:'prestige', children:[],                desc:'The pinnacle of luxury hospitality.', unlocked:false, purchased:false },
+];
+
+const BCOL = { root:'#b8965a', rooms:'#4a7c59', amenity:'#b8965a', staff:'#7060b0', prestige:'#b8965a' };
+const BBG  = { root:'#fdf8ee', rooms:'#f0faf2', amenity:'#fdf6e8', staff:'#f5f0ff', prestige:'#fff8ed' };
+const BSTROKE = { root:'#d4b07a', rooms:'#80c090', amenity:'#d4b88a', staff:'#c0a8e8', prestige:'#d4b060' };
+
+// ════════════════════════════
+// STATE
+// ════════════════════════════
+let G = null, activeSlot = null, loop = null, tick = 0;
+
+const fresh = () => ({
+  money:50, totalEarned:0,
+  rooms:[{id:1,type:'standard',status:'empty',guest:null,timer:0}],
+  upgrades: JSON.parse(JSON.stringify(TREE)),
+  stars:1, amenityIncome:0, hasCleaning:false,
+  totalGuests:0, arrivalTick:80, sinceGuest:0,
+});
+
+// ════════════════════════════
+// PERSISTENCE
+// ════════════════════════════
+const getSaves = () => { try { return JSON.parse(localStorage.getItem('grand_v3')||'{}'); } catch { return {}; } };
+const putSaves = s => localStorage.setItem('grand_v3', JSON.stringify(s));
+
+function saveGame(slot) {
+  if (!G) return;
+  const s = getSaves();
+  s[slot] = { state:G, at:Date.now(), stars:G.stars, money:G.money, rooms:G.rooms.length };
+  putSaves(s); activeSlot = slot;
+  toast(`Saved to Property ${slot+1}`); renderSaves();
+}
+function loadGame(slot) {
+  const s = getSaves();
+  if (!s[slot]) return;
+  if (loop) clearInterval(loop);
+  G = JSON.parse(JSON.stringify(s[slot].state));
+  activeSlot = slot;
+  startLoop(); renderAll(); switchTab('hotel-panel');
+  toast(`Property ${slot+1} loaded`);
+}
+function deleteSlot(slot) {
+  const s = getSaves(); delete s[slot]; putSaves(s);
+  if (activeSlot===slot) { G=null; activeSlot=null; if(loop) clearInterval(loop); }
+  renderSaves(); toast(`Property ${slot+1} removed`);
+}
+function newGame(slot) {
+  if (loop) clearInterval(loop);
+  G = fresh(); activeSlot = slot;
+  saveGame(slot); startLoop(); renderAll(); switchTab('hotel-panel');
+  toast(`Welcome to Property ${slot+1}`);
+}
+
+// ════════════════════════════
+// GAME LOOP
+// ════════════════════════════
+const NAMES  = ['Aria','Blake','Casey','Dana','Eli','Fiona','Grey','Hana','Ivan','Jade','Kai','Luna','Max','Nova','Owen','Petra','Quinn','Rae','Seth','Tara','Wren','Yuki','Zoe','Hugo','Isla'];
+const TITLES = ['Mr.','Ms.','Dr.','Prof.','Sir','Lady'];
+
+function startLoop() { if(loop) clearInterval(loop); loop = setInterval(gameTick, 680); }
+
+function gameTick() {
+  if (!G) return;
+  tick++;
+
+  G.rooms.forEach(r => {
+    if (r.status==='occupied') {
+      r.timer--;
+      if (r.timer<=0) {
+        const rate = r.type==='penthouse' ? 200 : r.type==='suite' ? 80 : 30 + G.stars*10;
+        G.money += rate; G.totalEarned += rate;
+        log(`${r.guest} departed Room ${r.id}`, 'out', `+$${rate}`);
+        r.status = G.hasCleaning ? 'empty' : 'dirty';
+        r.guest=null; r.timer=0;
+        popMoney(rate);
+      }
+    } else if (r.status==='dirty') {
+      r.timer--;
+      if (r.timer<=0) { r.status='empty'; r.timer=0; }
+    }
+  });
+
+  if (tick%5===0 && G.amenityIncome>0) { G.money+=G.amenityIncome; G.totalEarned+=G.amenityIncome; }
+
+  G.sinceGuest++;
+  const rate = Math.max(12, G.arrivalTick - G.stars*8);
+  if (G.sinceGuest>=rate) { G.sinceGuest=0; tryArrive(); }
+
+  renderHotel(); updateHeader();
+}
+
+function tryArrive() {
+  const empty = G.rooms.filter(r=>r.status==='empty');
+  if (!empty.length) return;
+  const room = empty[Math.floor(Math.random()*empty.length)];
+  const title = TITLES[Math.floor(Math.random()*TITLES.length)];
+  const name  = NAMES[Math.floor(Math.random()*NAMES.length)];
+  const nights = Math.floor(Math.random()*3)+1;
+  room.status='occupied'; room.guest=`${title} ${name}`; room.timer=nights*3;
+  G.totalGuests++;
+  log(`${room.guest} checked into Room ${room.id}`, 'in', `${nights}n`);
+}
+
+// ════════════════════════════
+// UPGRADES
+// ════════════════════════════
+function buy(id) {
+  if (!G) { toast('Load a property first'); return; }
+  const u = G.upgrades.find(x=>x.id===id);
+  if (!u||u.purchased) return;
+  if (!u.unlocked) { toast('Prerequisite not met'); return; }
+  if (G.money<u.cost) { toast(`Requires $${fmt(u.cost)}`); return; }
+  G.money -= u.cost;
+  u.purchased = true;
+  u.children.forEach(c=>{ const x=G.upgrades.find(y=>y.id===c); if(x) x.unlocked=true; });
+  apply(id);
+  toast(`${u.label.replace('\n',' ')} — acquired`);
+  renderAll();
+}
+
+function apply(id) {
+  const grow = n => { while(G.rooms.length<n) G.rooms.push({id:G.rooms.length+1,type:'standard',status:'empty',guest:null,timer:0}); };
+  switch(id) {
+    case 'room2':  grow(2); break;  case 'room4': grow(4); break;
+    case 'room8':  grow(8); break;  case 'room16': grow(16); break;
+    case 'room32': grow(32); break; case 'room64': grow(64); break;
+    case 'suite1': G.rooms.slice(0,Math.max(1,Math.floor(G.rooms.length/4))).forEach(r=>r.type='suite'); break;
+    case 'suite2': G.rooms[0].type='penthouse'; break;
+    case 'amenity1': G.amenityIncome+=10; break; case 'amenity2': G.amenityIncome+=30; break;
+    case 'amenity3': G.amenityIncome+=80; break; case 'amenity4': G.amenityIncome+=150; break;
+    case 'amenity5': G.amenityIncome+=300; break;
+    case 'staff1': G.arrivalTick=Math.max(10,G.arrivalTick-15); break;
+    case 'staff2': G.arrivalTick=Math.max(10,G.arrivalTick-10); break;
+    case 'staff3': G.hasCleaning=true; G.rooms.forEach(r=>{if(r.status==='dirty')r.status='empty';}); break;
+    case 'staff4': break;
+    case 'staff5': G.amenityIncome=Math.floor(G.amenityIncome*1.2); break;
+    case 'prestige1': G.stars=2; G.arrivalTick=Math.max(10,G.arrivalTick-10); break;
+    case 'prestige2': G.stars=3; G.arrivalTick=Math.max(10,G.arrivalTick-8); break;
+    case 'prestige3': G.stars=5; G.arrivalTick=Math.max(8,G.arrivalTick-15); break;
+  }
+}
+
+// ════════════════════════════
+// RENDER
+// ════════════════════════════
+function renderAll() { renderHotel(); renderTree(); renderSaves(); updateHeader(); }
+
+function updateHeader() {
+  if(!G) return;
+  document.getElementById('hdr-money').textContent  = '$'+fmt(G.money);
+  document.getElementById('hdr-stars').textContent  = '★'.repeat(G.stars);
+  document.getElementById('hdr-guests').textContent = G.totalGuests;
+  const nightly = G.rooms.length*(30+G.stars*10)+G.amenityIncome*5;
+  document.getElementById('hdr-rev').textContent    = '$'+fmt(nightly);
+}
+
+function renderHotel() {
+  if (!G) return;
+  const occ = G.rooms.filter(r=>r.status==='occupied').length;
+  const pct = G.rooms.length ? Math.round(occ/G.rooms.length*100) : 0;
+  document.getElementById('kpi-money').textContent   = '$'+fmt(G.money);
+  document.getElementById('kpi-earned').textContent  = '$'+fmt(G.totalEarned)+' total revenue';
+  document.getElementById('kpi-occ').textContent     = pct+'%';
+  document.getElementById('kpi-rooms').textContent   = G.rooms.length+' rooms · '+occ+' occupied';
+  document.getElementById('kpi-guests').textContent  = G.totalGuests;
+  document.getElementById('kpi-amenity').textContent = '$'+fmt(G.amenityIncome);
+
+  const grid = document.getElementById('room-grid');
+  grid.innerHTML = '';
+  G.rooms.forEach(r => {
+    const c = document.createElement('div');
+    c.className = 'room-cell';
+    if (r.status==='occupied' && (r.type==='suite'||r.type==='penthouse')) c.classList.add('suite-occ');
+    else if ((r.type==='suite'||r.type==='penthouse') && r.status!=='occupied') c.classList.add('suite-empty');
+    else if (r.status==='occupied') c.classList.add('occupied');
+    else if (r.status==='dirty') c.classList.add('dirty');
+    c.innerHTML = `<span>${roomIcon(r)}</span><span class="rn">${r.id}</span>`;
+    c.title = `Room ${r.id} [${r.type}] — ${r.status}${r.guest?' · '+r.guest:''}`;
+    grid.appendChild(c);
+  });
+}
+
+function roomIcon(r) {
+  if (r.type==='penthouse') return '👑';
+  if (r.type==='suite') return r.status==='occupied'?'✨':'🌟';
+  if (r.status==='occupied') return '😴';
+  if (r.status==='dirty') return '🧹';
+  return '🛏';
+}
+
+function renderTree() {
+  if (!G) return;
+  const svg = document.getElementById('tree-svg');
+  svg.innerHTML = '';
+  const ups = G.upgrades;
+
+  // Draw curved paths
+  ups.forEach(u => {
+    u.children.forEach(cid => {
+      const ch = ups.find(x=>x.id===cid); if (!ch) return;
+      const active = u.purchased && ch.unlocked;
+      const col = active ? BCOL[ch.branch] : '#ddd';
+      const my = (u.y+ch.y)/2;
+      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d',`M${u.x},${u.y} C${u.x},${my} ${ch.x},${my} ${ch.x},${ch.y}`);
+      path.setAttribute('fill','none');
+      path.setAttribute('stroke', col);
+      path.setAttribute('stroke-width', active ? '1.8' : '1.2');
+      path.setAttribute('stroke-dasharray', ch.purchased ? 'none' : '5,3');
+      path.setAttribute('opacity', active ? '0.7' : '0.35');
+      svg.appendChild(path);
+    });
+  });
+
+  // Draw nodes
+  ups.forEach(u => {
+    const col    = BCOL[u.branch]   || '#b8965a';
+    const bgFill = BBG[u.branch]    || '#fff';
+    const stroke = BSTROKE[u.branch]|| '#d4b07a';
+    const R = 24;
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('transform',`translate(${u.x},${u.y})`);
+    g.style.cursor = u.purchased ? 'default' : u.unlocked ? 'pointer' : 'not-allowed';
+
+    // Shadow
+    const sh = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    sh.setAttribute('r',R+3); sh.setAttribute('cx','1'); sh.setAttribute('cy','2');
+    sh.setAttribute('fill','rgba(44,31,14,0.08)'); g.appendChild(sh);
+
+    // Circle body
+    const circ = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circ.setAttribute('r', R);
+    if (u.purchased) {
+      circ.setAttribute('fill', col);
+      circ.setAttribute('stroke', 'rgba(255,255,255,0.6)');
+      circ.setAttribute('stroke-width','2');
+    } else if (u.unlocked) {
+      circ.setAttribute('fill', bgFill);
+      circ.setAttribute('stroke', stroke);
+      circ.setAttribute('stroke-width','1.5');
+    } else {
+      circ.setAttribute('fill','#f5f0e8');
+      circ.setAttribute('stroke','#ddd0c0');
+      circ.setAttribute('stroke-width','1');
+    }
+    g.appendChild(circ);
+
+    // Inner ring for unlocked-unpurchased
+    if (u.unlocked && !u.purchased) {
+      const ring = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      ring.setAttribute('r', R-5); ring.setAttribute('fill','none');
+      ring.setAttribute('stroke', stroke); ring.setAttribute('stroke-width','0.7');
+      ring.setAttribute('opacity','0.5');
+      g.appendChild(ring);
+    }
+
+    // Icon
+    const ic = document.createElementNS('http://www.w3.org/2000/svg','text');
+    ic.setAttribute('text-anchor','middle'); ic.setAttribute('dy','-2');
+    ic.setAttribute('font-size','13'); ic.style.userSelect='none';
+    ic.textContent = u.icon; g.appendChild(ic);
+
+    // Label
+    u.label.split('\n').forEach((line,i) => {
+      const lt = document.createElementNS('http://www.w3.org/2000/svg','text');
+      lt.setAttribute('text-anchor','middle');
+      lt.setAttribute('dy', (10+i*9)+'');
+      lt.setAttribute('font-size','6.5');
+      lt.setAttribute('font-family','Jost,sans-serif');
+      lt.setAttribute('font-weight','600');
+      lt.setAttribute('letter-spacing','0.8');
+      lt.setAttribute('fill', u.purchased ? 'rgba(255,255,255,0.9)' : u.unlocked ? col : '#c0b0a0');
+      lt.style.userSelect='none';
+      lt.textContent = line.toUpperCase(); g.appendChild(lt);
+    });
+
+    // Cost or "owned"
+    const bt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    bt.setAttribute('text-anchor','middle'); bt.setAttribute('dy', R+13+'');
+    bt.setAttribute('font-size','7.5');
+    bt.setAttribute('font-family','Jost,sans-serif'); bt.setAttribute('font-weight','500');
+    bt.style.userSelect='none';
+    if (u.purchased) {
+      bt.setAttribute('fill','#a09070'); bt.textContent='OWNED';
+    } else {
+      bt.setAttribute('fill', u.unlocked ? col : '#ccc');
+      bt.textContent = u.cost>0 ? '$'+fmt(u.cost) : '';
+    }
+    g.appendChild(bt);
+
+    // Events
+    g.addEventListener('mouseenter', e => showTip(u, e));
+    g.addEventListener('mousemove',  e => moveTip(e));
+    g.addEventListener('mouseleave', hideTip);
+    if (!u.purchased && u.unlocked) g.addEventListener('click', ()=>buy(u.id));
+    svg.appendChild(g);
+  });
+}
+
+function showTip(u, e) {
+  const t = document.getElementById('tooltip');
+  document.getElementById('tt-name').textContent = u.label.replace('\n',' ');
+  document.getElementById('tt-desc').textContent = u.desc;
+  document.getElementById('tt-cost').textContent = u.purchased ? '' : u.cost>0 ? `Investment: $${fmt(u.cost)}` : '';
+  const st = document.getElementById('tt-status');
+  if (u.purchased) { st.className='tt-status owned'; st.textContent='✓  Acquired'; }
+  else if (!u.unlocked) { st.className='tt-status locked'; st.textContent='Locked — unlock prerequisite first'; }
+  else { st.className='tt-status'; st.textContent = G && G.money>=u.cost ? 'Click to acquire' : 'Insufficient funds'; }
+  t.style.display='block';
+  moveTip(e);
+}
+function moveTip(e) {
+  const t = document.getElementById('tooltip');
+  t.style.left = (e.clientX+14)+'px';
+  t.style.top  = (e.clientY-10)+'px';
+}
+function hideTip() { document.getElementById('tooltip').style.display='none'; }
+
+function renderSaves() {
+  const c = document.getElementById('save-slots-container');
+  c.innerHTML = '';
+  const saves = getSaves();
+  for (let i=0;i<3;i++) {
+    const s = saves[i];
+    const div = document.createElement('div');
+    div.className = 'save-slot' + (activeSlot===i?' active-save':'');
+
+    const body = document.createElement('div');
+    body.className = 'save-slot-body';
+
+    const idx = document.createElement('div');
+    idx.className = 'slot-index'; idx.textContent = i+1;
+
+    const info = document.createElement('div');
+    info.className = 'slot-info';
+
+    if (s) {
+      const d = new Date(s.at);
+      const ts = d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' · ' + d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      const stars = '<span class="slot-star">'+'★'.repeat(s.stars)+'</span>';
+      info.innerHTML = `<div class="slot-name">Property ${i+1}${activeSlot===i?'<span class="active-badge">Active</span>':''}</div><div class="slot-meta">${stars} · $${fmt(s.money)} · ${s.rooms} rooms · Saved ${ts}</div>`;
+      body.append(idx, info); div.appendChild(body);
+      const foot = document.createElement('div');
+      foot.className = 'save-slot-footer';
+      const lb=btn('Load','sf-btn load',()=>{ if(confirm(`Load Property ${i+1}?`)) loadGame(i); });
+      const sb=btn('Save Here','sf-btn save',()=>saveGame(i)); if(!G) sb.disabled=true;
+      const db=btn('Remove','sf-btn del',()=>{ if(confirm(`Remove Property ${i+1}?`)) deleteSlot(i); });
+      foot.append(lb,sb,db); div.appendChild(foot);
+    } else {
+      info.innerHTML = `<div class="slot-name">Property ${i+1}</div><div class="slot-meta">No data — start a new game</div>`;
+      body.append(idx, info); div.appendChild(body);
+      const foot = document.createElement('div');
+      foot.className = 'save-slot-footer';
+      const nb=btn('New Game','sf-btn load',()=>newGame(i));
+      const sb=btn('Save Here','sf-btn save',()=>saveGame(i)); if(!G) sb.disabled=true;
+      foot.append(nb,sb); div.appendChild(foot);
+    }
+    c.appendChild(div);
+  }
+}
+
+// ════════════════════════════
+// HELPERS
+// ════════════════════════════
+function btn(label, cls, onclick) {
+  const b = document.createElement('button');
+  b.className = cls; b.textContent = label; b.onclick = onclick; return b;
+}
+
+function log(msg, type='', extra='') {
+  const box = document.getElementById('desk-log');
+  const row = document.createElement('div');
+  row.className = 'log-entry';
+  const tag = type ? `<span class="log-tag ${type}">${type==='in'?'Check-in':'Check-out'}</span>` : '';
+  const now = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  row.innerHTML = `${tag}<span class="log-msg">${msg}</span>${extra?`<span style="font-size:0.62rem;color:var(--brass-dk);font-weight:500">${extra}</span>`:''}<span class="log-time">${now}</span>`;
+  box.insertBefore(row, box.firstChild);
+  while (box.children.length>40) box.removeChild(box.lastChild);
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+function popMoney(n) {
+  const p = document.createElement('div');
+  p.className='money-pop'; p.textContent='+$'+n;
+  p.style.left=(80+Math.random()*160)+'px';
+  p.style.top=(180+Math.random()*100)+'px';
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(), 1500);
+}
+
+function fmt(n) {
+  n=Math.floor(n);
+  if(n>=1000000) return (n/1e6).toFixed(1)+'M';
+  if(n>=1000) return (n/1000).toFixed(1)+'K';
+  return n+'';
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
+}
+
+// ════════════════════════════
+// INIT
+// ════════════════════════════
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+document.getElementById('save-btn').addEventListener('click',()=>{
+  if(!G){toast('No active property');return;}
+  if(activeSlot!==null) saveGame(activeSlot); else switchTab('saves-panel');
+});
+
+(function init() {
+  const saves = getSaves();
+  let latest=null, lt=0;
+  for(let i=0;i<3;i++) if(saves[i]&&saves[i].at>lt){lt=saves[i].at;latest=i;}
+  if(latest!==null) {
+    G=JSON.parse(JSON.stringify(saves[latest].state));
+    activeSlot=latest; startLoop(); renderAll(); switchTab('hotel-panel');
+    log('Welcome back to The Grand', 'in');
+  } else {
+    renderSaves(); switchTab('saves-panel');
+    toast('Welcome to The Grand — open a property to begin');
+  }
+})();
+</script>
+</body>
+</html>
