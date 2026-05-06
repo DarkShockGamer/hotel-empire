@@ -29,9 +29,9 @@
   --red-lt:   #f5e8e8;
   --red:      #8b3a3a;
   --radius:   4px;
-  --radius-lg:10px;
+  --radius-lg:12px;
   --shadow:   0 2px 16px rgba(44,31,14,0.10);
-  --shadow-lg:0 8px 40px rgba(44,31,14,0.14);
+  --shadow-lg:0 8px 40px rgba(44,31,14,0.16);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,584 +41,290 @@ body {
   font-family: 'Jost', sans-serif;
   background: var(--linen);
   color: var(--text);
-  /* Subtle linen texture via repeating gradient */
   background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(184,150,90,0.03) 2px,
-      rgba(184,150,90,0.03) 4px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 8px,
-      rgba(184,150,90,0.02) 8px,
-      rgba(184,150,90,0.02) 9px
-    );
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(184,150,90,0.03) 2px, rgba(184,150,90,0.03) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(184,150,90,0.02) 8px, rgba(184,150,90,0.02) 9px);
 }
 
-/* ══════════════════════════════
-   LAYOUT
-══════════════════════════════ */
-#app {
-  display: grid;
-  grid-template-rows: auto auto 1fr;
-  height: 100vh;
-  overflow: hidden;
-}
+/* ── SCREENS ── */
+#screen-home, #screen-game { position: fixed; inset: 0; transition: opacity 0.4s, transform 0.4s; }
+#screen-home { display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+#screen-game { opacity: 0; pointer-events: none; transform: translateY(20px); z-index: 1; display: flex; flex-direction: column; }
+body.in-game #screen-home { opacity: 0; pointer-events: none; transform: translateY(-20px); }
+body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translateY(0); }
 
-/* ══════════════════════════════
-   HEADER — hotel letterhead style
-══════════════════════════════ */
-#header {
+/* ── HOME SCREEN ── */
+#screen-home {
   background: var(--espresso);
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  gap: 0;
-  min-height: 56px;
-  position: relative;
-  overflow: hidden;
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(184,150,90,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(184,150,90,0.08) 0%, transparent 50%),
+    repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(184,150,90,0.02) 30px, rgba(184,150,90,0.02) 31px);
 }
-/* Brass ornament lines */
+.home-ornament { color: var(--brass); font-size: 0.6rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 12px; opacity: 0.6; }
+.home-the { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; color: var(--brass-lt); letter-spacing: 6px; text-transform: uppercase; }
+.home-grand { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 4rem; color: var(--ivory); letter-spacing: 16px; text-transform: uppercase; line-height: 1; }
+.home-sub { font-size: 0.6rem; letter-spacing: 5px; color: var(--brass); text-transform: uppercase; margin-top: 6px; }
+.home-divider { width: 200px; height: 1px; background: linear-gradient(90deg, transparent, var(--brass), transparent); margin: 28px 0; }
+.home-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(249,245,239,0.4); font-size: 0.9rem; letter-spacing: 1px; margin-bottom: 40px; }
+
+.saves-container { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 460px; }
+.saves-label { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--brass); margin-bottom: 4px; }
+
+.home-slot {
+  background: rgba(249,245,239,0.04);
+  border: 1px solid rgba(184,150,90,0.2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.home-slot:hover { background: rgba(249,245,239,0.07); border-color: rgba(184,150,90,0.4); }
+.home-slot-body { display: flex; align-items: center; gap: 14px; padding: 14px 18px; }
+.home-slot-num {
+  width: 38px; height: 38px; border-radius: 8px;
+  background: rgba(184,150,90,0.12); border: 1px solid rgba(184,150,90,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--brass-lt);
+  flex-shrink: 0;
+}
+.home-slot-info { flex: 1; }
+.home-slot-name { font-size: 0.8rem; font-weight: 600; color: var(--ivory); display: flex; align-items: center; gap: 8px; }
+.home-slot-meta { font-size: 0.62rem; color: rgba(249,245,239,0.4); margin-top: 3px; }
+.home-slot-stars { color: var(--brass); }
+.home-slot-actions { display: flex; border-top: 1px solid rgba(184,150,90,0.12); }
+.hsa-btn {
+  flex: 1; padding: 9px 0; background: transparent; border: none;
+  border-right: 1px solid rgba(184,150,90,0.12);
+  font-family: 'Jost', sans-serif; font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+  color: rgba(249,245,239,0.45); transition: all 0.15s;
+}
+.hsa-btn:last-child { border-right: none; }
+.hsa-btn:hover { background: rgba(184,150,90,0.1); color: var(--brass-lt); }
+.hsa-btn.primary:hover { color: var(--ivory); }
+.hsa-btn.danger:hover { color: #e07070; background: rgba(140,60,60,0.15); }
+.hsa-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+
+/* ── GAME HEADER ── */
+#header {
+  background: var(--espresso); padding: 0 16px;
+  display: flex; align-items: center; gap: 0; min-height: 52px;
+  position: relative; overflow: hidden; flex-shrink: 0;
+}
 #header::before, #header::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  height: 1px;
+  content: ''; position: absolute; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg, transparent, var(--brass), var(--brass-lt), var(--brass), transparent);
 }
-#header::before { top: 8px; }
-#header::after  { bottom: 8px; }
+#header::before { top: 7px; } #header::after { bottom: 7px; }
 
-.hotel-wordmark {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 20px;
-  padding-right: 20px;
-  border-right: 1px solid rgba(184,150,90,0.25);
-}
-.wordmark-the {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 0.68rem;
-  color: var(--brass-lt);
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  line-height: 1;
-}
-.wordmark-grand {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  font-size: 1.5rem;
-  color: var(--ivory);
-  letter-spacing: 8px;
-  text-transform: uppercase;
-  line-height: 1;
-}
-.wordmark-sub {
-  font-size: 0.52rem;
-  letter-spacing: 3px;
-  color: var(--brass);
-  text-transform: uppercase;
-  margin-top: 1px;
-}
+.hotel-wordmark { display: flex; align-items: center; gap: 10px; margin-right: 18px; padding-right: 18px; border-right: 1px solid rgba(184,150,90,0.2); }
+.wordmark-grand { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.3rem; color: var(--ivory); letter-spacing: 6px; text-transform: uppercase; }
 
-.hdr-stats {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  flex: 1;
-}
-.hdr-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 4px 12px;
-  border-right: 1px solid rgba(184,150,90,0.15);
-  min-width: 70px;
-}
-.hdr-stat-label {
-  font-size: 0.52rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--brass);
-  margin-bottom: 1px;
-}
-.hdr-stat-val {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.05rem;
-  color: var(--ivory);
-  font-weight: 500;
-  line-height: 1;
-}
+.hdr-stats { display: flex; gap: 0; align-items: center; }
+.hdr-stat { display: flex; flex-direction: column; align-items: center; padding: 3px 14px; border-right: 1px solid rgba(184,150,90,0.12); }
+.hdr-stat-label { font-size: 0.48rem; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); margin-bottom: 1px; }
+.hdr-stat-val { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ivory); font-weight: 500; line-height: 1; }
 .spacer { flex: 1; }
-#save-btn {
-  background: transparent;
-  border: 1px solid var(--brass);
-  color: var(--brass-lt);
-  padding: 6px 16px;
-  font-family: 'Jost', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  border-radius: var(--radius);
-  transition: all 0.2s;
+.hdr-btn {
+  background: transparent; border: 1px solid rgba(184,150,90,0.4); color: var(--brass-lt);
+  padding: 5px 12px; font-family: 'Jost', sans-serif; font-size: 0.58rem; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: var(--radius);
+  transition: all 0.2s; margin-left: 8px;
 }
-#save-btn:hover { background: var(--brass); color: var(--espresso); }
+.hdr-btn:hover { background: rgba(184,150,90,0.15); color: var(--ivory); }
+.hdr-btn.home-btn:hover { background: rgba(184,150,90,0.1); }
 
-/* ══════════════════════════════
-   NAV TABS — hotel concierge bar
-══════════════════════════════ */
+/* ── TABS ── */
 #tabs {
-  background: var(--white);
-  border-bottom: 1px solid var(--linen3);
-  display: flex;
-  padding: 0 20px;
-  gap: 0;
-  box-shadow: 0 1px 0 var(--linen2);
+  background: var(--white); border-bottom: 1px solid var(--linen3);
+  display: flex; padding: 0 16px; flex-shrink: 0;
 }
 .tab {
-  padding: 10px 18px;
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--text-lt);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-bottom: -1px;
+  padding: 10px 16px; font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-lt);
+  cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;
+  display: flex; align-items: center; gap: 6px; margin-bottom: -1px;
 }
-.tab-icon { font-size: 0.85rem; }
 .tab:hover { color: var(--brown); }
 .tab.active { color: var(--espresso); border-bottom-color: var(--brass); font-weight: 600; }
+.tab-icon { font-size: 0.8rem; }
 
-/* ══════════════════════════════
-   PANELS
-══════════════════════════════ */
-#main { overflow: hidden; position: relative; }
-.panel { position: absolute; inset: 0; overflow-y: auto; display: none; }
-.panel.active { display: flex; flex-direction: column; }
+/* ── PANELS ── */
+#main { overflow: hidden; position: relative; flex: 1; }
+.panel { position: absolute; inset: 0; overflow-y: auto; display: none; flex-direction: column; }
+.panel.active { display: flex; }
 
-/* ══════════════════════════════
-   HOTEL DASHBOARD
-══════════════════════════════ */
-#hotel-panel { display: none; padding: 16px; gap: 12px; }
-#hotel-panel.active { display: flex; flex-direction: column; }
+/* ── LOBBY ── */
+#hotel-panel { padding: 14px; gap: 10px; }
 
-/* KPI row */
-.kpi-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .kpi-card {
-  background: var(--white);
-  border: 1px solid var(--linen2);
-  border-radius: var(--radius-lg);
-  padding: 14px 16px;
-  box-shadow: var(--shadow);
-  position: relative;
-  overflow: hidden;
+  background: var(--white); border: 1px solid var(--linen2);
+  border-radius: var(--radius-lg); padding: 12px 14px;
+  box-shadow: var(--shadow); position: relative; overflow: hidden;
 }
-.kpi-card::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 3px;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-}
+.kpi-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
 .kpi-card.k1::after { background: linear-gradient(90deg, var(--brass), var(--brass-lt)); }
 .kpi-card.k2::after { background: linear-gradient(90deg, var(--green), #6aaa80); }
 .kpi-card.k3::after { background: linear-gradient(90deg, var(--brown-lt), var(--brass-lt)); }
 .kpi-card.k4::after { background: linear-gradient(90deg, #a07050, var(--brown-lt)); }
-
-.kpi-label {
-  font-size: 0.58rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-lt);
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-.kpi-val {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.6rem;
-  font-weight: 500;
-  color: var(--espresso);
-  line-height: 1;
-}
+.kpi-label { font-size: 0.54rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 4px; font-weight: 500; }
+.kpi-val { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; color: var(--espresso); line-height: 1; }
 .kpi-val.brass { color: var(--brass-dk); }
 .kpi-val.green { color: var(--green); }
-.kpi-sub { font-size: 0.62rem; color: var(--text-fnt); margin-top: 4px; }
+.kpi-sub { font-size: 0.58rem; color: var(--text-fnt); margin-top: 3px; }
 
-/* Content row */
-.content-row {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 12px;
-  flex: 1;
-  min-height: 0;
-}
+.content-row { display: grid; grid-template-columns: 220px 1fr; gap: 10px; flex: 1; min-height: 0; }
+.section-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
+.section-header { padding: 9px 14px; border-bottom: 1px solid var(--linen2); display: flex; align-items: center; gap: 8px; background: var(--ivory); flex-shrink: 0; }
+.section-title { font-size: 0.56rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-md); font-weight: 600; }
+.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); margin-left: auto; animation: livePulse 2s infinite; }
+@keyframes livePulse { 0%,100%{box-shadow:0 0 0 2px rgba(74,124,89,0.2)} 50%{box-shadow:0 0 0 5px rgba(74,124,89,0.06)} }
 
-/* Section card */
-.section-card {
-  background: var(--white);
-  border: 1px solid var(--linen2);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-.section-header {
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--linen2);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--ivory);
-}
-.section-title {
-  font-size: 0.6rem;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--text-md);
-  font-weight: 600;
-}
-.live-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  margin-left: auto;
-  box-shadow: 0 0 0 2px rgba(74,124,89,0.2);
-  animation: livePulse 2s infinite;
-}
-@keyframes livePulse { 0%,100%{box-shadow:0 0 0 2px rgba(74,124,89,0.2)} 50%{box-shadow:0 0 0 5px rgba(74,124,89,0.08)} }
-
-/* Desk log */
-#desk-log {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-.log-entry {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 6px 8px;
-  border-radius: var(--radius);
-  font-size: 0.68rem;
-  color: var(--text-md);
-  line-height: 1.4;
-  transition: background 0.15s;
-  animation: entrySlide 0.3s ease;
-}
+#desk-log { flex: 1; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 1px; }
+.log-entry { display: flex; align-items: flex-start; gap: 7px; padding: 5px 7px; border-radius: var(--radius); font-size: 0.65rem; color: var(--text-md); line-height: 1.4; transition: background 0.15s; animation: entrySlide 0.25s ease; }
 .log-entry:hover { background: var(--ivory); }
-@keyframes entrySlide { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
-.log-tag {
-  font-size: 0.55rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 2px 6px;
-  border-radius: 3px;
-  white-space: nowrap;
-  font-weight: 600;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-.log-tag.in  { background: var(--green-lt);  color: var(--green); }
+@keyframes entrySlide { from{opacity:0;transform:translateY(-3px)} to{opacity:1;transform:translateY(0)} }
+.log-tag { font-size: 0.52rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 5px; border-radius: 3px; white-space: nowrap; font-weight: 600; flex-shrink: 0; margin-top: 1px; }
+.log-tag.in  { background: var(--green-lt); color: var(--green); }
 .log-tag.out { background: #fdf6e8; color: var(--brass-dk); }
 .log-msg { flex: 1; }
-.log-time { font-size: 0.58rem; color: var(--text-fnt); margin-left: auto; white-space: nowrap; flex-shrink: 0; }
+.log-time { font-size: 0.55rem; color: var(--text-fnt); margin-left: auto; white-space: nowrap; flex-shrink: 0; }
 
-/* Room grid */
-#room-grid {
-  padding: 12px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
-  gap: 6px;
-  overflow-y: auto;
-}
-.room-cell {
-  aspect-ratio: 1;
-  border-radius: var(--radius);
-  background: var(--linen);
-  border: 1px solid var(--linen3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.05rem;
-  position: relative;
-  transition: all 0.25s;
-  cursor: default;
-}
-.room-cell .rn {
-  position: absolute; bottom: 2px;
-  font-size: 0.5rem;
-  color: var(--text-fnt);
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-.room-cell.occupied {
-  background: var(--green-lt);
-  border-color: #a8d4b4;
-  box-shadow: 0 0 0 1px rgba(74,124,89,0.15);
-}
-.room-cell.dirty {
-  background: var(--red-lt);
-  border-color: #e0bbbb;
-}
-.room-cell.suite-empty {
-  background: #f5f0ff;
-  border-color: #c8b8e8;
-}
-.room-cell.suite-occ {
-  background: #ede5ff;
-  border-color: #b8a0e0;
-  box-shadow: 0 0 0 1px rgba(140,100,200,0.15);
-}
+#room-grid { padding: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 5px; overflow-y: auto; }
+.room-cell { aspect-ratio: 1; border-radius: var(--radius); background: var(--linen); border: 1px solid var(--linen3); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.95rem; position: relative; transition: all 0.25s; }
+.room-cell .rn { position: absolute; bottom: 2px; font-size: 0.45rem; color: var(--text-fnt); font-weight: 500; }
+.room-cell.occupied { background: var(--green-lt); border-color: #a8d4b4; }
+.room-cell.dirty { background: var(--red-lt); border-color: #e0bbbb; }
+.room-cell.suite-empty { background: #f5f0ff; border-color: #c8b8e8; }
+.room-cell.suite-occ { background: #ede5ff; border-color: #b8a0e0; }
 
-/* ══════════════════════════════
-   UPGRADE TREE
-══════════════════════════════ */
-#tree-panel { padding: 16px; }
+/* ── SKILL TREE ── */
+#tree-panel { padding: 0; }
+.tree-wrap {
+  width: 100%; height: 100%; overflow: auto;
+  display: flex; justify-content: center;
+}
+#tree-canvas { position: relative; }
+#tree-svg { display: block; }
 
-.tree-card {
-  background: var(--white);
-  border: 1px solid var(--linen2);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+/* Node bubbles */
+.node-bubble {
+  position: absolute; transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center;
+  cursor: pointer; transition: transform 0.2s;
 }
-.tree-topbar {
-  padding: 10px 16px;
-  background: var(--ivory);
-  border-bottom: 1px solid var(--linen2);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.node-bubble:hover { transform: translate(-50%, -50%) scale(1.08); }
+.node-bubble.purchased { cursor: default; }
+.node-bubble.purchased:hover { transform: translate(-50%, -50%); }
+.node-bubble.locked { cursor: not-allowed; opacity: 0.5; }
+.node-bubble.locked:hover { transform: translate(-50%, -50%); }
+
+.bubble-ring {
+  position: relative; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
-.tree-topbar-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1rem;
-  font-style: italic;
-  color: var(--espresso);
-  font-weight: 400;
+.bubble-ring.size-lg { width: 72px; height: 72px; }
+.bubble-ring.size-md { width: 60px; height: 60px; }
+.bubble-ring.size-sm { width: 50px; height: 50px; }
+
+/* Available pulse */
+.node-bubble.available .bubble-ring {
+  animation: availPulse 2.5s ease-in-out infinite;
 }
-.branch-pills {
-  display: flex;
-  gap: 6px;
-  margin-left: auto;
-}
-.branch-pill {
-  font-size: 0.55rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 20px;
-  font-weight: 600;
-  border: 1px solid;
+@keyframes availPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(184,150,90,0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(184,150,90,0); }
 }
 
-#tree-svg-wrap { overflow: auto; flex: 1; }
-#tree-svg { display: block; margin: 0 auto; }
+.bubble-icon { font-size: 1.35rem; line-height: 1; margin-bottom: 1px; }
+.bubble-label { font-size: 0.48rem; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; text-align: center; line-height: 1.2; margin-top: 1px; white-space: nowrap; }
+.bubble-cost { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 0.52rem; font-weight: 600; white-space: nowrap; }
 
-/* Tooltip */
-#tooltip {
-  position: fixed;
-  background: var(--espresso);
-  color: var(--ivory);
-  border-radius: var(--radius-lg);
-  padding: 12px 16px;
-  font-size: 0.72rem;
-  pointer-events: none;
-  z-index: 100;
-  max-width: 190px;
-  box-shadow: var(--shadow-lg);
-  display: none;
-  border: 1px solid rgba(184,150,90,0.3);
-}
-#tooltip .tt-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: var(--ivory);
-  margin-bottom: 4px;
-}
-#tooltip .tt-desc { color: rgba(249,245,239,0.7); line-height: 1.5; font-size: 0.68rem; }
-#tooltip .tt-cost { color: var(--brass-lt); margin-top: 6px; font-weight: 500; }
-#tooltip .tt-status { margin-top: 4px; font-size: 0.62rem; }
-#tooltip .tt-status.locked { color: #e07070; }
-#tooltip .tt-status.owned { color: #80cc90; }
+/* branch colors */
+.branch-rooms    .bubble-ring { background: #e8f5ec; border: 2px solid #80c090; }
+.branch-rooms    .bubble-label { color: #2d6b40; }
+.branch-rooms    .bubble-cost  { color: #3a7a50; }
+.branch-rooms.purchased .bubble-ring { background: #3a7a50; border-color: #2d6040; }
+.branch-rooms.purchased .bubble-label { color: rgba(255,255,255,0.9); }
+.branch-rooms.available .bubble-ring { border-color: #4a9060; }
 
-/* ══════════════════════════════
-   SAVES
-══════════════════════════════ */
-#saves-panel {
-  display: none;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: column;
-  padding: 20px 16px;
-  gap: 10px;
-}
-#saves-panel.active { display: flex; }
+.branch-amenity  .bubble-ring { background: #fdf6e8; border: 2px solid #d4b07a; }
+.branch-amenity  .bubble-label { color: #8a6030; }
+.branch-amenity  .bubble-cost  { color: #a07030; }
+.branch-amenity.purchased .bubble-ring { background: #b8965a; border-color: #8a6a35; }
+.branch-amenity.purchased .bubble-label { color: rgba(255,255,255,0.9); }
+.branch-amenity.available .bubble-ring { border-color: #c0a060; }
 
-.saves-eyebrow {
-  font-size: 0.6rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-lt);
-  margin-bottom: 4px;
-  align-self: flex-start;
-  max-width: 380px;
-  width: 100%;
-}
-.saves-heading {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
-  font-style: italic;
-  color: var(--espresso);
-  align-self: flex-start;
-  max-width: 380px;
-  width: 100%;
-  margin-bottom: 8px;
-}
+.branch-staff    .bubble-ring { background: #f5f0ff; border: 2px solid #c0a8e8; }
+.branch-staff    .bubble-label { color: #5040a0; }
+.branch-staff    .bubble-cost  { color: #6050b0; }
+.branch-staff.purchased .bubble-ring { background: #7060b0; border-color: #5040a0; }
+.branch-staff.purchased .bubble-label { color: rgba(255,255,255,0.9); }
+.branch-staff.available .bubble-ring { border-color: #9080d0; }
 
-.save-slot {
-  width: 100%;
-  max-width: 380px;
-  background: var(--white);
-  border: 1px solid var(--linen2);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  transition: box-shadow 0.2s, transform 0.2s;
-}
-.save-slot:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
-.save-slot.active-save { border-color: var(--brass); }
+.branch-prestige .bubble-ring { background: #fff8ed; border: 2px solid #d4b060; }
+.branch-prestige .bubble-label { color: #8a6020; }
+.branch-prestige .bubble-cost  { color: #a07020; }
+.branch-prestige.purchased .bubble-ring { background: #c09840; border-color: #906020; }
+.branch-prestige.purchased .bubble-label { color: rgba(255,255,255,0.9); }
+.branch-prestige.available .bubble-ring { border-color: #d4a840; }
 
-.save-slot-body {
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.slot-index {
-  width: 36px; height: 36px;
-  border-radius: var(--radius);
-  background: var(--linen);
-  border: 1px solid var(--linen3);
+.branch-root .bubble-ring { background: var(--espresso); border: 2px solid var(--brass); }
+.branch-root .bubble-label { color: var(--brass-lt); }
+
+.node-bubble .owned-badge {
+  position: absolute; top: -5px; right: -5px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--green); border: 2px solid var(--white);
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
-  color: var(--text-md);
-  font-weight: 500;
-  flex-shrink: 0;
-}
-.active-save .slot-index {
-  background: #fdf6e4;
-  border-color: var(--brass);
-  color: var(--brass-dk);
-}
-.slot-info { flex: 1; }
-.slot-name {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--espresso);
-  display: flex; align-items: center; gap: 7px;
-}
-.active-badge {
-  font-size: 0.52rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  background: #fdf6e4;
-  color: var(--brass-dk);
-  border: 1px solid var(--brass-lt);
-  border-radius: 3px;
-  padding: 1px 6px;
-  font-weight: 600;
-}
-.slot-meta { font-size: 0.65rem; color: var(--text-lt); margin-top: 3px; line-height: 1.5; }
-.slot-star { color: var(--brass); }
-
-.save-slot-footer {
-  display: flex;
-  border-top: 1px solid var(--linen2);
-}
-.sf-btn {
-  flex: 1;
-  padding: 9px 0;
-  background: transparent;
-  border: none;
-  border-right: 1px solid var(--linen2);
-  font-family: 'Jost', sans-serif;
-  font-size: 0.62rem;
-  font-weight: 500;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  color: var(--text-md);
-  transition: all 0.15s;
-}
-.sf-btn:last-child { border-right: none; }
-.sf-btn:hover { background: var(--ivory); color: var(--espresso); }
-.sf-btn.load:hover { color: var(--green); }
-.sf-btn.del:hover { color: var(--red); background: var(--red-lt); }
-.sf-btn.save:hover { color: var(--brass-dk); background: #fdf6e4; }
-.sf-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-/* Money float */
-.money-pop {
-  position: fixed;
-  pointer-events: none;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.05rem;
-  font-style: italic;
-  color: var(--brass-dk);
-  font-weight: 500;
-  z-index: 999;
-  animation: mfloat 1.4s ease forwards;
-}
-@keyframes mfloat {
-  0%   { opacity:1; transform:translateY(0); }
-  100% { opacity:0; transform:translateY(-45px); }
+  font-size: 0.45rem; color: white; font-weight: 700;
 }
 
-/* Toast */
-#toast {
-  position: fixed;
-  bottom: 20px; left: 50%; transform: translateX(-50%);
-  background: var(--espresso);
-  color: var(--ivory);
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 1px;
-  z-index: 1000;
-  opacity: 0;
-  transition: opacity 0.25s;
-  pointer-events: none;
+/* Legend */
+.tree-legend {
+  position: sticky; top: 0; left: 0; right: 0; z-index: 5;
+  background: var(--white); border-bottom: 1px solid var(--linen2);
+  padding: 8px 16px; display: flex; align-items: center; gap: 16px;
+}
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.55rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); font-weight: 600; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid; }
+.legend-dot.rooms    { background: #e8f5ec; border-color: #80c090; }
+.legend-dot.amenity  { background: #fdf6e8; border-color: #d4b07a; }
+.legend-dot.staff    { background: #f5f0ff; border-color: #c0a8e8; }
+.legend-dot.prestige { background: #fff8ed; border-color: #d4b060; }
+
+/* ── TOOLTIP ── */
+#tooltip {
+  position: fixed; background: var(--espresso); color: var(--ivory);
+  border-radius: var(--radius-lg); padding: 12px 15px; font-size: 0.7rem;
+  pointer-events: none; z-index: 200; max-width: 180px;
+  box-shadow: var(--shadow-lg); display: none;
   border: 1px solid rgba(184,150,90,0.3);
-  box-shadow: var(--shadow-lg);
+}
+#tooltip .tt-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 500; margin-bottom: 4px; }
+#tooltip .tt-desc { color: rgba(249,245,239,0.65); line-height: 1.5; font-size: 0.65rem; }
+#tooltip .tt-cost { color: var(--brass-lt); margin-top: 6px; font-weight: 500; }
+#tooltip .tt-status { margin-top: 3px; font-size: 0.6rem; }
+#tooltip .tt-status.locked { color: #e07070; }
+#tooltip .tt-status.owned  { color: #80cc90; }
+
+/* ── MISC ── */
+.money-pop {
+  position: fixed; pointer-events: none;
+  font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+  font-style: italic; color: var(--brass-dk); font-weight: 500;
+  z-index: 999; animation: mfloat 1.4s ease forwards;
+}
+@keyframes mfloat { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-48px)} }
+
+#toast {
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  background: var(--espresso); color: var(--ivory); padding: 7px 18px;
+  border-radius: 20px; font-size: 0.68rem; font-weight: 500; letter-spacing: 1px;
+  z-index: 1000; opacity: 0; transition: opacity 0.25s; pointer-events: none;
+  border: 1px solid rgba(184,150,90,0.3); box-shadow: var(--shadow-lg);
 }
 #toast.show { opacity: 1; }
 
@@ -628,56 +334,51 @@ body {
 </style>
 </head>
 <body>
-<div id="app">
 
-  <!-- HEADER -->
+<!-- HOME SCREEN -->
+<div id="screen-home">
+  <div class="home-ornament">✦ &nbsp; Est. 2024 &nbsp; ✦</div>
+  <div class="home-the">The</div>
+  <div class="home-grand">Grand</div>
+  <div class="home-sub">Hotel Empire</div>
+  <div class="home-divider"></div>
+  <div class="home-tagline">Build. Expand. Ascend.</div>
+  <div class="saves-container">
+    <div class="saves-label">Your Properties</div>
+    <div id="home-slots"></div>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="screen-game">
   <div id="header">
     <div class="hotel-wordmark">
-      <div class="wordmark-the">The</div>
       <div class="wordmark-grand">Grand</div>
-      <div class="wordmark-sub">Hotel Empire</div>
     </div>
-
     <div class="hdr-stats">
-      <div class="hdr-stat">
-        <div class="hdr-stat-label">Balance</div>
-        <div class="hdr-stat-val" id="hdr-money">$50</div>
-      </div>
-      <div class="hdr-stat">
-        <div class="hdr-stat-label">Rating</div>
-        <div class="hdr-stat-val" id="hdr-stars">★</div>
-      </div>
-      <div class="hdr-stat">
-        <div class="hdr-stat-label">Guests</div>
-        <div class="hdr-stat-val" id="hdr-guests">0</div>
-      </div>
-      <div class="hdr-stat">
-        <div class="hdr-stat-label">Revenue</div>
-        <div class="hdr-stat-val" id="hdr-rev">$0</div>
-      </div>
+      <div class="hdr-stat"><div class="hdr-stat-label">Balance</div><div class="hdr-stat-val" id="hdr-money">$50</div></div>
+      <div class="hdr-stat"><div class="hdr-stat-label">Rating</div><div class="hdr-stat-val" id="hdr-stars">★</div></div>
+      <div class="hdr-stat"><div class="hdr-stat-label">Guests</div><div class="hdr-stat-val" id="hdr-guests">0</div></div>
+      <div class="hdr-stat"><div class="hdr-stat-label">Revenue</div><div class="hdr-stat-val" id="hdr-rev">$0</div></div>
     </div>
-
     <div class="spacer"></div>
-    <button id="save-btn">Save Property</button>
+    <button class="hdr-btn home-btn" onclick="goHome()">⌂ Menu</button>
+    <button class="hdr-btn" id="save-btn">Save</button>
   </div>
 
-  <!-- TABS -->
   <div id="tabs">
     <div class="tab active" data-tab="hotel-panel"><span class="tab-icon">🏨</span>Lobby</div>
     <div class="tab" data-tab="tree-panel"><span class="tab-icon">✦</span>Investments</div>
-    <div class="tab" data-tab="saves-panel"><span class="tab-icon">🗝</span>Properties</div>
   </div>
 
-  <!-- MAIN -->
   <div id="main">
-
-    <!-- HOTEL LOBBY -->
+    <!-- LOBBY -->
     <div class="panel active" id="hotel-panel">
       <div class="kpi-row">
         <div class="kpi-card k1">
           <div class="kpi-label">Treasury</div>
           <div class="kpi-val brass" id="kpi-money">$50</div>
-          <div class="kpi-sub" id="kpi-earned">$0 total revenue</div>
+          <div class="kpi-sub" id="kpi-earned">$0 total</div>
         </div>
         <div class="kpi-card k2">
           <div class="kpi-label">Occupancy</div>
@@ -695,26 +396,16 @@ body {
           <div class="kpi-sub">per cycle</div>
         </div>
       </div>
-
       <div class="content-row" style="flex:1;min-height:0">
-        <!-- Concierge log -->
         <div class="section-card">
-          <div class="section-header">
-            <span class="section-title">Concierge Desk</span>
-            <div class="live-dot"></div>
-          </div>
+          <div class="section-header"><span class="section-title">Concierge Desk</span><div class="live-dot"></div></div>
           <div id="desk-log"></div>
         </div>
-
-        <!-- Rooms -->
         <div class="section-card">
           <div class="section-header">
             <span class="section-title">Room Status</span>
-            <span style="margin-left:auto;font-size:0.58rem;color:var(--text-fnt);letter-spacing:1px">
-              <span style="color:var(--green)">●</span> occupied &ensp;
-              <span style="color:#c04040">●</span> service &ensp;
-              <span style="color:#9060d0">●</span> suite &ensp;
-              <span style="color:var(--linen3)">●</span> vacant
+            <span style="margin-left:auto;font-size:0.54rem;color:var(--text-fnt);letter-spacing:1px">
+              <span style="color:var(--green)">●</span> occ &ensp;<span style="color:#c04040">●</span> dirty &ensp;<span style="color:#9060d0">●</span> suite &ensp;<span style="color:var(--linen3)">●</span> vacant
             </span>
           </div>
           <div id="room-grid"></div>
@@ -722,31 +413,22 @@ body {
       </div>
     </div>
 
-    <!-- INVESTMENTS (upgrade tree) -->
+    <!-- SKILL TREE -->
     <div class="panel" id="tree-panel">
-      <div class="tree-card">
-        <div class="tree-topbar">
-          <div class="tree-topbar-title">Investment Portfolio</div>
-          <div class="branch-pills">
-            <div class="branch-pill" style="background:#f0faf2;color:#3a7a50;border-color:#a8d4b8">Rooms</div>
-            <div class="branch-pill" style="background:#fdf6e8;color:#8a6030;border-color:#d4b88a">Amenities</div>
-            <div class="branch-pill" style="background:#f5f0ff;color:#6040a0;border-color:#c0a8e8">Staff</div>
-            <div class="branch-pill" style="background:#fff8ed;color:#8a6030;border-color:#d4b060">Prestige</div>
-          </div>
-        </div>
-        <div id="tree-svg-wrap">
-          <svg id="tree-svg" width="380" height="1130"></svg>
+      <div class="tree-legend">
+        <div class="legend-item"><div class="legend-dot rooms"></div>Rooms</div>
+        <div class="legend-item"><div class="legend-dot amenity"></div>Amenities</div>
+        <div class="legend-item"><div class="legend-dot staff"></div>Staff</div>
+        <div class="legend-item"><div class="legend-dot prestige"></div>Prestige</div>
+        <span style="margin-left:auto;font-size:0.55rem;color:var(--text-fnt);letter-spacing:1px">Click unlocked nodes to invest</span>
+      </div>
+      <div class="tree-wrap" id="tree-wrap">
+        <div id="tree-canvas">
+          <svg id="tree-svg"></svg>
+          <div id="tree-nodes"></div>
         </div>
       </div>
     </div>
-
-    <!-- PROPERTIES (saves) -->
-    <div class="panel" id="saves-panel">
-      <div class="saves-eyebrow">Your Properties</div>
-      <div class="saves-heading">Choose a Save Slot</div>
-      <div id="save-slots-container" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px"></div>
-    </div>
-
   </div>
 </div>
 
@@ -756,49 +438,85 @@ body {
   <div class="tt-cost" id="tt-cost"></div>
   <div class="tt-status" id="tt-status"></div>
 </div>
-
 <div id="toast"></div>
 
 <script>
-// ════════════════════════════
-// UPGRADE DATA
-// ════════════════════════════
-const TREE = [
-  { id:'root',      label:'Grand\nOpening',  icon:'🏨', cost:0,     x:190, y:55,   branch:'root',     children:['room2','amenity1','staff1','prestige1'], desc:'Your empire begins here.', unlocked:true, purchased:true },
+// ════════════════════════════════════════
+// TREE DEFINITION — proper branching layout
+// x/y are the node center positions in the canvas
+// ════════════════════════════════════════
+const TREE_DATA = [
+  // ROOT (center top)
+  { id:'root', label:'Grand Opening', icon:'🏨', cost:0, x:500, y:70, branch:'root', size:'lg',
+    children:['room2','amenity1','staff1','prestige_path'],
+    desc:'Your empire begins here.', unlocked:true, purchased:true },
 
-  // ROOMS
-  { id:'room2',     label:'2nd Room',    icon:'🛏', cost:150,   x:55,  y:155,  branch:'rooms',    children:['room4'],         desc:'Add a second guest room.',        unlocked:false, purchased:false },
-  { id:'room4',     label:'4 Rooms',     icon:'🛏', cost:400,   x:55,  y:265,  branch:'rooms',    children:['room8','suite1'],desc:'Expand to four rooms.',            unlocked:false, purchased:false },
-  { id:'room8',     label:'8 Rooms',     icon:'🏠', cost:900,   x:30,  y:385,  branch:'rooms',    children:['room16'],        desc:'A proper hotel floor.',           unlocked:false, purchased:false },
-  { id:'room16',    label:'16 Rooms',    icon:'🏠', cost:2500,  x:30,  y:510,  branch:'rooms',    children:['room32'],        desc:'Two full floors of accommodation.',unlocked:false, purchased:false },
-  { id:'room32',    label:'32 Rooms',    icon:'🏗', cost:7000,  x:30,  y:635,  branch:'rooms',    children:['room64'],        desc:'A major expansion wing.',         unlocked:false, purchased:false },
-  { id:'room64',    label:'64 Rooms',    icon:'🏢', cost:20000, x:30,  y:760,  branch:'rooms',    children:[],                desc:'Grand tower — fully realized.',   unlocked:false, purchased:false },
-  { id:'suite1',    label:'Suites',      icon:'✨', cost:1200,  x:100, y:510,  branch:'rooms',    children:['suite2'],        desc:'Luxury suites. +$80 per stay.',   unlocked:false, purchased:false },
-  { id:'suite2',    label:'Penthouse',   icon:'👑', cost:5000,  x:100, y:650,  branch:'rooms',    children:[],                desc:'The penthouse suite. +$200/stay.',unlocked:false, purchased:false },
+  // ── ROOMS BRANCH (left) ──
+  { id:'room2',  label:'2nd Room',   icon:'🛏', cost:150,   x:140, y:190, branch:'rooms', size:'md',
+    children:['room4','suite_path'], desc:'Add a second guest room.', unlocked:false, purchased:false },
+  { id:'room4',  label:'4 Rooms',    icon:'🛏', cost:400,   x:80,  y:320, branch:'rooms', size:'md',
+    children:['room8'],              desc:'Expand to four rooms.', unlocked:false, purchased:false },
+  { id:'suite_path', label:'Suites', icon:'✨', cost:800,   x:200, y:320, branch:'rooms', size:'md',
+    children:['room8','suite2'],     desc:'Luxury suites. +$80 per stay.', unlocked:false, purchased:false },
+  { id:'room8',  label:'8 Rooms',    icon:'🏠', cost:900,   x:100, y:460, branch:'rooms', size:'md',
+    children:['room16'],             desc:'A proper hotel floor.', unlocked:false, purchased:false },
+  { id:'suite2', label:'Penthouse',  icon:'👑', cost:3000,  x:230, y:460, branch:'rooms', size:'md',
+    children:['room16'],             desc:'The penthouse. +$200/stay.', unlocked:false, purchased:false },
+  { id:'room16', label:'16 Rooms',   icon:'🏠', cost:2500,  x:140, y:590, branch:'rooms', size:'md',
+    children:['room32'],             desc:'Two full floors.', unlocked:false, purchased:false },
+  { id:'room32', label:'32 Rooms',   icon:'🏗', cost:7000,  x:80,  y:720, branch:'rooms', size:'md',
+    children:['room64'],             desc:'A major expansion wing.', unlocked:false, purchased:false },
+  { id:'room64', label:'64 Rooms',   icon:'🏢', cost:20000, x:200, y:720, branch:'rooms', size:'sm',
+    children:[],                     desc:'Grand tower — fully realized.', unlocked:false, purchased:false },
 
-  // AMENITIES
-  { id:'amenity1',  label:'Vending',     icon:'🥤', cost:120,   x:190, y:155,  branch:'amenity',  children:['amenity2'],      desc:'Vending machine. +$10 per cycle.',unlocked:false, purchased:false },
-  { id:'amenity2',  label:'Café',        icon:'☕', cost:500,   x:190, y:265,  branch:'amenity',  children:['amenity3'],      desc:'In-house café. +$30 per cycle.',  unlocked:false, purchased:false },
-  { id:'amenity3',  label:'Restaurant',  icon:'🍽', cost:1500,  x:190, y:385,  branch:'amenity',  children:['amenity4'],      desc:'Fine dining. +$80 per cycle.',    unlocked:false, purchased:false },
-  { id:'amenity4',  label:'Rooftop Bar', icon:'🍸', cost:4000,  x:190, y:510,  branch:'amenity',  children:['amenity5'],      desc:'Rooftop bar. +$150 per cycle.',   unlocked:false, purchased:false },
-  { id:'amenity5',  label:'Spa & Pool',  icon:'🏊', cost:10000, x:190, y:635,  branch:'amenity',  children:[],                desc:'Luxury spa complex. +$300/cycle.',unlocked:false, purchased:false },
+  // ── AMENITIES BRANCH (center-left) ──
+  { id:'amenity1', label:'Vending',    icon:'🥤', cost:120,   x:380, y:210, branch:'amenity', size:'md',
+    children:['amenity2'],             desc:'Vending machine. +$10/cycle.', unlocked:false, purchased:false },
+  { id:'amenity2', label:'Café',       icon:'☕', cost:500,   x:340, y:350, branch:'amenity', size:'md',
+    children:['amenity3a','amenity3b'],desc:'In-house café. +$30/cycle.', unlocked:false, purchased:false },
+  { id:'amenity3a', label:'Restaurant',icon:'🍽', cost:1500,  x:280, y:490, branch:'amenity', size:'md',
+    children:['amenity4'],             desc:'Fine dining. +$80/cycle.', unlocked:false, purchased:false },
+  { id:'amenity3b', label:'Bar',       icon:'🍸', cost:1200,  x:400, y:490, branch:'amenity', size:'md',
+    children:['amenity4'],             desc:'In-house bar. +$60/cycle.', unlocked:false, purchased:false },
+  { id:'amenity4', label:'Rooftop',    icon:'🌇', cost:4000,  x:340, y:620, branch:'amenity', size:'md',
+    children:['amenity5'],             desc:'Rooftop bar. +$150/cycle.', unlocked:false, purchased:false },
+  { id:'amenity5', label:'Spa & Pool', icon:'🏊', cost:10000, x:340, y:750, branch:'amenity', size:'sm',
+    children:[],                       desc:'Luxury spa. +$300/cycle.', unlocked:false, purchased:false },
 
-  // STAFF
-  { id:'staff1',    label:'Bellhop',     icon:'🧳', cost:200,   x:325, y:155,  branch:'staff',    children:['staff2'],        desc:'Faster guest check-in.',          unlocked:false, purchased:false },
-  { id:'staff2',    label:'Concierge',   icon:'🎩', cost:600,   x:325, y:265,  branch:'staff',    children:['staff3'],        desc:'Guest satisfaction +15%.',        unlocked:false, purchased:false },
-  { id:'staff3',    label:'Housekeeping',icon:'🧹', cost:1100,  x:325, y:385,  branch:'staff',    children:['staff4'],        desc:'Rooms clean instantly.',          unlocked:false, purchased:false },
-  { id:'staff4',    label:'Manager',     icon:'👔', cost:3000,  x:325, y:510,  branch:'staff',    children:['staff5'],        desc:'Auto-assigns guests to rooms.',   unlocked:false, purchased:false },
-  { id:'staff5',    label:'Full Team',   icon:'👥', cost:8000,  x:325, y:635,  branch:'staff',    children:[],                desc:'All staff bonuses +20%.',         unlocked:false, purchased:false },
+  // ── STAFF BRANCH (center-right) ──
+  { id:'staff1',   label:'Bellhop',    icon:'🧳', cost:200,   x:620, y:210, branch:'staff', size:'md',
+    children:['staff2a','staff2b'],    desc:'Faster guest check-in.', unlocked:false, purchased:false },
+  { id:'staff2a',  label:'Concierge',  icon:'🎩', cost:600,   x:560, y:360, branch:'staff', size:'md',
+    children:['staff3'],               desc:'Guest satisfaction +15%.', unlocked:false, purchased:false },
+  { id:'staff2b',  label:'Chef',       icon:'👨‍🍳', cost:800,  x:680, y:360, branch:'staff', size:'md',
+    children:['staff3'],               desc:'Restaurant revenue +25%.', unlocked:false, purchased:false },
+  { id:'staff3',   label:'Housekeeping',icon:'🧹',cost:1100,  x:620, y:500, branch:'staff', size:'md',
+    children:['staff4'],               desc:'Rooms clean instantly.', unlocked:false, purchased:false },
+  { id:'staff4',   label:'Manager',    icon:'👔', cost:3000,  x:560, y:630, branch:'staff', size:'md',
+    children:['staff5'],               desc:'Auto-assigns guests.', unlocked:false, purchased:false },
+  { id:'staff5',   label:'Full Team',  icon:'👥', cost:8000,  x:680, y:630, branch:'staff', size:'sm',
+    children:[],                       desc:'All staff bonuses +20%.', unlocked:false, purchased:false },
 
-  // PRESTIGE
-  { id:'prestige1', label:'2-Star',      icon:'⭐', cost:800,   x:190, y:800,  branch:'prestige', children:['prestige2'],     desc:'Rated 2 stars. More guests arrive.',  unlocked:false, purchased:false },
-  { id:'prestige2', label:'3-Star',      icon:'⭐', cost:3000,  x:190, y:910,  branch:'prestige', children:['prestige3'],     desc:'Business travelers seek you out.',    unlocked:false, purchased:false },
-  { id:'prestige3', label:'5-Star',      icon:'🏆', cost:15000, x:190, y:1020, branch:'prestige', children:[],                desc:'The pinnacle of luxury hospitality.', unlocked:false, purchased:false },
+  // ── PRESTIGE BRANCH (right) ──
+  { id:'prestige_path', label:'2-Star', icon:'⭐', cost:500,  x:840, y:190, branch:'prestige', size:'md',
+    children:['prestige2a','prestige2b'], desc:'Rated 2 stars. More guests.', unlocked:false, purchased:false },
+  { id:'prestige2a', label:'3-Star',    icon:'⭐', cost:2000, x:780, y:330, branch:'prestige', size:'md',
+    children:['prestige3'],              desc:'Business travelers come.', unlocked:false, purchased:false },
+  { id:'prestige2b', label:'Awards',    icon:'🏅', cost:1500, x:900, y:330, branch:'prestige', size:'md',
+    children:['prestige3'],              desc:'Media coverage. +guests.', unlocked:false, purchased:false },
+  { id:'prestige3', label:'5-Star',     icon:'🏆', cost:15000,x:840, y:470, branch:'prestige', size:'md',
+    children:['prestige4a','prestige4b'],desc:'The pinnacle of luxury.', unlocked:false, purchased:false },
+  { id:'prestige4a', label:'VIP Club',  icon:'💎', cost:8000, x:780, y:610, branch:'prestige', size:'md',
+    children:[],                         desc:'VIP members spend 3x more.', unlocked:false, purchased:false },
+  { id:'prestige4b', label:'Michelin',  icon:'🌟', cost:12000,x:900, y:610, branch:'prestige', size:'sm',
+    children:[],                         desc:'Michelin star restaurant.', unlocked:false, purchased:false },
 ];
 
-const BCOL = { root:'#b8965a', rooms:'#4a7c59', amenity:'#b8965a', staff:'#7060b0', prestige:'#b8965a' };
-const BBG  = { root:'#fdf8ee', rooms:'#f0faf2', amenity:'#fdf6e8', staff:'#f5f0ff', prestige:'#fff8ed' };
-const BSTROKE = { root:'#d4b07a', rooms:'#80c090', amenity:'#d4b88a', staff:'#c0a8e8', prestige:'#d4b060' };
+const CANVAS_W = 1020;
+const CANVAS_H = 820;
+
+// Branch stroke colors for connections
+const B_STROKE = { root:'#b8965a', rooms:'#60a878', amenity:'#c8a050', staff:'#9080c0', prestige:'#c0a030' };
 
 // ════════════════════════════
 // STATE
@@ -808,7 +526,7 @@ let G = null, activeSlot = null, loop = null, tick = 0;
 const fresh = () => ({
   money:50, totalEarned:0,
   rooms:[{id:1,type:'standard',status:'empty',guest:null,timer:0}],
-  upgrades: JSON.parse(JSON.stringify(TREE)),
+  upgrades: JSON.parse(JSON.stringify(TREE_DATA)),
   stars:1, amenityIncome:0, hasCleaning:false,
   totalGuests:0, arrivalTick:80, sinceGuest:0,
 });
@@ -816,15 +534,15 @@ const fresh = () => ({
 // ════════════════════════════
 // PERSISTENCE
 // ════════════════════════════
-const getSaves = () => { try { return JSON.parse(localStorage.getItem('grand_v3')||'{}'); } catch { return {}; } };
-const putSaves = s => localStorage.setItem('grand_v3', JSON.stringify(s));
+const getSaves = () => { try { return JSON.parse(localStorage.getItem('grand_v4')||'{}'); } catch { return {}; } };
+const putSaves = s => localStorage.setItem('grand_v4', JSON.stringify(s));
 
 function saveGame(slot) {
   if (!G) return;
   const s = getSaves();
   s[slot] = { state:G, at:Date.now(), stars:G.stars, money:G.money, rooms:G.rooms.length };
   putSaves(s); activeSlot = slot;
-  toast(`Saved to Property ${slot+1}`); renderSaves();
+  toast(`Saved to Property ${slot+1}`); renderHomeSaves();
 }
 function loadGame(slot) {
   const s = getSaves();
@@ -832,20 +550,24 @@ function loadGame(slot) {
   if (loop) clearInterval(loop);
   G = JSON.parse(JSON.stringify(s[slot].state));
   activeSlot = slot;
-  startLoop(); renderAll(); switchTab('hotel-panel');
+  startLoop(); renderAll(); enterGame();
   toast(`Property ${slot+1} loaded`);
 }
 function deleteSlot(slot) {
   const s = getSaves(); delete s[slot]; putSaves(s);
   if (activeSlot===slot) { G=null; activeSlot=null; if(loop) clearInterval(loop); }
-  renderSaves(); toast(`Property ${slot+1} removed`);
+  renderHomeSaves();
+  toast(`Property ${slot+1} removed`);
 }
 function newGame(slot) {
   if (loop) clearInterval(loop);
   G = fresh(); activeSlot = slot;
-  saveGame(slot); startLoop(); renderAll(); switchTab('hotel-panel');
+  saveGame(slot); startLoop(); renderAll(); enterGame();
   toast(`Welcome to Property ${slot+1}`);
 }
+
+function enterGame() { document.body.classList.add('in-game'); switchTab('hotel-panel'); }
+function goHome() { document.body.classList.remove('in-game'); renderHomeSaves(); }
 
 // ════════════════════════════
 // GAME LOOP
@@ -858,7 +580,6 @@ function startLoop() { if(loop) clearInterval(loop); loop = setInterval(gameTick
 function gameTick() {
   if (!G) return;
   tick++;
-
   G.rooms.forEach(r => {
     if (r.status==='occupied') {
       r.timer--;
@@ -866,8 +587,7 @@ function gameTick() {
         const rate = r.type==='penthouse' ? 200 : r.type==='suite' ? 80 : 30 + G.stars*10;
         G.money += rate; G.totalEarned += rate;
         log(`${r.guest} departed Room ${r.id}`, 'out', `+$${rate}`);
-        r.status = G.hasCleaning ? 'empty' : 'dirty';
-        r.guest=null; r.timer=0;
+        r.status = G.hasCleaning ? 'empty' : 'dirty'; r.guest=null; r.timer=0;
         popMoney(rate);
       }
     } else if (r.status==='dirty') {
@@ -875,13 +595,10 @@ function gameTick() {
       if (r.timer<=0) { r.status='empty'; r.timer=0; }
     }
   });
-
   if (tick%5===0 && G.amenityIncome>0) { G.money+=G.amenityIncome; G.totalEarned+=G.amenityIncome; }
-
   G.sinceGuest++;
   const rate = Math.max(12, G.arrivalTick - G.stars*8);
   if (G.sinceGuest>=rate) { G.sinceGuest=0; tryArrive(); }
-
   renderHotel(); updateHeader();
 }
 
@@ -904,42 +621,91 @@ function buy(id) {
   if (!G) { toast('Load a property first'); return; }
   const u = G.upgrades.find(x=>x.id===id);
   if (!u||u.purchased) return;
-  if (!u.unlocked) { toast('Prerequisite not met'); return; }
+  if (!u.unlocked) { toast('Unlock prerequisite first'); return; }
   if (G.money<u.cost) { toast(`Requires $${fmt(u.cost)}`); return; }
   G.money -= u.cost;
   u.purchased = true;
   u.children.forEach(c=>{ const x=G.upgrades.find(y=>y.id===c); if(x) x.unlocked=true; });
   apply(id);
-  toast(`${u.label.replace('\n',' ')} — acquired`);
-  renderAll();
+  toast(`${u.label} — acquired`);
+  renderTree(); renderHotel(); updateHeader();
 }
 
 function apply(id) {
   const grow = n => { while(G.rooms.length<n) G.rooms.push({id:G.rooms.length+1,type:'standard',status:'empty',guest:null,timer:0}); };
   switch(id) {
-    case 'room2':  grow(2); break;  case 'room4': grow(4); break;
-    case 'room8':  grow(8); break;  case 'room16': grow(16); break;
+    case 'room2':  grow(2); break; case 'room4': grow(4); break;
+    case 'room8':  grow(8); break; case 'room16': grow(16); break;
     case 'room32': grow(32); break; case 'room64': grow(64); break;
-    case 'suite1': G.rooms.slice(0,Math.max(1,Math.floor(G.rooms.length/4))).forEach(r=>r.type='suite'); break;
+    case 'suite_path': G.rooms.slice(0, Math.max(1, Math.floor(G.rooms.length/4))).forEach(r=>r.type='suite'); break;
     case 'suite2': G.rooms[0].type='penthouse'; break;
     case 'amenity1': G.amenityIncome+=10; break; case 'amenity2': G.amenityIncome+=30; break;
-    case 'amenity3': G.amenityIncome+=80; break; case 'amenity4': G.amenityIncome+=150; break;
-    case 'amenity5': G.amenityIncome+=300; break;
+    case 'amenity3a': G.amenityIncome+=80; break; case 'amenity3b': G.amenityIncome+=60; break;
+    case 'amenity4': G.amenityIncome+=150; break; case 'amenity5': G.amenityIncome+=300; break;
     case 'staff1': G.arrivalTick=Math.max(10,G.arrivalTick-15); break;
-    case 'staff2': G.arrivalTick=Math.max(10,G.arrivalTick-10); break;
+    case 'staff2a': G.arrivalTick=Math.max(10,G.arrivalTick-10); break;
+    case 'staff2b': G.amenityIncome=Math.floor(G.amenityIncome*1.25); break;
     case 'staff3': G.hasCleaning=true; G.rooms.forEach(r=>{if(r.status==='dirty')r.status='empty';}); break;
-    case 'staff4': break;
+    case 'staff4': G.arrivalTick=Math.max(8,G.arrivalTick-5); break;
     case 'staff5': G.amenityIncome=Math.floor(G.amenityIncome*1.2); break;
-    case 'prestige1': G.stars=2; G.arrivalTick=Math.max(10,G.arrivalTick-10); break;
-    case 'prestige2': G.stars=3; G.arrivalTick=Math.max(10,G.arrivalTick-8); break;
+    case 'prestige_path': G.stars=Math.max(G.stars,2); G.arrivalTick=Math.max(10,G.arrivalTick-10); break;
+    case 'prestige2a': G.stars=Math.max(G.stars,3); G.arrivalTick=Math.max(10,G.arrivalTick-8); break;
+    case 'prestige2b': G.arrivalTick=Math.max(10,G.arrivalTick-6); break;
     case 'prestige3': G.stars=5; G.arrivalTick=Math.max(8,G.arrivalTick-15); break;
+    case 'prestige4a': G.amenityIncome=Math.floor(G.amenityIncome*1.3); break;
+    case 'prestige4b': G.amenityIncome+=400; break;
   }
 }
 
 // ════════════════════════════
-// RENDER
+// RENDER — HOME
 // ════════════════════════════
-function renderAll() { renderHotel(); renderTree(); renderSaves(); updateHeader(); }
+function renderHomeSaves() {
+  const c = document.getElementById('home-slots');
+  c.innerHTML = '';
+  const saves = getSaves();
+  for (let i=0; i<3; i++) {
+    const s = saves[i];
+    const div = document.createElement('div');
+    div.className = 'home-slot';
+    if (activeSlot===i) div.style.borderColor='rgba(184,150,90,0.5)';
+
+    const body = document.createElement('div');
+    body.className = 'home-slot-body';
+    const num = document.createElement('div');
+    num.className = 'home-slot-num'; num.textContent = i+1;
+    const info = document.createElement('div');
+    info.className = 'home-slot-info';
+
+    if (s) {
+      const d = new Date(s.at);
+      const ts = d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' · ' + d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      const stars = '★'.repeat(s.stars);
+      info.innerHTML = `<div class="home-slot-name"><span>${activeSlot===i?'⬥ ':''}</span>Property ${i+1}</div><div class="home-slot-meta"><span class="home-slot-stars">${stars}</span> &ensp;$${fmt(s.money)} &ensp;${s.rooms} rooms &ensp;· ${ts}</div>`;
+      body.append(num, info); div.appendChild(body);
+      const foot = document.createElement('div'); foot.className = 'home-slot-actions';
+      foot.append(
+        mkBtn('Play', 'hsa-btn primary', () => loadGame(i)),
+        mkBtn('Overwrite', 'hsa-btn', () => { if(G&&confirm(`Save current game to slot ${i+1}?`)) saveGame(i); else if(!G) toast('No active game to save.'); }),
+        mkBtn('Delete', 'hsa-btn danger', () => { if(confirm(`Delete Property ${i+1}?`)) deleteSlot(i); })
+      );
+      div.appendChild(foot);
+    } else {
+      info.innerHTML = `<div class="home-slot-name">Property ${i+1}</div><div class="home-slot-meta">Empty — start a new game</div>`;
+      body.append(num, info); div.appendChild(body);
+      const foot = document.createElement('div'); foot.className = 'home-slot-actions';
+      const nb = mkBtn('New Game', 'hsa-btn primary', () => newGame(i));
+      const sb = mkBtn('Save Here', 'hsa-btn', () => saveGame(i)); if(!G) sb.disabled=true;
+      foot.append(nb, sb); div.appendChild(foot);
+    }
+    c.appendChild(div);
+  }
+}
+
+// ════════════════════════════
+// RENDER — GAME
+// ════════════════════════════
+function renderAll() { renderHotel(); renderTree(); updateHeader(); }
 
 function updateHeader() {
   if(!G) return;
@@ -955,7 +721,7 @@ function renderHotel() {
   const occ = G.rooms.filter(r=>r.status==='occupied').length;
   const pct = G.rooms.length ? Math.round(occ/G.rooms.length*100) : 0;
   document.getElementById('kpi-money').textContent   = '$'+fmt(G.money);
-  document.getElementById('kpi-earned').textContent  = '$'+fmt(G.totalEarned)+' total revenue';
+  document.getElementById('kpi-earned').textContent  = '$'+fmt(G.totalEarned)+' total';
   document.getElementById('kpi-occ').textContent     = pct+'%';
   document.getElementById('kpi-rooms').textContent   = G.rooms.length+' rooms · '+occ+' occupied';
   document.getElementById('kpi-guests').textContent  = G.totalGuests;
@@ -984,208 +750,166 @@ function roomIcon(r) {
   return '🛏';
 }
 
+// ════════════════════════════
+// RENDER — SKILL TREE
+// ════════════════════════════
 function renderTree() {
   if (!G) return;
-  const svg = document.getElementById('tree-svg');
-  svg.innerHTML = '';
   const ups = G.upgrades;
+  const svg = document.getElementById('tree-svg');
+  const nodesDiv = document.getElementById('tree-nodes');
+  svg.setAttribute('width', CANVAS_W);
+  svg.setAttribute('height', CANVAS_H);
+  svg.innerHTML = '';
+  nodesDiv.innerHTML = '';
+  document.getElementById('tree-canvas').style.width = CANVAS_W+'px';
+  document.getElementById('tree-canvas').style.height = CANVAS_H+'px';
 
-  // Draw curved paths
-  ups.forEach(u => {
-    u.children.forEach(cid => {
-      const ch = ups.find(x=>x.id===cid); if (!ch) return;
-      const active = u.purchased && ch.unlocked;
-      const col = active ? BCOL[ch.branch] : '#ddd';
-      const my = (u.y+ch.y)/2;
+  // Build lookup
+  const byId = {};
+  ups.forEach(u => byId[u.id] = u);
+
+  // Draw connections (SVG lines behind nodes)
+  const deduped = new Set();
+  ups.forEach(parent => {
+    parent.children.forEach(cid => {
+      const key = parent.id+'→'+cid;
+      if (deduped.has(key)) return;
+      deduped.add(key);
+      const child = byId[cid]; if (!child) return;
+      const active = parent.purchased;
+      const col = B_STROKE[child.branch] || '#ccc';
+      const px = parent.x, py = parent.y, cx = child.x, cy = child.y;
+
+      // Determine radius to pull from
+      const pR = parent.size==='lg' ? 36 : parent.size==='md' ? 30 : 25;
+      const cR = child.size==='lg'  ? 36 : child.size==='md'  ? 30 : 25;
+
+      // Vector from parent to child
+      const dx = cx - px, dy = cy - py;
+      const len = Math.sqrt(dx*dx+dy*dy);
+      const ux = dx/len, uy = dy/len;
+      const x1 = px + ux*pR, y1 = py + uy*pR;
+      const x2 = cx - ux*cR, y2 = cy - uy*cR;
+
+      // Bezier control
+      const mx = (x1+x2)/2, my = (y1+y2)/2 - 20;
       const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-      path.setAttribute('d',`M${u.x},${u.y} C${u.x},${my} ${ch.x},${my} ${ch.x},${ch.y}`);
+      path.setAttribute('d',`M${x1},${y1} Q${mx},${my} ${x2},${y2}`);
       path.setAttribute('fill','none');
-      path.setAttribute('stroke', col);
-      path.setAttribute('stroke-width', active ? '1.8' : '1.2');
-      path.setAttribute('stroke-dasharray', ch.purchased ? 'none' : '5,3');
-      path.setAttribute('opacity', active ? '0.7' : '0.35');
+      path.setAttribute('stroke', active && child.unlocked ? col : '#ddd0c0');
+      path.setAttribute('stroke-width', active && child.unlocked ? '2' : '1.2');
+      path.setAttribute('stroke-dasharray', child.purchased ? 'none' : '6,3');
+      path.setAttribute('opacity', active ? (child.purchased?'0.9':'0.5') : '0.25');
+      path.setAttribute('stroke-linecap','round');
       svg.appendChild(path);
+
+      // Draw arrow dot at midpoint if active
+      if (active && child.unlocked && !child.purchased) {
+        const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        dot.setAttribute('cx', (x1+x2)/2);
+        dot.setAttribute('cy', (y1+y2)/2);
+        dot.setAttribute('r','3');
+        dot.setAttribute('fill', col);
+        dot.setAttribute('opacity','0.5');
+        svg.appendChild(dot);
+      }
     });
   });
 
-  // Draw nodes
+  // Draw node bubbles (HTML divs for rich styling)
   ups.forEach(u => {
-    const col    = BCOL[u.branch]   || '#b8965a';
-    const bgFill = BBG[u.branch]    || '#fff';
-    const stroke = BSTROKE[u.branch]|| '#d4b07a';
-    const R = 24;
+    const def = TREE_DATA.find(d=>d.id===u.id);
+    const size = def ? def.size : 'md';
+    const bubble = document.createElement('div');
+    bubble.className = `node-bubble branch-${u.branch}`;
+    if (u.purchased) bubble.classList.add('purchased');
+    else if (!u.unlocked) bubble.classList.add('locked');
+    else bubble.classList.add('available');
+    bubble.style.left = u.x + 'px';
+    bubble.style.top  = u.y + 'px';
 
-    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('transform',`translate(${u.x},${u.y})`);
-    g.style.cursor = u.purchased ? 'default' : u.unlocked ? 'pointer' : 'not-allowed';
+    const sizeClass = size==='lg'?'size-lg':size==='md'?'size-md':'size-sm';
+    const ring = document.createElement('div');
+    ring.className = `bubble-ring ${sizeClass}`;
+    ring.innerHTML = `<span class="bubble-icon">${u.icon}</span><span class="bubble-label">${u.label}</span>`;
 
-    // Shadow
-    const sh = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    sh.setAttribute('r',R+3); sh.setAttribute('cx','1'); sh.setAttribute('cy','2');
-    sh.setAttribute('fill','rgba(44,31,14,0.08)'); g.appendChild(sh);
-
-    // Circle body
-    const circ = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    circ.setAttribute('r', R);
     if (u.purchased) {
-      circ.setAttribute('fill', col);
-      circ.setAttribute('stroke', 'rgba(255,255,255,0.6)');
-      circ.setAttribute('stroke-width','2');
-    } else if (u.unlocked) {
-      circ.setAttribute('fill', bgFill);
-      circ.setAttribute('stroke', stroke);
-      circ.setAttribute('stroke-width','1.5');
-    } else {
-      circ.setAttribute('fill','#f5f0e8');
-      circ.setAttribute('stroke','#ddd0c0');
-      circ.setAttribute('stroke-width','1');
+      const badge = document.createElement('div');
+      badge.className = 'owned-badge'; badge.textContent = '✓';
+      ring.appendChild(badge);
     }
-    g.appendChild(circ);
+    bubble.appendChild(ring);
 
-    // Inner ring for unlocked-unpurchased
-    if (u.unlocked && !u.purchased) {
-      const ring = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      ring.setAttribute('r', R-5); ring.setAttribute('fill','none');
-      ring.setAttribute('stroke', stroke); ring.setAttribute('stroke-width','0.7');
-      ring.setAttribute('opacity','0.5');
-      g.appendChild(ring);
+    if (!u.purchased && u.cost > 0) {
+      const cost = document.createElement('div');
+      cost.className = 'bubble-cost';
+      const canAfford = G && G.money >= u.cost;
+      cost.style.color = u.unlocked ? (canAfford ? (B_STROKE[u.branch]||'#888') : '#c06060') : '#ccc';
+      cost.textContent = '$'+fmt(u.cost);
+      bubble.appendChild(cost);
     }
-
-    // Icon
-    const ic = document.createElementNS('http://www.w3.org/2000/svg','text');
-    ic.setAttribute('text-anchor','middle'); ic.setAttribute('dy','-2');
-    ic.setAttribute('font-size','13'); ic.style.userSelect='none';
-    ic.textContent = u.icon; g.appendChild(ic);
-
-    // Label
-    u.label.split('\n').forEach((line,i) => {
-      const lt = document.createElementNS('http://www.w3.org/2000/svg','text');
-      lt.setAttribute('text-anchor','middle');
-      lt.setAttribute('dy', (10+i*9)+'');
-      lt.setAttribute('font-size','6.5');
-      lt.setAttribute('font-family','Jost,sans-serif');
-      lt.setAttribute('font-weight','600');
-      lt.setAttribute('letter-spacing','0.8');
-      lt.setAttribute('fill', u.purchased ? 'rgba(255,255,255,0.9)' : u.unlocked ? col : '#c0b0a0');
-      lt.style.userSelect='none';
-      lt.textContent = line.toUpperCase(); g.appendChild(lt);
-    });
-
-    // Cost or "owned"
-    const bt = document.createElementNS('http://www.w3.org/2000/svg','text');
-    bt.setAttribute('text-anchor','middle'); bt.setAttribute('dy', R+13+'');
-    bt.setAttribute('font-size','7.5');
-    bt.setAttribute('font-family','Jost,sans-serif'); bt.setAttribute('font-weight','500');
-    bt.style.userSelect='none';
-    if (u.purchased) {
-      bt.setAttribute('fill','#a09070'); bt.textContent='OWNED';
-    } else {
-      bt.setAttribute('fill', u.unlocked ? col : '#ccc');
-      bt.textContent = u.cost>0 ? '$'+fmt(u.cost) : '';
-    }
-    g.appendChild(bt);
 
     // Events
-    g.addEventListener('mouseenter', e => showTip(u, e));
-    g.addEventListener('mousemove',  e => moveTip(e));
-    g.addEventListener('mouseleave', hideTip);
-    if (!u.purchased && u.unlocked) g.addEventListener('click', ()=>buy(u.id));
-    svg.appendChild(g);
+    bubble.addEventListener('mouseenter', e => showTip(u, e));
+    bubble.addEventListener('mousemove', moveTip);
+    bubble.addEventListener('mouseleave', hideTip);
+    if (!u.purchased && u.unlocked) bubble.addEventListener('click', () => buy(u.id));
+
+    nodesDiv.appendChild(bubble);
   });
 }
 
+// ════════════════════════════
+// TOOLTIP
+// ════════════════════════════
 function showTip(u, e) {
   const t = document.getElementById('tooltip');
-  document.getElementById('tt-name').textContent = u.label.replace('\n',' ');
+  document.getElementById('tt-name').textContent = u.label;
   document.getElementById('tt-desc').textContent = u.desc;
   document.getElementById('tt-cost').textContent = u.purchased ? '' : u.cost>0 ? `Investment: $${fmt(u.cost)}` : '';
   const st = document.getElementById('tt-status');
-  if (u.purchased) { st.className='tt-status owned'; st.textContent='✓  Acquired'; }
-  else if (!u.unlocked) { st.className='tt-status locked'; st.textContent='Locked — unlock prerequisite first'; }
+  if (u.purchased) { st.className='tt-status owned'; st.textContent='✓ Acquired'; }
+  else if (!u.unlocked) { st.className='tt-status locked'; st.textContent='Locked — complete prerequisites'; }
   else { st.className='tt-status'; st.textContent = G && G.money>=u.cost ? 'Click to acquire' : 'Insufficient funds'; }
-  t.style.display='block';
-  moveTip(e);
+  t.style.display='block'; moveTip(e);
 }
 function moveTip(e) {
   const t = document.getElementById('tooltip');
-  t.style.left = (e.clientX+14)+'px';
-  t.style.top  = (e.clientY-10)+'px';
+  t.style.left = (e.clientX+16)+'px'; t.style.top = (e.clientY-10)+'px';
 }
 function hideTip() { document.getElementById('tooltip').style.display='none'; }
-
-function renderSaves() {
-  const c = document.getElementById('save-slots-container');
-  c.innerHTML = '';
-  const saves = getSaves();
-  for (let i=0;i<3;i++) {
-    const s = saves[i];
-    const div = document.createElement('div');
-    div.className = 'save-slot' + (activeSlot===i?' active-save':'');
-
-    const body = document.createElement('div');
-    body.className = 'save-slot-body';
-
-    const idx = document.createElement('div');
-    idx.className = 'slot-index'; idx.textContent = i+1;
-
-    const info = document.createElement('div');
-    info.className = 'slot-info';
-
-    if (s) {
-      const d = new Date(s.at);
-      const ts = d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' · ' + d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-      const stars = '<span class="slot-star">'+'★'.repeat(s.stars)+'</span>';
-      info.innerHTML = `<div class="slot-name">Property ${i+1}${activeSlot===i?'<span class="active-badge">Active</span>':''}</div><div class="slot-meta">${stars} · $${fmt(s.money)} · ${s.rooms} rooms · Saved ${ts}</div>`;
-      body.append(idx, info); div.appendChild(body);
-      const foot = document.createElement('div');
-      foot.className = 'save-slot-footer';
-      const lb=btn('Load','sf-btn load',()=>{ if(confirm(`Load Property ${i+1}?`)) loadGame(i); });
-      const sb=btn('Save Here','sf-btn save',()=>saveGame(i)); if(!G) sb.disabled=true;
-      const db=btn('Remove','sf-btn del',()=>{ if(confirm(`Remove Property ${i+1}?`)) deleteSlot(i); });
-      foot.append(lb,sb,db); div.appendChild(foot);
-    } else {
-      info.innerHTML = `<div class="slot-name">Property ${i+1}</div><div class="slot-meta">No data — start a new game</div>`;
-      body.append(idx, info); div.appendChild(body);
-      const foot = document.createElement('div');
-      foot.className = 'save-slot-footer';
-      const nb=btn('New Game','sf-btn load',()=>newGame(i));
-      const sb=btn('Save Here','sf-btn save',()=>saveGame(i)); if(!G) sb.disabled=true;
-      foot.append(nb,sb); div.appendChild(foot);
-    }
-    c.appendChild(div);
-  }
-}
 
 // ════════════════════════════
 // HELPERS
 // ════════════════════════════
-function btn(label, cls, onclick) {
+function mkBtn(label, cls, onclick) {
   const b = document.createElement('button');
-  b.className = cls; b.textContent = label; b.onclick = onclick; return b;
+  b.className=cls; b.textContent=label; b.onclick=onclick; return b;
 }
 
 function log(msg, type='', extra='') {
   const box = document.getElementById('desk-log');
-  const row = document.createElement('div');
-  row.className = 'log-entry';
-  const tag = type ? `<span class="log-tag ${type}">${type==='in'?'Check-in':'Check-out'}</span>` : '';
+  if (!box) return;
+  const row = document.createElement('div'); row.className='log-entry';
+  const tag = type ? `<span class="log-tag ${type}">${type==='in'?'In':'Out'}</span>` : '';
   const now = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-  row.innerHTML = `${tag}<span class="log-msg">${msg}</span>${extra?`<span style="font-size:0.62rem;color:var(--brass-dk);font-weight:500">${extra}</span>`:''}<span class="log-time">${now}</span>`;
+  row.innerHTML = `${tag}<span class="log-msg">${msg}</span>${extra?`<span style="font-size:0.6rem;color:var(--brass-dk);font-weight:600">${extra}</span>`:''}<span class="log-time">${now}</span>`;
   box.insertBefore(row, box.firstChild);
   while (box.children.length>40) box.removeChild(box.lastChild);
 }
 
 function toast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
+  t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 2200);
 }
 
 function popMoney(n) {
   const p = document.createElement('div');
   p.className='money-pop'; p.textContent='+$'+n;
-  p.style.left=(80+Math.random()*160)+'px';
-  p.style.top=(180+Math.random()*100)+'px';
+  p.style.left=(80+Math.random()*180)+'px';
+  p.style.top=(200+Math.random()*80)+'px';
   document.body.appendChild(p);
   setTimeout(()=>p.remove(), 1500);
 }
@@ -1205,23 +929,21 @@ function switchTab(id) {
 // ════════════════════════════
 // INIT
 // ════════════════════════════
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{ switchTab(t.dataset.tab); if(t.dataset.tab==='tree-panel') renderTree(); }));
 document.getElementById('save-btn').addEventListener('click',()=>{
   if(!G){toast('No active property');return;}
-  if(activeSlot!==null) saveGame(activeSlot); else switchTab('saves-panel');
+  if(activeSlot!==null) saveGame(activeSlot); else toast('No slot selected');
 });
 
 (function init() {
+  renderHomeSaves();
   const saves = getSaves();
   let latest=null, lt=0;
   for(let i=0;i<3;i++) if(saves[i]&&saves[i].at>lt){lt=saves[i].at;latest=i;}
   if(latest!==null) {
     G=JSON.parse(JSON.stringify(saves[latest].state));
-    activeSlot=latest; startLoop(); renderAll(); switchTab('hotel-panel');
-    log('Welcome back to The Grand', 'in');
-  } else {
-    renderSaves(); switchTab('saves-panel');
-    toast('Welcome to The Grand — open a property to begin');
+    activeSlot=latest; startLoop(); renderAll(); enterGame();
+    log('Welcome back to The Grand','in');
   }
 })();
 </script>
