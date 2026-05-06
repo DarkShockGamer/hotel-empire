@@ -55,55 +55,103 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 
 /* ── HOME SCREEN ── */
 #screen-home {
-  background: var(--espresso);
+  background: #1a3a2a;
   background-image:
-    radial-gradient(ellipse at 30% 20%, rgba(184,150,90,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse at 70% 80%, rgba(184,150,90,0.08) 0%, transparent 50%),
-    repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(184,150,90,0.02) 30px, rgba(184,150,90,0.02) 31px);
+    radial-gradient(ellipse at 20% 0%,   #2d6e4e 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 10%,  #7a4a1a 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 100%, #1e2d4a 0%, transparent 55%),
+    radial-gradient(ellipse at 0%  60%,  #2a1a40 0%, transparent 40%),
+    radial-gradient(ellipse at 100% 50%, #4a2a10 0%, transparent 35%);
+  overflow: hidden;
 }
-.home-ornament { color: var(--brass); font-size: 0.6rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 12px; opacity: 0.6; }
-.home-the { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; color: var(--brass-lt); letter-spacing: 6px; text-transform: uppercase; }
-.home-grand { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 4rem; color: var(--ivory); letter-spacing: 16px; text-transform: uppercase; line-height: 1; }
-.home-sub { font-size: 0.6rem; letter-spacing: 5px; color: var(--brass); text-transform: uppercase; margin-top: 6px; }
-.home-divider { width: 200px; height: 1px; background: linear-gradient(90deg, transparent, var(--brass), transparent); margin: 28px 0; }
-.home-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(249,245,239,0.4); font-size: 0.9rem; letter-spacing: 1px; margin-bottom: 40px; }
 
-.saves-container { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 460px; }
-.saves-label { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--brass); margin-bottom: 4px; }
+/* Decorative art-deco arch behind the title */
+#screen-home::before {
+  content: '';
+  position: absolute;
+  top: -10%; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 520px;
+  border-radius: 50% 50% 0 0;
+  border: 1px solid rgba(184,150,90,0.18);
+  pointer-events: none;
+}
+#screen-home::after {
+  content: '';
+  position: absolute;
+  top: -5%; left: 50%; transform: translateX(-50%);
+  width: 440px; height: 400px;
+  border-radius: 50% 50% 0 0;
+  border: 1px solid rgba(184,150,90,0.1);
+  pointer-events: none;
+}
+
+.home-bg-stars {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+}
+.home-bg-stars::before {
+  content: '✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦';
+  position: absolute; top: 0; left: 0; right: 0;
+  font-size: 0.5rem; color: rgba(184,150,90,0.12);
+  letter-spacing: 24px; line-height: 3; word-break: break-all;
+}
+
+.home-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 560px; padding: 0 20px; }
+
+.home-ornament { color: var(--brass-lt); font-size: 0.55rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 14px; opacity: 0.7; }
+.home-the { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: var(--brass-lt); letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 0 40px rgba(212,176,122,0.5); }
+.home-grand { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 4.5rem; color: #fff; letter-spacing: 18px; text-transform: uppercase; line-height: 1; text-shadow: 0 2px 40px rgba(0,0,0,0.5), 0 0 80px rgba(184,150,90,0.2); }
+.home-sub { font-size: 0.58rem; letter-spacing: 5px; color: var(--brass); text-transform: uppercase; margin-top: 8px; }
+.home-divider {
+  width: 280px; height: 1px; margin: 22px 0 16px;
+  background: linear-gradient(90deg, transparent, rgba(184,150,90,0.6), #d4b07a, rgba(184,150,90,0.6), transparent);
+  position: relative;
+}
+.home-divider::before {
+  content: '◆';
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  color: var(--brass-lt); font-size: 0.5rem; background: transparent;
+  padding: 0 4px;
+}
+.home-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(255,255,255,0.35); font-size: 0.95rem; letter-spacing: 2px; margin-bottom: 32px; }
+
+.saves-container { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.saves-label { font-size: 0.52rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(184,150,90,0.7); margin-bottom: 6px; }
 
 .home-slot {
-  background: rgba(249,245,239,0.04);
-  border: 1px solid rgba(184,150,90,0.2);
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(184,150,90,0.25);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: all 0.2s;
+  transition: all 0.22s;
+  backdrop-filter: blur(6px);
 }
-.home-slot:hover { background: rgba(249,245,239,0.07); border-color: rgba(184,150,90,0.4); }
-.home-slot-body { display: flex; align-items: center; gap: 14px; padding: 14px 18px; }
+.home-slot:hover { background: rgba(255,255,255,0.09); border-color: rgba(184,150,90,0.5); transform: translateY(-1px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.home-slot-body { display: flex; align-items: center; gap: 14px; padding: 13px 16px; }
 .home-slot-num {
-  width: 38px; height: 38px; border-radius: 8px;
-  background: rgba(184,150,90,0.12); border: 1px solid rgba(184,150,90,0.25);
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(184,150,90,0.18); border: 1px solid rgba(184,150,90,0.35);
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--brass-lt);
+  font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--brass-lt);
   flex-shrink: 0;
 }
 .home-slot-info { flex: 1; }
-.home-slot-name { font-size: 0.8rem; font-weight: 600; color: var(--ivory); display: flex; align-items: center; gap: 8px; }
-.home-slot-meta { font-size: 0.62rem; color: rgba(249,245,239,0.4); margin-top: 3px; }
-.home-slot-stars { color: var(--brass); }
-.home-slot-actions { display: flex; border-top: 1px solid rgba(184,150,90,0.12); }
+.home-slot-name { font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 8px; }
+.home-slot-meta { font-size: 0.6rem; color: rgba(255,255,255,0.38); margin-top: 3px; }
+.home-slot-stars { color: var(--brass-lt); }
+.home-slot-actions { display: flex; border-top: 1px solid rgba(184,150,90,0.15); }
 .hsa-btn {
   flex: 1; padding: 9px 0; background: transparent; border: none;
-  border-right: 1px solid rgba(184,150,90,0.12);
-  font-family: 'Jost', sans-serif; font-size: 0.6rem; font-weight: 600;
+  border-right: 1px solid rgba(184,150,90,0.15);
+  font-family: 'Jost', sans-serif; font-size: 0.58rem; font-weight: 600;
   letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
-  color: rgba(249,245,239,0.45); transition: all 0.15s;
+  color: rgba(255,255,255,0.38); transition: all 0.15s;
 }
 .hsa-btn:last-child { border-right: none; }
-.hsa-btn:hover { background: rgba(184,150,90,0.1); color: var(--brass-lt); }
-.hsa-btn.primary:hover { color: var(--ivory); }
-.hsa-btn.danger:hover { color: #e07070; background: rgba(140,60,60,0.15); }
-.hsa-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+.hsa-btn:hover { background: rgba(184,150,90,0.12); color: var(--brass-lt); }
+.hsa-btn.primary { color: rgba(255,255,255,0.6); }
+.hsa-btn.primary:hover { background: rgba(184,150,90,0.22); color: #fff; }
+.hsa-btn.danger:hover { color: #f08080; background: rgba(160,50,50,0.2); }
+.hsa-btn:disabled { opacity: 0.18; cursor: not-allowed; }
 
 /* ── GAME HEADER ── */
 #header {
@@ -200,10 +248,14 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .room-cell.suite-occ { background: #ede5ff; border-color: #b8a0e0; }
 
 /* ── SKILL TREE ── */
-#tree-panel { padding: 0; }
+#tree-panel { padding: 0; background: #f0ede6; }
 .tree-wrap {
   width: 100%; height: 100%; overflow: auto;
   display: flex; justify-content: center;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(74,124,89,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(112,96,176,0.05) 0%, transparent 45%),
+    #edeae2;
 }
 #tree-canvas { position: relative; }
 #tree-svg { display: block; }
@@ -225,9 +277,9 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   transition: box-shadow 0.2s, border-color 0.2s;
 }
-.bubble-ring.size-lg { width: 72px; height: 72px; }
-.bubble-ring.size-md { width: 60px; height: 60px; }
-.bubble-ring.size-sm { width: 50px; height: 50px; }
+.bubble-ring.size-lg { width: 80px; height: 80px; }
+.bubble-ring.size-md { width: 68px; height: 68px; }
+.bubble-ring.size-sm { width: 56px; height: 56px; }
 
 /* Available pulse */
 .node-bubble.available .bubble-ring {
@@ -238,9 +290,9 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
   50% { box-shadow: 0 0 0 6px rgba(184,150,90,0); }
 }
 
-.bubble-icon { font-size: 1.35rem; line-height: 1; margin-bottom: 1px; }
-.bubble-label { font-size: 0.48rem; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; text-align: center; line-height: 1.2; margin-top: 1px; white-space: nowrap; }
-.bubble-cost { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 0.52rem; font-weight: 600; white-space: nowrap; }
+.bubble-icon { font-size: 1.55rem; line-height: 1; margin-bottom: 1px; }
+.bubble-label { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; text-align: center; line-height: 1.2; margin-top: 2px; white-space: nowrap; }
+.bubble-cost { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.56rem; font-weight: 700; white-space: nowrap; }
 
 /* branch colors */
 .branch-rooms    .bubble-ring { background: #e8f5ec; border: 2px solid #80c090; }
@@ -337,15 +389,18 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 
 <!-- HOME SCREEN -->
 <div id="screen-home">
-  <div class="home-ornament">✦ &nbsp; Est. 2024 &nbsp; ✦</div>
-  <div class="home-the">The</div>
-  <div class="home-grand">Grand</div>
-  <div class="home-sub">Hotel Empire</div>
-  <div class="home-divider"></div>
-  <div class="home-tagline">Build. Expand. Ascend.</div>
-  <div class="saves-container">
-    <div class="saves-label">Your Properties</div>
-    <div id="home-slots"></div>
+  <div class="home-bg-stars"></div>
+  <div class="home-content">
+    <div class="home-ornament">✦ &nbsp; Est. 2024 &nbsp; ✦</div>
+    <div class="home-the">The</div>
+    <div class="home-grand">Grand</div>
+    <div class="home-sub">Hotel Empire</div>
+    <div class="home-divider"></div>
+    <div class="home-tagline">Build. Expand. Ascend.</div>
+    <div class="saves-container">
+      <div class="saves-label">Your Properties</div>
+      <div id="home-slots"></div>
+    </div>
   </div>
 </div>
 
@@ -447,76 +502,76 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 // ════════════════════════════════════════
 const TREE_DATA = [
   // ROOT (center top)
-  { id:'root', label:'Grand Opening', icon:'🏨', cost:0, x:500, y:70, branch:'root', size:'lg',
+  { id:'root', label:'Grand Opening', icon:'🏨', cost:0, x:560, y:80, branch:'root', size:'lg',
     children:['room2','amenity1','staff1','prestige_path'],
     desc:'Your empire begins here.', unlocked:true, purchased:true },
 
   // ── ROOMS BRANCH (left) ──
-  { id:'room2',  label:'2nd Room',   icon:'🛏', cost:150,   x:140, y:190, branch:'rooms', size:'md',
+  { id:'room2',  label:'2nd Room',   icon:'🛏', cost:150,   x:130, y:230, branch:'rooms', size:'md',
     children:['room4','suite_path'], desc:'Add a second guest room.', unlocked:false, purchased:false },
-  { id:'room4',  label:'4 Rooms',    icon:'🛏', cost:400,   x:80,  y:320, branch:'rooms', size:'md',
+  { id:'room4',  label:'4 Rooms',    icon:'🛏', cost:400,   x:60,  y:390, branch:'rooms', size:'md',
     children:['room8'],              desc:'Expand to four rooms.', unlocked:false, purchased:false },
-  { id:'suite_path', label:'Suites', icon:'✨', cost:800,   x:200, y:320, branch:'rooms', size:'md',
+  { id:'suite_path', label:'Suites', icon:'✨', cost:800,   x:210, y:390, branch:'rooms', size:'md',
     children:['room8','suite2'],     desc:'Luxury suites. +$80 per stay.', unlocked:false, purchased:false },
-  { id:'room8',  label:'8 Rooms',    icon:'🏠', cost:900,   x:100, y:460, branch:'rooms', size:'md',
+  { id:'room8',  label:'8 Rooms',    icon:'🏠', cost:900,   x:80,  y:555, branch:'rooms', size:'md',
     children:['room16'],             desc:'A proper hotel floor.', unlocked:false, purchased:false },
-  { id:'suite2', label:'Penthouse',  icon:'👑', cost:3000,  x:230, y:460, branch:'rooms', size:'md',
+  { id:'suite2', label:'Penthouse',  icon:'👑', cost:3000,  x:230, y:555, branch:'rooms', size:'md',
     children:['room16'],             desc:'The penthouse. +$200/stay.', unlocked:false, purchased:false },
-  { id:'room16', label:'16 Rooms',   icon:'🏠', cost:2500,  x:140, y:590, branch:'rooms', size:'md',
+  { id:'room16', label:'16 Rooms',   icon:'🏠', cost:2500,  x:145, y:710, branch:'rooms', size:'md',
     children:['room32'],             desc:'Two full floors.', unlocked:false, purchased:false },
-  { id:'room32', label:'32 Rooms',   icon:'🏗', cost:7000,  x:80,  y:720, branch:'rooms', size:'md',
+  { id:'room32', label:'32 Rooms',   icon:'🏗', cost:7000,  x:75,  y:865, branch:'rooms', size:'md',
     children:['room64'],             desc:'A major expansion wing.', unlocked:false, purchased:false },
-  { id:'room64', label:'64 Rooms',   icon:'🏢', cost:20000, x:200, y:720, branch:'rooms', size:'sm',
+  { id:'room64', label:'64 Rooms',   icon:'🏢', cost:20000, x:215, y:865, branch:'rooms', size:'sm',
     children:[],                     desc:'Grand tower — fully realized.', unlocked:false, purchased:false },
 
   // ── AMENITIES BRANCH (center-left) ──
-  { id:'amenity1', label:'Vending',    icon:'🥤', cost:120,   x:380, y:210, branch:'amenity', size:'md',
+  { id:'amenity1', label:'Vending',    icon:'🥤', cost:120,   x:400, y:250, branch:'amenity', size:'md',
     children:['amenity2'],             desc:'Vending machine. +$10/cycle.', unlocked:false, purchased:false },
-  { id:'amenity2', label:'Café',       icon:'☕', cost:500,   x:340, y:350, branch:'amenity', size:'md',
+  { id:'amenity2', label:'Café',       icon:'☕', cost:500,   x:360, y:420, branch:'amenity', size:'md',
     children:['amenity3a','amenity3b'],desc:'In-house café. +$30/cycle.', unlocked:false, purchased:false },
-  { id:'amenity3a', label:'Restaurant',icon:'🍽', cost:1500,  x:280, y:490, branch:'amenity', size:'md',
+  { id:'amenity3a', label:'Restaurant',icon:'🍽', cost:1500,  x:290, y:590, branch:'amenity', size:'md',
     children:['amenity4'],             desc:'Fine dining. +$80/cycle.', unlocked:false, purchased:false },
-  { id:'amenity3b', label:'Bar',       icon:'🍸', cost:1200,  x:400, y:490, branch:'amenity', size:'md',
+  { id:'amenity3b', label:'Bar',       icon:'🍸', cost:1200,  x:430, y:590, branch:'amenity', size:'md',
     children:['amenity4'],             desc:'In-house bar. +$60/cycle.', unlocked:false, purchased:false },
-  { id:'amenity4', label:'Rooftop',    icon:'🌇', cost:4000,  x:340, y:620, branch:'amenity', size:'md',
+  { id:'amenity4', label:'Rooftop',    icon:'🌇', cost:4000,  x:360, y:750, branch:'amenity', size:'md',
     children:['amenity5'],             desc:'Rooftop bar. +$150/cycle.', unlocked:false, purchased:false },
-  { id:'amenity5', label:'Spa & Pool', icon:'🏊', cost:10000, x:340, y:750, branch:'amenity', size:'sm',
+  { id:'amenity5', label:'Spa & Pool', icon:'🏊', cost:10000, x:360, y:900, branch:'amenity', size:'sm',
     children:[],                       desc:'Luxury spa. +$300/cycle.', unlocked:false, purchased:false },
 
   // ── STAFF BRANCH (center-right) ──
-  { id:'staff1',   label:'Bellhop',    icon:'🧳', cost:200,   x:620, y:210, branch:'staff', size:'md',
+  { id:'staff1',   label:'Bellhop',    icon:'🧳', cost:200,   x:720, y:250, branch:'staff', size:'md',
     children:['staff2a','staff2b'],    desc:'Faster guest check-in.', unlocked:false, purchased:false },
-  { id:'staff2a',  label:'Concierge',  icon:'🎩', cost:600,   x:560, y:360, branch:'staff', size:'md',
+  { id:'staff2a',  label:'Concierge',  icon:'🎩', cost:600,   x:650, y:420, branch:'staff', size:'md',
     children:['staff3'],               desc:'Guest satisfaction +15%.', unlocked:false, purchased:false },
-  { id:'staff2b',  label:'Chef',       icon:'👨‍🍳', cost:800,  x:680, y:360, branch:'staff', size:'md',
+  { id:'staff2b',  label:'Chef',       icon:'👨‍🍳', cost:800,  x:790, y:420, branch:'staff', size:'md',
     children:['staff3'],               desc:'Restaurant revenue +25%.', unlocked:false, purchased:false },
-  { id:'staff3',   label:'Housekeeping',icon:'🧹',cost:1100,  x:620, y:500, branch:'staff', size:'md',
+  { id:'staff3',   label:'Housekeeping',icon:'🧹',cost:1100,  x:720, y:590, branch:'staff', size:'md',
     children:['staff4'],               desc:'Rooms clean instantly.', unlocked:false, purchased:false },
-  { id:'staff4',   label:'Manager',    icon:'👔', cost:3000,  x:560, y:630, branch:'staff', size:'md',
+  { id:'staff4',   label:'Manager',    icon:'👔', cost:3000,  x:650, y:750, branch:'staff', size:'md',
     children:['staff5'],               desc:'Auto-assigns guests.', unlocked:false, purchased:false },
-  { id:'staff5',   label:'Full Team',  icon:'👥', cost:8000,  x:680, y:630, branch:'staff', size:'sm',
+  { id:'staff5',   label:'Full Team',  icon:'👥', cost:8000,  x:790, y:750, branch:'staff', size:'sm',
     children:[],                       desc:'All staff bonuses +20%.', unlocked:false, purchased:false },
 
   // ── PRESTIGE BRANCH (right) ──
-  { id:'prestige_path', label:'2-Star', icon:'⭐', cost:500,  x:840, y:190, branch:'prestige', size:'md',
+  { id:'prestige_path', label:'2-Star', icon:'⭐', cost:500,  x:990, y:230, branch:'prestige', size:'md',
     children:['prestige2a','prestige2b'], desc:'Rated 2 stars. More guests.', unlocked:false, purchased:false },
-  { id:'prestige2a', label:'3-Star',    icon:'⭐', cost:2000, x:780, y:330, branch:'prestige', size:'md',
+  { id:'prestige2a', label:'3-Star',    icon:'⭐', cost:2000, x:920, y:400, branch:'prestige', size:'md',
     children:['prestige3'],              desc:'Business travelers come.', unlocked:false, purchased:false },
-  { id:'prestige2b', label:'Awards',    icon:'🏅', cost:1500, x:900, y:330, branch:'prestige', size:'md',
+  { id:'prestige2b', label:'Awards',    icon:'🏅', cost:1500, x:1060,y:400, branch:'prestige', size:'md',
     children:['prestige3'],              desc:'Media coverage. +guests.', unlocked:false, purchased:false },
-  { id:'prestige3', label:'5-Star',     icon:'🏆', cost:15000,x:840, y:470, branch:'prestige', size:'md',
+  { id:'prestige3', label:'5-Star',     icon:'🏆', cost:15000,x:990, y:570, branch:'prestige', size:'md',
     children:['prestige4a','prestige4b'],desc:'The pinnacle of luxury.', unlocked:false, purchased:false },
-  { id:'prestige4a', label:'VIP Club',  icon:'💎', cost:8000, x:780, y:610, branch:'prestige', size:'md',
+  { id:'prestige4a', label:'VIP Club',  icon:'💎', cost:8000, x:920, y:740, branch:'prestige', size:'md',
     children:[],                         desc:'VIP members spend 3x more.', unlocked:false, purchased:false },
-  { id:'prestige4b', label:'Michelin',  icon:'🌟', cost:12000,x:900, y:610, branch:'prestige', size:'sm',
+  { id:'prestige4b', label:'Michelin',  icon:'🌟', cost:12000,x:1060,y:740, branch:'prestige', size:'sm',
     children:[],                         desc:'Michelin star restaurant.', unlocked:false, purchased:false },
 ];
 
-const CANVAS_W = 1020;
-const CANVAS_H = 820;
+const CANVAS_W = 1160;
+const CANVAS_H = 980;
 
-// Branch stroke colors for connections
-const B_STROKE = { root:'#b8965a', rooms:'#60a878', amenity:'#c8a050', staff:'#9080c0', prestige:'#c0a030' };
+// Branch stroke colors for connections — strong saturated colors
+const B_STROKE = { root:'#b8965a', rooms:'#2d8a50', amenity:'#c08020', staff:'#6040b8', prestige:'#b08020' };
 
 // ════════════════════════════
 // STATE
@@ -765,6 +820,19 @@ function renderTree() {
   document.getElementById('tree-canvas').style.width = CANVAS_W+'px';
   document.getElementById('tree-canvas').style.height = CANVAS_H+'px';
 
+  // Subtle dot grid for depth
+  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+  const pat = document.createElementNS('http://www.w3.org/2000/svg','pattern');
+  pat.setAttribute('id','dotgrid'); pat.setAttribute('patternUnits','userSpaceOnUse');
+  pat.setAttribute('width','40'); pat.setAttribute('height','40');
+  const dotc = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  dotc.setAttribute('cx','20'); dotc.setAttribute('cy','20'); dotc.setAttribute('r','1');
+  dotc.setAttribute('fill','rgba(100,80,40,0.15)');
+  pat.appendChild(dotc); defs.appendChild(pat); svg.appendChild(defs);
+  const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  bg.setAttribute('width','100%'); bg.setAttribute('height','100%');
+  bg.setAttribute('fill','url(#dotgrid)'); svg.appendChild(bg);
+
   // Build lookup
   const byId = {};
   ups.forEach(u => byId[u.id] = u);
@@ -782,8 +850,8 @@ function renderTree() {
       const px = parent.x, py = parent.y, cx = child.x, cy = child.y;
 
       // Determine radius to pull from
-      const pR = parent.size==='lg' ? 36 : parent.size==='md' ? 30 : 25;
-      const cR = child.size==='lg'  ? 36 : child.size==='md'  ? 30 : 25;
+      const pR = parent.size==='lg' ? 40 : parent.size==='md' ? 34 : 28;
+      const cR = child.size==='lg'  ? 40 : child.size==='md'  ? 34 : 28;
 
       // Vector from parent to child
       const dx = cx - px, dy = cy - py;
@@ -797,21 +865,20 @@ function renderTree() {
       const path = document.createElementNS('http://www.w3.org/2000/svg','path');
       path.setAttribute('d',`M${x1},${y1} Q${mx},${my} ${x2},${y2}`);
       path.setAttribute('fill','none');
-      path.setAttribute('stroke', active && child.unlocked ? col : '#ddd0c0');
-      path.setAttribute('stroke-width', active && child.unlocked ? '2' : '1.2');
-      path.setAttribute('stroke-dasharray', child.purchased ? 'none' : '6,3');
-      path.setAttribute('opacity', active ? (child.purchased?'0.9':'0.5') : '0.25');
+      path.setAttribute('stroke', active && child.unlocked ? col : '#b8b0a0');
+      path.setAttribute('stroke-width', active && child.unlocked ? '3' : '2');
+      path.setAttribute('stroke-dasharray', child.purchased ? 'none' : '8,4');
+      path.setAttribute('opacity', active ? (child.purchased?'1':'0.7') : '0.3');
       path.setAttribute('stroke-linecap','round');
       svg.appendChild(path);
 
-      // Draw arrow dot at midpoint if active
+      // Draw arrow chevron at midpoint if active+available
       if (active && child.unlocked && !child.purchased) {
+        const mx2 = (x1+x2)/2, my2 = (y1+y2)/2;
         const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
-        dot.setAttribute('cx', (x1+x2)/2);
-        dot.setAttribute('cy', (y1+y2)/2);
-        dot.setAttribute('r','3');
-        dot.setAttribute('fill', col);
-        dot.setAttribute('opacity','0.5');
+        dot.setAttribute('cx', mx2); dot.setAttribute('cy', my2);
+        dot.setAttribute('r','4');
+        dot.setAttribute('fill', col); dot.setAttribute('opacity','0.6');
         svg.appendChild(dot);
       }
     });
