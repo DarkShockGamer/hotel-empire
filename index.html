@@ -664,23 +664,39 @@ function guestActivity(roomId) {
 // ════════════════════════════
 // PERSISTENCE
 // ════════════════════════════
-const getSaves = () => { try { return JSON.parse(localStorage.getItem('grand_v4')||'{}'); } catch { return {}; } };
-const putSaves = s => localStorage.setItem('grand_v4', JSON.stringify(s));
+const SAVE_KEY = 'grand_v5';
+const getSaves = () => {
+  try {
+    // Try current key first
+    const cur = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
+    // If empty, try to migrate from v4
+    if (!Object.keys(cur).length) {
+      const old = JSON.parse(localStorage.getItem('grand_v4') || '{}');
+      if (Object.keys(old).length) return old; // will be re-saved under v5 on next save
+    }
+    return cur;
+  } catch { return {}; }
+};
+const putSaves = s => { try { localStorage.setItem(SAVE_KEY, JSON.stringify(s)); } catch(e) { console.error('putSaves failed', e); } };
 
 function saveGame(slot) {
   if (!G) return;
-  const s = getSaves();
-  s[slot] = { state:G, at:Date.now(), stars:G.stars, money:G.money, rooms:G.rooms.length };
-  putSaves(s); activeSlot = slot;
-  toast(`Saved to Property ${slot+1}`); renderHomeSaves();
+  try {
+    const s = getSaves();
+    s[slot] = { state: JSON.parse(JSON.stringify(G)), at:Date.now(), stars:G.stars, money:G.money, rooms:G.rooms.length };
+    putSaves(s); activeSlot = slot;
+    toast(`Saved to Property ${slot+1}`); renderHomeSaves();
+  } catch(e) {
+    console.error('Save failed:', e);
+    toast('Save failed — storage error');
+  }
 }
 function loadGame(slot) {
   const s = getSaves();
   if (!s[slot]) return;
   if (loop) clearInterval(loop);
   G = JSON.parse(JSON.stringify(s[slot].state));
-  // Migrate old saves: ensure direct children of root are unlocked
-  migrateUnlocks(G.upgrades);
+  migrateState(G);
   activeSlot = slot;
   startLoop(); renderAll(); enterGame();
   toast(`Property ${slot+1} loaded`);
@@ -698,7 +714,28 @@ function newGame(slot) {
   toast(`Welcome to Property ${slot+1}`);
 }
 
-// Ensure any node that is a direct child of a purchased node is unlocked
+// Patch any missing fields so old saves don't crash with new code
+function migrateState(g) {
+  if (g.gameHour  === undefined) g.gameHour  = 8;
+  if (g.tickInHour === undefined) g.tickInHour = 0;
+  if (g.sinceGuest === undefined) g.sinceGuest = 0;
+  // Ensure upgrade list has all nodes from TREE_DATA (add any missing ones)
+  TREE_DATA.forEach(def => {
+    if (!g.upgrades.find(u => u.id === def.id)) {
+      g.upgrades.push(JSON.parse(JSON.stringify(def)));
+    }
+  });
+  // Fix unlock state: direct children of purchased nodes must be unlocked
+  const byId = {};
+  g.upgrades.forEach(u => byId[u.id] = u);
+  g.upgrades.forEach(u => {
+    if (u.purchased) {
+      u.children.forEach(cid => { if (byId[cid]) byId[cid].unlocked = true; });
+    }
+  });
+}
+
+// Keep old name working too
 function migrateUnlocks(upgrades) {
   const byId = {};
   upgrades.forEach(u => byId[u.id] = u);
@@ -718,7 +755,7 @@ function goHome() { document.body.classList.remove('in-game'); renderHomeSaves()
 const NAMES  = ['Aria','Blake','Casey','Dana','Eli','Fiona','Grey','Hana','Ivan','Jade','Kai','Luna','Max','Nova','Owen','Petra','Quinn','Rae','Seth','Tara','Wren','Yuki','Zoe','Hugo','Isla'];
 const TITLES = ['Mr.','Ms.','Dr.','Prof.','Sir','Lady'];
 
-function startLoop() { if(loop) clearInterval(loop); loop = setInterval(gameTick, 680); }
+function startLoop() { if(loop) clearInterval(loop); loop = setInterval(() => { try { gameTick(); } catch(e) { console.error('gameTick error:', e); } }, 680); }
 
 function gameTick() {
   if (!G) return;
@@ -1185,7 +1222,7 @@ document.getElementById('save-btn').addEventListener('click',()=>{
   for(let i=0;i<3;i++) if(saves[i]&&saves[i].at>lt){lt=saves[i].at;latest=i;}
   if(latest!==null) {
     G=JSON.parse(JSON.stringify(saves[latest].state));
-    migrateUnlocks(G.upgrades);
+    migrateState(G);
     activeSlot=latest; startLoop(); renderAll(); enterGame();
     log('Welcome back to The Grand','in');
   }
