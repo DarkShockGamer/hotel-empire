@@ -108,29 +108,41 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .hsa-btn:disabled { opacity: 0.18; cursor: not-allowed; }
 
 /* ── GAME HEADER ── */
-#header { background: var(--espresso); padding: 0 16px; display: flex; align-items: center; gap: 0; min-height: 52px; position: relative; overflow: hidden; flex-shrink: 0; }
+#header { background: var(--espresso); padding: 0 16px; display: flex; align-items: center; gap: 0; min-height: 56px; position: relative; overflow: hidden; flex-shrink: 0; }
 #header::before, #header::after { content: ''; position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--brass), var(--brass-lt), var(--brass), transparent); }
 #header::before { top: 7px; } #header::after { bottom: 7px; }
 .hotel-wordmark { display: flex; align-items: center; gap: 10px; margin-right: 18px; padding-right: 18px; border-right: 1px solid rgba(184,150,90,0.2); }
 .wordmark-grand { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.3rem; color: var(--ivory); letter-spacing: 6px; text-transform: uppercase; }
 .hdr-stats { display: flex; gap: 0; align-items: center; }
 .hdr-stat { display: flex; flex-direction: column; align-items: center; padding: 3px 14px; border-right: 1px solid rgba(184,150,90,0.12); }
-.hdr-stat-label { font-size: 0.48rem; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); margin-bottom: 1px; }
-.hdr-stat-val { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ivory); font-weight: 500; line-height: 1; }
+.hdr-stat-label { font-size: 0.52rem; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); margin-bottom: 1px; }
+.hdr-stat-val { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--ivory); font-weight: 500; line-height: 1; transition: transform 0.15s; }
+.hdr-stat-val.bump { animation: statBump 0.3s ease; }
+@keyframes statBump { 0%{transform:scale(1)} 40%{transform:scale(1.18)} 100%{transform:scale(1)} }
 .spacer { flex: 1; }
 .hdr-btn { background: transparent; border: 1px solid rgba(184,150,90,0.4); color: var(--brass-lt); padding: 5px 12px; font-family: 'Jost', sans-serif; font-size: 0.58rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: var(--radius); transition: all 0.2s; margin-left: 8px; }
 .hdr-btn:hover { background: rgba(184,150,90,0.15); color: var(--ivory); }
 .hdr-btn.home-btn:hover { background: rgba(184,150,90,0.1); }
-/* Notification bell */
 .hdr-bell { position: relative; }
 .hdr-bell-count { position: absolute; top: -4px; right: -4px; width: 14px; height: 14px; border-radius: 50%; background: #c04040; color: white; font-size: 0.48rem; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--espresso); }
 
+/* ── LOBBY AMBIENCE TICKER ── */
+#lobby-ticker { background: rgba(184,150,90,0.12); border-bottom: 1px solid rgba(184,150,90,0.2); padding: 4px 0; overflow: hidden; flex-shrink: 0; position: relative; }
+#lobby-ticker::before, #lobby-ticker::after { content:''; position:absolute; top:0; bottom:0; width:40px; z-index:2; pointer-events:none; }
+#lobby-ticker::before { left:0; background: linear-gradient(90deg, var(--espresso), transparent); }
+#lobby-ticker::after  { right:0; background: linear-gradient(-90deg, var(--espresso), transparent); }
+.ticker-inner { display: flex; gap: 60px; white-space: nowrap; animation: tickerScroll 30s linear infinite; }
+.ticker-inner:hover { animation-play-state: paused; }
+.ticker-item { font-size: 0.62rem; color: rgba(212,176,122,0.75); letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }
+.ticker-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--brass); opacity: 0.6; }
+@keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
 /* ── TABS ── */
 #tabs { background: var(--white); border-bottom: 1px solid var(--linen3); display: flex; padding: 0 16px; flex-shrink: 0; }
-.tab { padding: 10px 16px; font-size: 0.6rem; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-lt); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; display: flex; align-items: center; gap: 6px; margin-bottom: -1px; position: relative; }
+.tab { padding: 11px 16px; font-size: 0.66rem; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-lt); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; display: flex; align-items: center; gap: 6px; margin-bottom: -1px; position: relative; }
 .tab:hover { color: var(--brown); }
 .tab.active { color: var(--espresso); border-bottom-color: var(--brass); font-weight: 600; }
-.tab-icon { font-size: 0.8rem; }
+.tab-icon { font-size: 0.85rem; }
 .tab-badge { background: var(--red); color: white; font-size: 0.45rem; font-weight: 700; padding: 1px 4px; border-radius: 8px; min-width: 14px; text-align: center; }
 
 /* ── PANELS ── */
@@ -141,103 +153,122 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 /* ── LOBBY ── */
 #hotel-panel { padding: 14px; gap: 10px; }
 .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.kpi-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 12px 14px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.kpi-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 13px 16px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
 .kpi-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
 .kpi-card.k1::after { background: linear-gradient(90deg, var(--brass), var(--brass-lt)); }
 .kpi-card.k2::after { background: linear-gradient(90deg, var(--green), #6aaa80); }
 .kpi-card.k3::after { background: linear-gradient(90deg, var(--brown-lt), var(--brass-lt)); }
 .kpi-card.k4::after { background: linear-gradient(90deg, #a07050, var(--brown-lt)); }
-.kpi-label { font-size: 0.54rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 4px; font-weight: 500; }
-.kpi-val { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; color: var(--espresso); line-height: 1; }
+.kpi-label { font-size: 0.57rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 4px; font-weight: 500; }
+.kpi-val { font-family: 'Cormorant Garamond', serif; font-size: 1.85rem; font-weight: 500; color: var(--espresso); line-height: 1; }
 .kpi-val.brass { color: var(--brass-dk); }
 .kpi-val.green { color: var(--green); }
-.kpi-sub { font-size: 0.58rem; color: var(--text-fnt); margin-top: 3px; }
+.kpi-sub { font-size: 0.62rem; color: var(--text-fnt); margin-top: 3px; }
 
-.content-row { display: grid; grid-template-columns: 220px 1fr; gap: 10px; flex: 1; min-height: 0; }
+.content-row { display: grid; grid-template-columns: 240px 1fr; gap: 10px; flex: 1; min-height: 0; }
 .section-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
 .section-header { padding: 9px 14px; border-bottom: 1px solid var(--linen2); display: flex; align-items: center; gap: 8px; background: var(--ivory); flex-shrink: 0; }
-.section-title { font-size: 0.56rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-md); font-weight: 600; }
+.section-title { font-size: 0.59rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-md); font-weight: 600; }
 .live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); margin-left: auto; animation: livePulse 2s infinite; }
 @keyframes livePulse { 0%,100%{box-shadow:0 0 0 2px rgba(74,124,89,0.2)} 50%{box-shadow:0 0 0 5px rgba(74,124,89,0.06)} }
 
 /* ── CONCIERGE LOG ── */
 #desk-log { flex: 1; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 1px; }
-.log-entry { display: flex; align-items: flex-start; gap: 7px; padding: 5px 7px; border-radius: var(--radius); font-size: 0.65rem; color: var(--text-md); line-height: 1.4; transition: background 0.15s; animation: entrySlide 0.25s ease; }
+.log-entry { display: flex; align-items: flex-start; gap: 7px; padding: 6px 8px; border-radius: var(--radius); font-size: 0.7rem; color: var(--text-md); line-height: 1.4; transition: background 0.15s; animation: entrySlide 0.3s cubic-bezier(0.34,1.2,0.64,1); }
 .log-entry:hover { background: var(--ivory); }
-@keyframes entrySlide { from{opacity:0;transform:translateY(-3px)} to{opacity:1;transform:translateY(0)} }
-.log-tag { font-size: 0.52rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 5px; border-radius: 3px; white-space: nowrap; font-weight: 600; flex-shrink: 0; margin-top: 1px; }
+@keyframes entrySlide { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)} }
+.log-tag { font-size: 0.54rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; white-space: nowrap; font-weight: 600; flex-shrink: 0; margin-top: 1px; }
 .log-tag.in  { background: var(--green-lt); color: var(--green); }
 .log-tag.out { background: #fdf6e8; color: var(--brass-dk); }
 .log-tag.event { background: #fff0d0; color: #a06010; }
 .log-tag.urgent { background: #ffe0e0; color: #a03020; }
 .log-msg { flex: 1; }
-.log-time { font-size: 0.55rem; color: var(--text-fnt); margin-left: auto; white-space: nowrap; flex-shrink: 0; }
+.log-time { font-size: 0.57rem; color: var(--text-fnt); margin-left: auto; white-space: nowrap; flex-shrink: 0; }
 
 /* ── ROOM GRID ── */
-#room-grid { padding: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 5px; overflow-y: auto; }
-.room-cell { aspect-ratio: 1; border-radius: var(--radius); background: var(--linen); border: 1px solid var(--linen3); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.95rem; position: relative; transition: all 0.25s; cursor: pointer; }
-.room-cell:hover { transform: scale(1.08); z-index: 2; }
-.room-cell .rn { position: absolute; bottom: 2px; font-size: 0.45rem; color: var(--text-fnt); font-weight: 500; }
+#room-grid { padding: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 5px; overflow-y: auto; }
+.room-cell { aspect-ratio: 1; border-radius: var(--radius); background: var(--linen); border: 1px solid var(--linen3); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 1rem; position: relative; transition: all 0.25s; cursor: pointer; }
+.room-cell:hover { transform: scale(1.1); z-index: 2; box-shadow: 0 4px 12px rgba(44,31,14,0.15); }
+.room-cell .rn { position: absolute; bottom: 2px; font-size: 0.48rem; color: var(--text-fnt); font-weight: 500; }
 .room-cell.occupied { background: var(--green-lt); border-color: #a8d4b4; }
 .room-cell.dirty { background: var(--red-lt); border-color: #e0bbbb; }
 .room-cell.suite-empty { background: #f5f0ff; border-color: #c8b8e8; }
 .room-cell.suite-occ { background: #ede5ff; border-color: #b8a0e0; }
 .room-cell.maintenance { background: #fff3d0; border-color: #e0c070; }
+/* Animated guests */
+.room-cell.occupied .room-icon { animation: guestBob 3s ease-in-out infinite; animation-delay: var(--bob-delay, 0s); }
+@keyframes guestBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+.room-cell.guest-sleeping .room-icon { animation: sleepPulse 4s ease-in-out infinite; }
+@keyframes sleepPulse { 0%,100%{opacity:1} 50%{opacity:0.65} }
+.room-cell.guest-activity { background: #e0f5e0 !important; border-color: #80c880 !important; }
+.room-cell.guest-sleeping  { background: #e8edf5 !important; border-color: #b0bcd4 !important; }
+
+/* ── FLOATING LOBBY GUESTS ── */
+#lobby-guests { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.lobby-guest { position: absolute; font-size: 1.3rem; animation: guestWalk linear infinite; opacity: 0.55; }
+@keyframes guestWalk {
+  0%   { transform: translateX(-40px) translateY(0px); opacity: 0; }
+  5%   { opacity: 0.55; }
+  48%  { transform: translateX(calc(50vw - 40px)) translateY(-8px); }
+  52%  { transform: translateX(calc(50vw + 40px)) translateY(-8px); }
+  95%  { opacity: 0.55; }
+  100% { transform: translateX(calc(100vw + 40px)) translateY(0px); opacity: 0; }
+}
 
 /* ── FINANCES PANEL ── */
 #finance-panel { padding: 14px; gap: 10px; }
 .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1; }
 .finance-col { display: flex; flex-direction: column; gap: 10px; }
 .chart-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 14px; box-shadow: var(--shadow); }
-.chart-title { font-size: 0.54rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 10px; font-weight: 600; }
+.chart-title { font-size: 0.57rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 10px; font-weight: 600; }
 #sparkline { display: flex; align-items: flex-end; gap: 3px; height: 60px; }
-.spark-bar { flex: 1; background: linear-gradient(0deg, var(--brass-dk), var(--brass-lt)); border-radius: 2px 2px 0 0; min-height: 2px; transition: height 0.3s; position: relative; }
+.spark-bar { flex: 1; background: linear-gradient(0deg, var(--brass-dk), var(--brass-lt)); border-radius: 2px 2px 0 0; min-height: 2px; transition: height 0.5s; position: relative; }
 .spark-bar:hover::after { content: attr(data-val); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--espresso); color: var(--ivory); font-size: 0.5rem; padding: 2px 5px; border-radius: 3px; white-space: nowrap; margin-bottom: 3px; pointer-events: none; }
 .income-breakdown { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
 .income-row { display: flex; align-items: center; gap: 8px; }
-.income-label { font-size: 0.6rem; color: var(--text-md); flex: 1; }
+.income-label { font-size: 0.63rem; color: var(--text-md); flex: 1; }
 .income-bar-bg { flex: 2; height: 6px; background: var(--linen2); border-radius: 3px; overflow: hidden; }
 .income-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
-.income-val { font-size: 0.58rem; font-weight: 600; color: var(--espresso); min-width: 36px; text-align: right; }
+.income-val { font-size: 0.61rem; font-weight: 600; color: var(--espresso); min-width: 40px; text-align: right; }
 .milestone-list { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex: 1; }
-.milestone-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: var(--radius); border: 1px solid var(--linen2); background: var(--white); }
-.milestone-icon { font-size: 1.1rem; flex-shrink: 0; }
+.milestone-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--radius); border: 1px solid var(--linen2); background: var(--white); }
+.milestone-icon { font-size: 1.2rem; flex-shrink: 0; }
 .milestone-info { flex: 1; }
-.milestone-name { font-size: 0.68rem; font-weight: 600; color: var(--espresso); }
-.milestone-desc { font-size: 0.58rem; color: var(--text-lt); margin-top: 2px; }
+.milestone-name { font-size: 0.72rem; font-weight: 600; color: var(--espresso); }
+.milestone-desc { font-size: 0.62rem; color: var(--text-lt); margin-top: 2px; }
 .milestone-prog { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
 .milestone-bar-bg { flex: 1; height: 5px; background: var(--linen2); border-radius: 3px; overflow: hidden; }
 .milestone-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--green), #6aaa80); transition: width 0.5s; }
-.milestone-pct { font-size: 0.55rem; color: var(--text-lt); white-space: nowrap; }
+.milestone-pct { font-size: 0.58rem; color: var(--text-lt); white-space: nowrap; }
 .milestone-item.done { background: var(--green-lt); border-color: #a8d4b4; }
 .milestone-item.done .milestone-name { color: var(--green); }
 .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .stat-tile { background: var(--ivory); border: 1px solid var(--linen2); border-radius: var(--radius); padding: 10px 12px; }
-.stat-tile-label { font-size: 0.5rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 3px; }
-.stat-tile-val { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--espresso); font-weight: 500; }
+.stat-tile-label { font-size: 0.53rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 3px; }
+.stat-tile-val { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--espresso); font-weight: 500; }
 
 /* ── REVIEWS PANEL ── */
 #reviews-panel { padding: 14px; gap: 10px; }
 .reviews-header-row { display: flex; gap: 10px; }
 .rating-big-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 16px 20px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
-.rating-number { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 600; color: var(--espresso); line-height: 1; }
-.rating-stars { color: var(--brass); font-size: 1.1rem; margin-bottom: 4px; }
-.rating-count { font-size: 0.6rem; color: var(--text-lt); }
+.rating-number { font-family: 'Cormorant Garamond', serif; font-size: 3.2rem; font-weight: 600; color: var(--espresso); line-height: 1; }
+.rating-stars { color: var(--brass); font-size: 1.2rem; margin-bottom: 4px; }
+.rating-count { font-size: 0.63rem; color: var(--text-lt); }
 .rating-bars { display: flex; flex-direction: column; gap: 5px; flex: 1; }
-.rating-bar-row { display: flex; align-items: center; gap: 7px; font-size: 0.58rem; color: var(--text-lt); }
+.rating-bar-row { display: flex; align-items: center; gap: 7px; font-size: 0.61rem; color: var(--text-lt); }
 .rating-bar-bg { flex: 1; height: 6px; background: var(--linen2); border-radius: 3px; overflow: hidden; }
 .rating-bar-fill { height: 100%; background: var(--brass); border-radius: 3px; transition: width 0.5s; }
 .review-list { display: flex; flex-direction: column; gap: 8px; flex: 1; overflow-y: auto; }
-.review-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 12px 14px; box-shadow: var(--shadow); animation: entrySlide 0.3s ease; }
+.review-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 13px 16px; box-shadow: var(--shadow); animation: entrySlide 0.3s ease; }
 .review-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.review-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.review-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
 .review-meta { flex: 1; }
-.review-name { font-size: 0.68rem; font-weight: 600; color: var(--espresso); }
-.review-date { font-size: 0.55rem; color: var(--text-fnt); }
-.review-stars { color: var(--brass); font-size: 0.8rem; }
-.review-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.85rem; color: var(--text-md); line-height: 1.5; }
+.review-name { font-size: 0.72rem; font-weight: 600; color: var(--espresso); }
+.review-date { font-size: 0.58rem; color: var(--text-fnt); }
+.review-stars { color: var(--brass); font-size: 0.9rem; }
+.review-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.92rem; color: var(--text-md); line-height: 1.6; }
 .review-tags { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
-.review-tag { font-size: 0.52rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
+.review-tag { font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
 .review-tag.pos { background: var(--green-lt); color: var(--green); }
 .review-tag.neg { background: var(--red-lt); color: var(--red); }
 
@@ -255,21 +286,21 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 }
 #event-modal.show .event-card { transform: scale(1); }
 .event-icon-big { font-size: 3rem; text-align: center; margin-bottom: 12px; }
-.event-type-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.52rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; padding: 3px 9px; border-radius: 10px; margin-bottom: 10px; }
+.event-type-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.54rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; padding: 3px 9px; border-radius: 10px; margin-bottom: 10px; }
 .event-type-badge.crisis { background: var(--red-lt); color: var(--red); }
 .event-type-badge.opportunity { background: var(--green-lt); color: var(--green); }
 .event-type-badge.vip { background: #fdf6e8; color: var(--brass-dk); }
 .event-type-badge.maintenance { background: #fff3d0; color: #a07010; }
-.event-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--espresso); margin-bottom: 8px; }
-.event-desc { font-size: 0.72rem; color: var(--text-md); line-height: 1.6; margin-bottom: 20px; }
+.event-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: var(--espresso); margin-bottom: 8px; }
+.event-desc { font-size: 0.74rem; color: var(--text-md); line-height: 1.6; margin-bottom: 20px; }
 .event-choices { display: flex; flex-direction: column; gap: 8px; }
 .event-choice {
   padding: 11px 16px; border-radius: var(--radius-lg); border: 1px solid var(--linen2);
   background: var(--ivory); cursor: pointer; transition: all 0.18s; text-align: left;
 }
 .event-choice:hover { background: var(--linen); border-color: var(--brass); transform: translateX(3px); }
-.ec-label { font-size: 0.68rem; font-weight: 600; color: var(--espresso); margin-bottom: 3px; }
-.ec-effect { font-size: 0.6rem; color: var(--text-lt); }
+.ec-label { font-size: 0.72rem; font-weight: 600; color: var(--espresso); margin-bottom: 3px; }
+.ec-effect { font-size: 0.63rem; color: var(--text-lt); }
 .ec-effect.good { color: var(--green); }
 .ec-effect.bad { color: var(--red); }
 
@@ -282,8 +313,8 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
   transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
 }
 #day-summary.show { transform: translateX(0); }
-.ds-title { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); margin-bottom: 8px; }
-.ds-row { display: flex; justify-content: space-between; font-size: 0.64rem; margin-bottom: 4px; }
+.ds-title { font-size: 0.57rem; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); margin-bottom: 8px; }
+.ds-row { display: flex; justify-content: space-between; font-size: 0.67rem; margin-bottom: 4px; }
 .ds-label { color: rgba(249,245,239,0.55); }
 .ds-val { font-weight: 600; color: var(--ivory); }
 .ds-val.good { color: #80e0a0; }
@@ -310,8 +341,8 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .node-bubble.available .bubble-ring { animation: availPulse 2.5s ease-in-out infinite; }
 @keyframes availPulse { 0%,100%{box-shadow:0 0 0 0 rgba(184,150,90,0.3)} 50%{box-shadow:0 0 0 6px rgba(184,150,90,0)} }
 .bubble-icon { font-size: 1.55rem; line-height: 1; margin-bottom: 1px; }
-.bubble-label { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; text-align: center; line-height: 1.2; margin-top: 2px; white-space: nowrap; }
-.bubble-cost { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.56rem; font-weight: 700; white-space: nowrap; }
+.bubble-label { font-size: 0.53rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; text-align: center; line-height: 1.2; margin-top: 2px; white-space: nowrap; }
+.bubble-cost { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.58rem; font-weight: 700; white-space: nowrap; }
 .branch-rooms    .bubble-ring { background: #e8f5ec; border: 2px solid #80c090; }
 .branch-rooms    .bubble-label { color: #2d6b40; }
 .branch-rooms    .bubble-cost  { color: #3a7a50; }
@@ -340,7 +371,7 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .branch-root .bubble-label { color: var(--brass-lt); }
 .node-bubble .owned-badge { position: absolute; top: -5px; right: -5px; width: 16px; height: 16px; border-radius: 50%; background: var(--green); border: 2px solid var(--white); display: flex; align-items: center; justify-content: center; font-size: 0.45rem; color: white; font-weight: 700; }
 .tree-legend { position: sticky; top: 0; left: 0; right: 0; z-index: 5; background: var(--white); border-bottom: 1px solid var(--linen2); padding: 8px 16px; display: flex; align-items: center; gap: 16px; }
-.legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.55rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); font-weight: 600; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.58rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); font-weight: 600; }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid; }
 .legend-dot.rooms    { background: #e8f5ec; border-color: #80c090; }
 .legend-dot.amenity  { background: #fdf6e8; border-color: #d4b07a; }
@@ -348,11 +379,11 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .legend-dot.prestige { background: #fff8ed; border-color: #d4b060; }
 
 /* ── TOOLTIP ── */
-#tooltip { position: fixed; background: var(--espresso); color: var(--ivory); border-radius: var(--radius-lg); padding: 12px 15px; font-size: 0.7rem; pointer-events: none; z-index: 200; max-width: 180px; box-shadow: var(--shadow-lg); display: none; border: 1px solid rgba(184,150,90,0.3); }
-#tooltip .tt-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 500; margin-bottom: 4px; }
-#tooltip .tt-desc { color: rgba(249,245,239,0.65); line-height: 1.5; font-size: 0.65rem; }
+#tooltip { position: fixed; background: var(--espresso); color: var(--ivory); border-radius: var(--radius-lg); padding: 12px 15px; font-size: 0.72rem; pointer-events: none; z-index: 200; max-width: 190px; box-shadow: var(--shadow-lg); display: none; border: 1px solid rgba(184,150,90,0.3); }
+#tooltip .tt-name { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 500; margin-bottom: 4px; }
+#tooltip .tt-desc { color: rgba(249,245,239,0.65); line-height: 1.5; font-size: 0.66rem; }
 #tooltip .tt-cost { color: var(--brass-lt); margin-top: 6px; font-weight: 500; }
-#tooltip .tt-status { margin-top: 3px; font-size: 0.6rem; }
+#tooltip .tt-status { margin-top: 3px; font-size: 0.63rem; }
 #tooltip .tt-status.locked { color: #e07070; }
 #tooltip .tt-status.owned  { color: #80cc90; }
 
@@ -360,22 +391,22 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 #room-popup {
   position: fixed; z-index: 300; background: var(--white);
   border: 1px solid var(--linen2); border-radius: var(--radius-lg);
-  padding: 14px; min-width: 200px; box-shadow: var(--shadow-lg);
-  display: none; font-size: 0.68rem;
+  padding: 14px; min-width: 210px; box-shadow: var(--shadow-lg);
+  display: none; font-size: 0.72rem;
 }
 #room-popup.show { display: block; }
-.rp-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+.rp-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
 .rp-row { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 4px; color: var(--text-md); }
 .rp-row span:last-child { font-weight: 600; color: var(--espresso); }
 .rp-actions { display: flex; gap: 6px; margin-top: 10px; border-top: 1px solid var(--linen2); padding-top: 10px; }
-.rp-btn { flex: 1; padding: 6px 8px; border-radius: var(--radius); border: 1px solid var(--linen2); background: var(--ivory); font-family: 'Jost', sans-serif; font-size: 0.55rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; color: var(--text-md); transition: all 0.15s; }
+.rp-btn { flex: 1; padding: 6px 8px; border-radius: var(--radius); border: 1px solid var(--linen2); background: var(--ivory); font-family: 'Jost', sans-serif; font-size: 0.58rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; color: var(--text-md); transition: all 0.15s; }
 .rp-btn:hover { background: var(--linen); border-color: var(--brass); color: var(--espresso); }
 .rp-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ── MISC ── */
-.money-pop { position: fixed; pointer-events: none; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: var(--brass-dk); font-weight: 500; z-index: 999; animation: mfloat 1.4s ease forwards; }
-@keyframes mfloat { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-48px)} }
-#toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--espresso); color: var(--ivory); padding: 7px 18px; border-radius: 20px; font-size: 0.68rem; font-weight: 500; letter-spacing: 1px; z-index: 1000; opacity: 0; transition: opacity 0.25s; pointer-events: none; border: 1px solid rgba(184,150,90,0.3); box-shadow: var(--shadow-lg); }
+.money-pop { position: fixed; pointer-events: none; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--brass-dk); font-weight: 500; z-index: 999; animation: mfloat 1.4s ease forwards; }
+@keyframes mfloat { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-52px)} }
+#toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--espresso); color: var(--ivory); padding: 8px 20px; border-radius: 20px; font-size: 0.72rem; font-weight: 500; letter-spacing: 1px; z-index: 1000; opacity: 0; transition: opacity 0.25s; pointer-events: none; border: 1px solid rgba(184,150,90,0.3); box-shadow: var(--shadow-lg); }
 #toast.show { opacity: 1; }
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -383,27 +414,18 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 
 /* ── CLOCK ── */
 .hdr-clock { display: flex; flex-direction: column; align-items: center; padding: 3px 16px; border-right: 1px solid rgba(184,150,90,0.12); gap: 2px; }
-.clock-time { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--ivory); font-weight: 500; letter-spacing: 2px; line-height: 1; }
-.clock-phase { font-size: 0.48rem; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); display: flex; align-items: center; gap: 4px; }
+.clock-time { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--ivory); font-weight: 500; letter-spacing: 2px; line-height: 1; }
+.clock-phase { font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); display: flex; align-items: center; gap: 4px; }
 .clock-sun  { color: #f0c060; }
 .clock-moon { color: #a0b8e0; }
 #sky-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 0; transition: background 2s ease, opacity 2s ease; opacity: 0; }
 body.in-game #sky-overlay { opacity: 1; }
-.room-cell.guest-sleeping  { background: #e8edf5 !important; border-color: #b0bcd4 !important; }
-.room-cell.guest-activity  { background: #e8f5e8 !important; border-color: #90c890 !important; }
 body.night-mode #header { background: #150e06; transition: background 1.5s; }
 body.night-mode #header::before, body.night-mode #header::after { background: linear-gradient(90deg, transparent, #6080b0, #8090c0, #6080b0, transparent); }
 body.night-mode .clock-phase { color: #8090c0; }
-.period-badge { display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px; border-radius: 10px; font-size: 0.52rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-left: 6px; }
+.period-badge { display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px; border-radius: 10px; font-size: 0.54rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-left: 6px; }
 .period-badge.day   { background: #fff5d0; color: #8a6010; border: 1px solid #d4a820; }
 .period-badge.night { background: #1a2040; color: #9090d0; border: 1px solid #4050a0; }
-
-/* ── SATISFACTION METER ── */
-.satisfaction-bar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--ivory); border-bottom: 1px solid var(--linen2); }
-.sat-label { font-size: 0.52rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); font-weight: 600; width: 70px; flex-shrink: 0; }
-.sat-bar-bg { flex: 1; height: 7px; background: var(--linen2); border-radius: 4px; overflow: hidden; }
-.sat-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s, background 0.5s; }
-.sat-val { font-size: 0.6rem; font-weight: 700; min-width: 32px; text-align: right; }
 
 /* ── STAFF PANEL ── */
 #staff-panel { padding: 14px; gap: 10px; }
@@ -412,19 +434,22 @@ body.night-mode .clock-phase { color: #8090c0; }
 .staff-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
 .staff-card.locked-card { opacity: 0.55; background: var(--ivory); }
 .sc-icon { font-size: 2rem; margin-bottom: 8px; }
-.sc-name { font-size: 0.68rem; font-weight: 700; color: var(--espresso); letter-spacing: 0.5px; }
-.sc-role { font-size: 0.56rem; color: var(--text-lt); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-.sc-desc { font-size: 0.62rem; color: var(--text-md); line-height: 1.5; margin-bottom: 10px; }
-.sc-status { display: flex; align-items: center; gap: 5px; font-size: 0.58rem; font-weight: 600; }
+.sc-name { font-size: 0.72rem; font-weight: 700; color: var(--espresso); letter-spacing: 0.5px; }
+.sc-role { font-size: 0.58rem; color: var(--text-lt); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.sc-desc { font-size: 0.65rem; color: var(--text-md); line-height: 1.5; margin-bottom: 10px; }
+.sc-status { display: flex; align-items: center; gap: 5px; font-size: 0.61rem; font-weight: 600; }
 .sc-dot { width: 6px; height: 6px; border-radius: 50%; }
 .sc-dot.active { background: var(--green); }
 .sc-dot.idle   { background: var(--brass); }
 .sc-dot.locked { background: var(--linen3); }
-.sc-action { margin-top: 10px; padding: 7px; border-radius: var(--radius); border: 1px solid var(--linen2); background: var(--ivory); font-family: 'Jost', sans-serif; font-size: 0.58rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; color: var(--text-md); width: 100%; transition: all 0.15s; }
+.sc-action { margin-top: 10px; padding: 7px; border-radius: var(--radius); border: 1px solid var(--linen2); background: var(--ivory); font-family: 'Jost', sans-serif; font-size: 0.6rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; color: var(--text-md); width: 100%; transition: all 0.15s; }
 .sc-action:hover:not(:disabled) { background: var(--linen); border-color: var(--brass); color: var(--espresso); }
 .sc-action:disabled { opacity: 0.35; cursor: not-allowed; }
 .sc-action.on-cooldown { color: var(--text-fnt); }
-.sc-cooldown { font-size: 0.52rem; color: var(--text-fnt); margin-top: 4px; text-align: center; }
+
+/* ── PULSE ON NEW GUEST ── */
+@keyframes newGuestPulse { 0%{box-shadow:0 0 0 0 rgba(74,124,89,0.6)} 70%{box-shadow:0 0 0 8px rgba(74,124,89,0)} 100%{box-shadow:0 0 0 0 rgba(74,124,89,0)} }
+.room-cell.just-arrived { animation: newGuestPulse 0.8s ease; }
 </style>
 </head>
 <body>
@@ -469,6 +494,11 @@ body.night-mode .clock-phase { color: #8090c0; }
     <button class="hdr-btn" id="save-btn">Save</button>
   </div>
 
+  <!-- LOBBY TICKER -->
+  <div id="lobby-ticker">
+    <div class="ticker-inner" id="ticker-inner"></div>
+  </div>
+
   <div id="tabs">
     <div class="tab active" data-tab="hotel-panel"><span class="tab-icon">🏨</span>Lobby</div>
     <div class="tab" data-tab="staff-panel"><span class="tab-icon">👔</span>Staff</div>
@@ -507,14 +537,15 @@ body.night-mode .clock-phase { color: #8090c0; }
           <div class="section-header"><span class="section-title">Concierge Desk</span><div class="live-dot"></div></div>
           <div id="desk-log"></div>
         </div>
-        <div class="section-card">
+        <div class="section-card" style="position:relative;overflow:hidden;">
           <div class="section-header">
             <span class="section-title">Room Status</span>
             <span id="period-badge"></span>
-            <span style="margin-left:auto;font-size:0.54rem;color:var(--text-fnt);letter-spacing:1px">
+            <span style="margin-left:auto;font-size:0.56rem;color:var(--text-fnt);letter-spacing:1px">
               <span style="color:var(--green)">●</span> active &ensp;<span style="color:#8090c0">●</span> sleeping &ensp;<span style="color:#c04040">●</span> dirty &ensp;<span style="color:#e0a010">●</span> maint. &ensp;<span style="color:#9060d0">●</span> suite &ensp;<span style="color:var(--linen3)">●</span> vacant
             </span>
           </div>
+          <div id="lobby-guests"></div>
           <div id="room-grid"></div>
         </div>
       </div>
@@ -523,8 +554,8 @@ body.night-mode .clock-phase { color: #8090c0; }
     <!-- STAFF -->
     <div class="panel" id="staff-panel">
       <div style="padding:14px;flex:1;overflow-y:auto;">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--espresso);margin-bottom:4px;">Hotel Staff</div>
-        <div style="font-size:0.62rem;color:var(--text-lt);margin-bottom:14px;letter-spacing:0.5px;">Hire staff and dispatch them for special actions. Unlock more staff via Investments.</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--espresso);margin-bottom:4px;">Hotel Staff</div>
+        <div style="font-size:0.65rem;color:var(--text-lt);margin-bottom:14px;letter-spacing:0.5px;">Hire staff and dispatch them for special actions. Unlock more staff via Investments.</div>
         <div class="staff-grid" id="staff-grid"></div>
       </div>
     </div>
@@ -558,7 +589,7 @@ body.night-mode .clock-phase { color: #8090c0; }
             <div class="chart-card">
               <div class="chart-title">Daily Revenue (last 14 days)</div>
               <div id="sparkline"></div>
-              <div style="display:flex;justify-content:space-between;font-size:0.52rem;color:var(--text-fnt);margin-top:5px;">
+              <div style="display:flex;justify-content:space-between;font-size:0.54rem;color:var(--text-fnt);margin-top:5px;">
                 <span id="spark-min">$0</span><span id="spark-max">$0</span>
               </div>
             </div>
@@ -588,7 +619,7 @@ body.night-mode .clock-phase { color: #8090c0; }
         <div class="legend-item"><div class="legend-dot amenity"></div>Amenities</div>
         <div class="legend-item"><div class="legend-dot staff"></div>Staff</div>
         <div class="legend-item"><div class="legend-dot prestige"></div>Prestige</div>
-        <span style="margin-left:auto;font-size:0.55rem;color:var(--text-fnt);letter-spacing:1px">Click unlocked nodes to invest</span>
+        <span style="margin-left:auto;font-size:0.57rem;color:var(--text-fnt);letter-spacing:1px">Click unlocked nodes to invest</span>
       </div>
       <div class="tree-wrap" id="tree-wrap">
         <div id="tree-canvas">
@@ -678,6 +709,60 @@ const CANVAS_W = 1360, CANVAS_H = 980;
 const B_STROKE = { root:'#b8965a', rooms:'#2d8a50', amenity:'#c08020', staff:'#6040b8', prestige:'#b08020' };
 
 // ════════════════════════════
+// LOBBY TICKER PHRASES
+// ════════════════════════════
+const TICKER_PHRASES = [
+  '☕ Coffee service running smoothly',
+  '🛎 Concierge desk fully staffed',
+  '🌡 Lobby temperature: 22°C',
+  '🛗 Elevator serviced this morning',
+  '🌿 Fresh flowers in the atrium',
+  '📰 Morning papers delivered',
+  '🎵 Jazz ensemble tonight at 8pm',
+  '🍳 Breakfast service until 11am',
+  '🅿 Valet parking available',
+  '🧼 Amenity kits freshly restocked',
+  '🌧 Umbrellas available at the door',
+  '📦 Room service: 24/7',
+  '🔑 Express check-out available',
+  '💆 Spa appointments open',
+  '🚗 Airport transfers on request',
+  '🌸 Weekend floral arrangement delivered',
+  '🎩 Dress code: smart casual after 7pm',
+  '🔒 In-room safes reset and tested',
+  '🛏 Turndown service from 6pm',
+  '📡 Complimentary WiFi throughout',
+];
+
+function initTicker() {
+  const inner = document.getElementById('ticker-inner');
+  if (!inner) return;
+  // Duplicate for seamless loop
+  const phrases = [...TICKER_PHRASES, ...TICKER_PHRASES];
+  inner.innerHTML = phrases.map(p => `<span class="ticker-item"><span class="ticker-dot"></span>${p}</span>`).join('');
+}
+
+// ════════════════════════════
+// FLOATING LOBBY GUESTS
+// ════════════════════════════
+const WALK_GUESTS = ['🧑','👩','👨','🧔','👩‍🦱','🧑‍💼','👩‍💼','👨‍💼','🧓','👴','👵'];
+let walkerInterval = null;
+
+function spawnLobbyGuest() {
+  const container = document.getElementById('lobby-guests');
+  if (!container || !G || G.totalGuests === 0) return;
+  const el = document.createElement('div');
+  el.className = 'lobby-guest';
+  el.textContent = WALK_GUESTS[Math.floor(Math.random()*WALK_GUESTS.length)];
+  const top = 20 + Math.random() * 60;
+  const dur = 12 + Math.random() * 10;
+  const delay = Math.random() * 2;
+  el.style.cssText = `top:${top}%;left:0;animation-duration:${dur}s;animation-delay:${delay}s;font-size:${1.1+Math.random()*0.5}rem;`;
+  container.appendChild(el);
+  setTimeout(() => el.remove(), (dur + delay + 1) * 1000);
+}
+
+// ════════════════════════════
 // RANDOM EVENTS
 // ════════════════════════════
 const EVENTS = [
@@ -710,7 +795,7 @@ const EVENTS = [
     desc:'A journalist from "Luxury Escapes" magazine is checking in anonymously. A great experience means a glowing feature.',
     choices:[
       { label:'Assign Best Room & Butler', effect:'Spend $100 to impress. +30 satisfaction, unlock press bonus.', cost:100, sat:+30, bonus:'press', tag:'good' },
-      { label:'Normal Service', effect:'Risk it. 50/50 chance of neutral or negative review.', cost:0, sat:-10, tag:'bad' },
+      { label:'Normal Service', effect:'Risk it. Chance of neutral or negative review.', cost:0, sat:-10, tag:'bad' },
     ]
   },
   {
@@ -739,9 +824,9 @@ const EVENTS = [
   },
   {
     id:'noise_complaint', type:'crisis', icon:'📢', title:'Noise Complaint — Room 7',
-    desc:'Guests on the top floor are complaining about a loud birthday party in Room 7. It\'s 1am.',
+    desc:"Guests on the top floor are complaining about a loud birthday party in Room 7. It's 1am.",
     choices:[
-      { label:'Politely Intervene', effect:'Staff mediates. -$0. Small satisfaction gain.', cost:0, sat:+5, tag:'good' },
+      { label:'Politely Intervene', effect:'Staff mediates. No cost. Small satisfaction gain.', cost:0, sat:+5, tag:'good' },
       { label:'Offer Earplugs & Apology', effect:'Free, but the other guests remain annoyed. -8 satisfaction.', cost:0, sat:-8, tag:'bad' },
     ]
   },
@@ -827,7 +912,7 @@ const STAFF_ROSTER = [
 // ════════════════════════════
 let G = null, activeSlot = null, loop = null, tick = 0;
 let selectedRoomId = null;
-let staffCooldowns = {}; // staffId -> ticks remaining
+let staffCooldowns = {};
 
 const fresh = () => ({
   money:50, totalEarned:0,
@@ -836,20 +921,21 @@ const fresh = () => ({
   stars:1, amenityIncome:0, hasCleaning:false,
   totalGuests:0, arrivalTick:80, sinceGuest:0,
   gameHour:8, tickInHour:0,
-  satisfaction:60, // 0–100
+  satisfaction:60,
   reviews:[], newReviewCount:0,
-  revenueHistory:[], // last 14 days
-  dayRevenue:0, // accumulated today
+  revenueHistory:[],
+  dayRevenue:0,
   eventsResolved:0,
   pendingGuestBoost:0,
   completedMilestones:[],
-  // Income tracking
   roomRevenue:0, amenityRevenue:0,
-  // Day summary
   dayCheckIns:0, dayCheckOuts:0, dayAmenityEarned:0,
 });
 
-const TICKS_PER_HOUR = 6;
+// ── TIME: faster (4 ticks/hour, 350ms loop) ──
+const TICKS_PER_HOUR = 4;
+const LOOP_MS = 350;
+
 const isNight = h => h >= 22 || h < 6;
 const isActiveDay = h => h >= 8 && h < 22;
 const DAY_ACTIVITIES = ['🍽','☕','🏊','🍸','🎾','💆','🛍','📖','🌇','🧘','🎲','🌿'];
@@ -917,6 +1003,8 @@ function migrateState(g) {
 
 function enterGame() {
   document.body.classList.add('in-game');
+  initTicker();
+  startWalkers();
   const lastTab = sessionStorage.getItem('grand_tab') || 'hotel-panel';
   switchTab(lastTab);
   if (lastTab === 'tree-panel') renderTree();
@@ -924,8 +1012,21 @@ function enterGame() {
 }
 function goHome() {
   document.body.classList.remove('in-game');
+  stopWalkers();
   sessionStorage.setItem('grand_screen', 'home');
   renderHomeSaves();
+}
+
+function startWalkers() {
+  stopWalkers();
+  walkerInterval = setInterval(() => {
+    if (G && G.totalGuests > 0 && !isNight(G.gameHour)) {
+      spawnLobbyGuest();
+    }
+  }, 4000 + Math.random() * 3000);
+}
+function stopWalkers() {
+  if (walkerInterval) { clearInterval(walkerInterval); walkerInterval = null; }
 }
 
 // ════════════════════════════
@@ -934,9 +1035,11 @@ function goHome() {
 const NAMES  = ['Aria','Blake','Casey','Dana','Eli','Fiona','Grey','Hana','Ivan','Jade','Kai','Luna','Max','Nova','Owen','Petra','Quinn','Rae','Seth','Tara','Wren','Yuki','Zoe','Hugo','Isla','Felix','Nora','Liam','Cora','Theo'];
 const TITLES = ['Mr.','Ms.','Dr.','Prof.','Sir','Lady','Mx.'];
 let eventPending = false;
-let nextEventIn = 60 + Math.floor(Math.random()*40); // ticks until next event
+// Events start much later and are less frequent — minimum 5 guests before any event
+let nextEventIn = 200 + Math.floor(Math.random()*120);
+let eventsSinceLast = 0;
 
-function startLoop() { if(loop) clearInterval(loop); loop = setInterval(() => { try { gameTick(); } catch(e) { console.error(e); } }, 680); }
+function startLoop() { if(loop) clearInterval(loop); loop = setInterval(() => { try { gameTick(); } catch(e) { console.error(e); } }, LOOP_MS); }
 
 function gameTick() {
   if (!G) return;
@@ -944,18 +1047,15 @@ function gameTick() {
 
   // ── Advance clock ──
   G.tickInHour = (G.tickInHour || 0) + 1;
-  const prevHour = G.gameHour;
   if (G.tickInHour >= TICKS_PER_HOUR) {
     G.tickInHour = 0;
     G.gameHour = (G.gameHour + 1) % 24;
-    if (G.gameHour === 6)  log('The sun rises — good morning','','🌅');
-    if (G.gameHour === 11) log('Check-out time — guests departing','','🧳');
+    if (G.gameHour === 6)  log('The sun rises — good morning ☀️','','🌅');
+    if (G.gameHour === 11) log('Check-out time — guests departing 🧳','','🧳');
     if (G.gameHour === 14) log('Afternoon check-in window now open','','☀️');
     if (G.gameHour === 22) {
-      log('Evening falls — guests retiring for the night','','🌙');
-      // Night summary
+      log('Evening falls — guests retiring for the night 🌙','','🌙');
       showNightSummary();
-      // Archive day revenue
       G.revenueHistory.push(G.dayRevenue);
       if (G.revenueHistory.length > 14) G.revenueHistory.shift();
       G.dayRevenue = 0;
@@ -976,7 +1076,7 @@ function gameTick() {
           const rate = r.type==='penthouse' ? 200 : r.type==='suite' ? 80 : 30 + G.stars*10;
           G.money += rate; G.totalEarned += rate; G.dayRevenue += rate; G.roomRevenue += rate; G.dayCheckOuts++;
           log(`${r.guest} checked out of Room ${r.id}`, 'out', `+$${rate}`);
-          // Generate review
+          bumpStat('hdr-money');
           generateReview(r.guest, rate);
           if (G.hasCleaning) { r.status='empty'; } else { r.status='dirty'; r.timer=3; }
           r.guest=null; popMoney(rate);
@@ -992,6 +1092,7 @@ function gameTick() {
   // ── Amenity income ──
   if (tick%5===0 && G.amenityIncome>0 && active) {
     G.money+=G.amenityIncome; G.totalEarned+=G.amenityIncome; G.dayRevenue+=G.amenityIncome; G.amenityRevenue+=G.amenityIncome; G.dayAmenityEarned+=G.amenityIncome;
+    if (tick%20===0) bumpStat('hdr-money');
   }
 
   // ── Satisfaction drift ──
@@ -1000,8 +1101,8 @@ function gameTick() {
     const occRatio   = G.rooms.filter(r=>r.status==='occupied').length / Math.max(1,G.rooms.length);
     let drift = 0;
     if (dirtyRatio > 0.3) drift -= 1;
-    if (occRatio > 0.8) drift += 1; // busy = good
-    if (G.amenityIncome > 100) drift += 1; // good amenities
+    if (occRatio > 0.8) drift += 1;
+    if (G.amenityIncome > 100) drift += 1;
     drift += (G.stars - 2) * 0.5;
     G.satisfaction = Math.max(10, Math.min(100, (G.satisfaction||60) + drift));
   }
@@ -1017,11 +1118,12 @@ function gameTick() {
   // ── Staff cooldowns ──
   STAFF_ROSTER.forEach(s => { if (staffCooldowns[s.id] > 0) staffCooldowns[s.id]--; });
 
-  // ── Random events ──
-  if (!eventPending && !night) {
+  // ── Random events — delayed, needs 5+ guests, no events during first 3 days ──
+  if (!eventPending && !night && G.totalGuests >= 5) {
     nextEventIn--;
     if (nextEventIn <= 0) {
-      nextEventIn = 80 + Math.floor(Math.random()*80);
+      // Minimum gap between events: 150 ticks
+      nextEventIn = 180 + Math.floor(Math.random()*140);
       triggerRandomEvent();
     }
   }
@@ -1034,6 +1136,14 @@ function gameTick() {
   else if (activeTab === 'staff-panel') { renderStaff(); updateHeader(); }
   else if (activeTab === 'finance-panel') { renderFinances(); updateHeader(); }
   else updateHeader();
+}
+
+function bumpStat(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
 }
 
 function updateClock() {
@@ -1077,6 +1187,19 @@ function tryArrive() {
   room.status='occupied'; room.guest=`${title} ${name}`; room.timer=nights;
   G.totalGuests++; G.dayCheckIns++;
   log(`${room.guest} checked into Room ${room.id}`, 'in', `${nights}n`);
+  bumpStat('hdr-guests');
+  // Flash the room cell
+  setTimeout(() => {
+    const cells = document.querySelectorAll('.room-cell');
+    cells.forEach(c => {
+      if (c.title && c.title.includes(`Room ${room.id} `)) {
+        c.classList.add('just-arrived');
+        setTimeout(() => c.classList.remove('just-arrived'), 900);
+      }
+    });
+  }, 50);
+  // Spawn a walker immediately
+  spawnLobbyGuest();
 }
 
 // ════════════════════════════
@@ -1118,7 +1241,7 @@ function updateReviewBadge() {
 // EVENTS
 // ════════════════════════════
 function triggerRandomEvent() {
-  if (!G || G.rooms.filter(r=>r.status==='occupied').length === 0) return; // no guests = no events
+  if (!G || G.rooms.filter(r=>r.status==='occupied').length === 0) return;
   eventPending = true;
   const ev = EVENTS[Math.floor(Math.random()*EVENTS.length)];
   showEvent(ev);
@@ -1149,7 +1272,7 @@ function resolveEvent(ev, choice) {
   document.getElementById('event-modal').classList.remove('show');
   eventPending = false;
   G.eventsResolved = (G.eventsResolved||0) + 1;
-  if (choice.cost) { G.money -= choice.cost; if (choice.cost > 0) { G.money -= 0; /* already deducted */ } }
+  if (choice.cost && choice.cost > 0) { G.money -= choice.cost; }
   if (choice.money) { G.money += choice.money; G.totalEarned += choice.money; G.dayRevenue += choice.money; popMoney(choice.money); }
   if (choice.sat) { G.satisfaction = Math.max(0, Math.min(100, (G.satisfaction||60) + choice.sat)); }
   if (choice.guests) { G.pendingGuestBoost = (G.pendingGuestBoost||0) + choice.guests; }
@@ -1178,7 +1301,6 @@ function showNightSummary() {
   const occ = G.rooms.filter(r=>r.status==='occupied').length;
   const occPct = G.rooms.length ? Math.round(occ/G.rooms.length*100) : 0;
   const satClass = G.satisfaction >= 70 ? 'good' : G.satisfaction >= 50 ? '' : 'bad';
-
   content.innerHTML = `
     <div class="ds-row"><span class="ds-label">Revenue Today</span><span class="ds-val good">+$${fmt(G.dayRevenue)}</span></div>
     <div class="ds-row"><span class="ds-label">Check-ins</span><span class="ds-val">${G.dayCheckIns}</span></div>
@@ -1298,7 +1420,6 @@ function upgradeRoom() {
   closeRoomPopup(); renderHotel();
 }
 
-// Close popup on outside click
 document.addEventListener('click', e => {
   const popup = document.getElementById('room-popup');
   if (popup.classList.contains('show') && !popup.contains(e.target) && !e.target.closest('.room-cell')) closeRoomPopup();
@@ -1388,7 +1509,16 @@ function renderHotel() {
     else if ((r.type==='suite'||r.type==='penthouse')&&r.status!=='occupied') c.classList.add('suite-empty');
     else if (r.status==='occupied') c.classList.add(night?'guest-sleeping':'guest-activity');
     else if (r.status==='dirty') c.classList.add('dirty');
-    c.innerHTML=`<span>${roomIcon(r)}</span><span class="rn">${r.id}</span>`;
+    const bobDelay = (r.id * 0.37) % 2.5;
+    c.style.setProperty('--bob-delay', `${bobDelay}s`);
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'room-icon';
+    iconSpan.textContent = roomIcon(r);
+    c.appendChild(iconSpan);
+    const rnSpan = document.createElement('span');
+    rnSpan.className = 'rn';
+    rnSpan.textContent = r.id;
+    c.appendChild(rnSpan);
     c.title=`Room ${r.id} [${r.type}] — ${r.status}${r.guest?' · '+r.guest:''}`;
     c.addEventListener('click', e => openRoomPopup(r.id, e));
     grid.appendChild(c);
@@ -1419,7 +1549,7 @@ function renderStaff() {
     card.className = `staff-card${isUnlocked?'':' locked-card'}`;
     const cd = staffCooldowns[s.id]||0;
     const actionDisabled = !isUnlocked || cd > 0;
-    const cdSecs = Math.ceil(cd * 0.68);
+    const cdSecs = Math.ceil(cd * (LOOP_MS/1000));
     card.innerHTML = `
       <div class="sc-icon">${s.icon}</div>
       <div class="sc-name">${s.name}</div>
@@ -1455,13 +1585,10 @@ function renderStaff() {
 function renderReviews() {
   if (!G) return;
   const reviews = G.reviews||[];
-  // Mark all as read
   if (document.querySelector('.tab.active')?.dataset.tab === 'reviews-panel') {
     G.newReviewCount = 0; updateReviewBadge();
     reviews.forEach(r=>r.isNew=false);
   }
-
-  // Score
   const avg = reviews.length ? (reviews.reduce((s,r)=>s+r.stars,0)/reviews.length) : 0;
   const scoreEl = document.getElementById('rv-score');
   const starsEl = document.getElementById('rv-stars');
@@ -1471,8 +1598,6 @@ function renderReviews() {
     const full=Math.round(avg); starsEl.textContent='★'.repeat(full)+'☆'.repeat(5-full);
   }
   if (countEl) countEl.textContent = reviews.length?`${reviews.length} review${reviews.length!==1?'s':''}`:' No reviews yet';
-
-  // Bars
   const barsEl = document.getElementById('rv-bars');
   if (barsEl) {
     barsEl.innerHTML='';
@@ -1482,8 +1607,6 @@ function renderReviews() {
       barsEl.innerHTML += `<div class="rating-bar-row"><span>${'★'.repeat(n)}</span><div class="rating-bar-bg"><div class="rating-bar-fill" style="width:${pct}%"></div></div><span>${cnt}</span></div>`;
     });
   }
-
-  // Sentiment
   const sentEl = document.getElementById('sentiment-chart');
   if (sentEl) {
     const aspects = [
@@ -1499,12 +1622,10 @@ function renderReviews() {
       return `<div class="income-row"><span class="income-label">${a.label}</span><div class="income-bar-bg"><div class="income-bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="income-val">${pct}%</span></div>`;
     }).join('');
   }
-
-  // Review list
   const listEl = document.getElementById('review-list');
   if (listEl) {
     if (!reviews.length) {
-      listEl.innerHTML = '<div style="padding:20px;text-align:center;font-size:0.7rem;color:var(--text-fnt);font-style:italic;">No reviews yet — check out your first guest to receive one.</div>';
+      listEl.innerHTML = '<div style="padding:20px;text-align:center;font-size:0.74rem;color:var(--text-fnt);font-style:italic;">No reviews yet — check out your first guest to receive one.</div>';
       return;
     }
     listEl.innerHTML='';
@@ -1521,7 +1642,7 @@ function renderReviews() {
             <div class="review-name">${rv.guest||'Anonymous Guest'}</div>
             <div class="review-stars">${stars}</div>
           </div>
-          ${rv.isNew?'<span style="font-size:0.5rem;background:var(--green);color:white;padding:2px 6px;border-radius:8px;font-weight:700">NEW</span>':''}
+          ${rv.isNew?'<span style="font-size:0.52rem;background:var(--green);color:white;padding:2px 6px;border-radius:8px;font-weight:700">NEW</span>':''}
         </div>
         <div class="review-text">${rv.text}</div>
         <div class="review-tags">${(rv.tags||[]).map(t=>`<span class="review-tag ${rv.stars>=3?'pos':'neg'}">${t}</span>`).join('')}</div>
@@ -1536,11 +1657,10 @@ function renderReviews() {
 // ════════════════════════════
 function renderFinances() {
   if (!G) return;
-  // Sparkline
   const sp = document.getElementById('sparkline');
   if (sp) {
     const hist = G.revenueHistory||[];
-    if (hist.length === 0) { sp.innerHTML='<div style="font-size:0.6rem;color:var(--text-fnt);padding:20px">No data yet — revenue records after each day.</div>'; }
+    if (hist.length === 0) { sp.innerHTML='<div style="font-size:0.63rem;color:var(--text-fnt);padding:20px">No data yet — revenue records after each day.</div>'; }
     else {
       const max = Math.max(...hist, 1);
       sp.innerHTML = hist.map(v=>`<div class="spark-bar" style="height:${Math.max(4,Math.round(v/max*56))}px" data-val="$${fmt(v)}"></div>`).join('');
@@ -1548,7 +1668,6 @@ function renderFinances() {
       document.getElementById('spark-max').textContent='$'+fmt(max);
     }
   }
-  // Income breakdown
   const ib = document.getElementById('income-breakdown');
   if (ib) {
     const total = (G.roomRevenue||0) + (G.amenityRevenue||0) + 1;
@@ -1563,7 +1682,6 @@ function renderFinances() {
         <span class="income-val">$${fmt(it.val)}</span>
       </div>`).join('');
   }
-  // Stats grid
   const sg = document.getElementById('stat-grid');
   if (sg) {
     const avgRev = G.revenueHistory?.length ? fmt(G.revenueHistory.reduce((a,b)=>a+b,0)/G.revenueHistory.length) : '—';
@@ -1578,7 +1696,6 @@ function renderFinances() {
     ];
     sg.innerHTML = tiles.map(t=>`<div class="stat-tile"><div class="stat-tile-label">${t.label}</div><div class="stat-tile-val">${t.val}</div></div>`).join('');
   }
-  // Milestones
   const ml = document.getElementById('milestone-list');
   if (ml) {
     ml.innerHTML='';
@@ -1710,16 +1827,17 @@ function log(msg,type='',extra=''){
   const box=document.getElementById('desk-log'); if(!box) return;
   const row=document.createElement('div'); row.className='log-entry';
   const tag=type?`<span class="log-tag ${type}">${type==='in'?'In':type==='out'?'Out':type==='event'?'Event':'!'}</span>`:'';
-  const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-  row.innerHTML=`${tag}<span class="log-msg">${msg}</span>${extra?`<span style="font-size:0.6rem;color:var(--brass-dk);font-weight:600">${extra}</span>`:''}<span class="log-time">${now}</span>`;
+  const h=G?G.gameHour:new Date().getHours();
+  const ampm=h<12?'AM':'PM'; const h12=h%12||12;
+  row.innerHTML=`${tag}<span class="log-msg">${msg}</span>${extra?`<span style="font-size:0.63rem;color:var(--brass-dk);font-weight:600">${extra}</span>`:''}<span class="log-time">${h12}:00 ${ampm}</span>`;
   box.insertBefore(row,box.firstChild);
-  while(box.children.length>50) box.removeChild(box.lastChild);
+  while(box.children.length>60) box.removeChild(box.lastChild);
 }
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 function popMoney(n){
   if(n<=0) return;
   const p=document.createElement('div'); p.className='money-pop'; p.textContent='+$'+n;
-  p.style.left=(80+Math.random()*180)+'px'; p.style.top=(200+Math.random()*80)+'px';
+  p.style.left=(80+Math.random()*200)+'px'; p.style.top=(160+Math.random()*80)+'px';
   document.body.appendChild(p); setTimeout(()=>p.remove(),1500);
 }
 function fmt(n){n=Math.floor(n);if(n>=1000000)return(n/1e6).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return n+'';}
@@ -1752,9 +1870,11 @@ document.getElementById('save-btn').addEventListener('click',()=>{if(!G){toast('
   }
   if(sessionStorage.getItem('grand_screen')==='game'&&G){
     document.body.classList.add('in-game');
+    initTicker();
+    startWalkers();
     const lastTab=sessionStorage.getItem('grand_tab')||'hotel-panel';
     switchTab(lastTab);
-    log('Welcome back to The Grand','in');
+    log('Welcome back to The Grand — the doors are open 🚪','in');
   }
 })();
 </script>
