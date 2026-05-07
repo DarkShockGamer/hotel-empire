@@ -382,9 +382,61 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--linen3); border-radius: 4px; }
+
+/* ── CLOCK ── */
+.hdr-clock {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 3px 16px; border-right: 1px solid rgba(184,150,90,0.12);
+  gap: 2px;
+}
+.clock-time {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+  color: var(--ivory); font-weight: 500; letter-spacing: 2px; line-height: 1;
+}
+.clock-phase {
+  font-size: 0.48rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--brass); display: flex; align-items: center; gap: 4px;
+}
+.clock-sun  { color: #f0c060; }
+.clock-moon { color: #a0b8e0; }
+
+/* sky gradient overlay on the game panel area */
+#sky-overlay {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  transition: background 2s ease, opacity 2s ease;
+  opacity: 0;
+}
+body.in-game #sky-overlay { opacity: 1; }
+
+/* day-phase tint on the room cells */
+.room-cell.guest-sleeping  { background: #e8edf5 !important; border-color: #b0bcd4 !important; }
+.room-cell.guest-activity  { background: #e8f5e8 !important; border-color: #90c890 !important; }
+
+/* night mode: header dims slightly */
+body.night-mode #header {
+  background: #150e06;
+  transition: background 1.5s;
+}
+body.night-mode #header::before,
+body.night-mode #header::after {
+  background: linear-gradient(90deg, transparent, #6080b0, #8090c0, #6080b0, transparent);
+}
+body.night-mode .clock-phase { color: #8090c0; }
+
+/* day-period badge */
+.period-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 1px 7px; border-radius: 10px; font-size: 0.52rem;
+  font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  margin-left: 6px;
+}
+.period-badge.day   { background: #fff5d0; color: #8a6010; border: 1px solid #d4a820; }
+.period-badge.night { background: #1a2040; color: #9090d0; border: 1px solid #4050a0; }
 </style>
 </head>
 <body>
+
+<div id="sky-overlay"></div>
 
 <!-- HOME SCREEN -->
 <div id="screen-home">
@@ -408,6 +460,10 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
   <div id="header">
     <div class="hotel-wordmark">
       <div class="wordmark-grand">Grand</div>
+    </div>
+    <div class="hdr-clock">
+      <div class="clock-time" id="hdr-clock-time">12:00</div>
+      <div class="clock-phase" id="hdr-clock-phase"><span class="clock-sun">☀</span> Day</div>
     </div>
     <div class="hdr-stats">
       <div class="hdr-stat"><div class="hdr-stat-label">Balance</div><div class="hdr-stat-val" id="hdr-money">$50</div></div>
@@ -458,8 +514,9 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
         <div class="section-card">
           <div class="section-header">
             <span class="section-title">Room Status</span>
+            <span id="period-badge"></span>
             <span style="margin-left:auto;font-size:0.54rem;color:var(--text-fnt);letter-spacing:1px">
-              <span style="color:var(--green)">●</span> occ &ensp;<span style="color:#c04040">●</span> dirty &ensp;<span style="color:#9060d0">●</span> suite &ensp;<span style="color:var(--linen3)">●</span> vacant
+              <span style="color:var(--green)">●</span> active &ensp;<span style="color:#8090c0">●</span> sleeping &ensp;<span style="color:#c04040">●</span> dirty &ensp;<span style="color:#9060d0">●</span> suite &ensp;<span style="color:var(--linen3)">●</span> vacant
             </span>
           </div>
           <div id="room-grid"></div>
@@ -586,7 +643,23 @@ const fresh = () => ({
   upgrades: JSON.parse(JSON.stringify(TREE_DATA)),
   stars:1, amenityIncome:0, hasCleaning:false,
   totalGuests:0, arrivalTick:80, sinceGuest:0,
+  gameHour: 8,   // start at 8am
+  tickInHour: 0, // ticks elapsed in current hour
 });
+
+// 1 game-hour = 6 real ticks (each tick ~680ms → 1 day ≈ 97s real time)
+const TICKS_PER_HOUR = 6;
+// Night = 22:00–06:00  |  Day = 06:00–22:00
+const isNight = h => h >= 22 || h < 6;
+// Activity hours: guests roam 08:00–21:00
+const isActiveDay = h => h >= 8 && h < 22;
+
+// Day-phase activity icons (shown instead of sleeping icon)
+const DAY_ACTIVITIES = ['🍽','☕','🏊','🍸','🎾','💆','🛍','📖','🌇'];
+// Each occupied room tracks which activity its guest is doing
+function guestActivity(roomId) {
+  return DAY_ACTIVITIES[roomId % DAY_ACTIVITIES.length];
+}
 
 // ════════════════════════════
 // PERSISTENCE
@@ -650,26 +723,109 @@ function startLoop() { if(loop) clearInterval(loop); loop = setInterval(gameTick
 function gameTick() {
   if (!G) return;
   tick++;
+
+  // ── Advance game clock ──
+  G.tickInHour = (G.tickInHour || 0) + 1;
+  if (G.tickInHour >= TICKS_PER_HOUR) {
+    G.tickInHour = 0;
+    const prevHour = G.gameHour;
+    G.gameHour = (G.gameHour + 1) % 24;
+    // Announce phase transitions
+    if (G.gameHour === 6)  log('The sun rises — guests are stirring', '', '🌅');
+    if (G.gameHour === 8)  log('Morning activity begins across the hotel', '', '☀️');
+    if (G.gameHour === 22) log('Evening falls — guests retiring to their rooms', '', '🌙');
+  }
+  updateClock();
+
+  const night = isNight(G.gameHour);
+  const active = isActiveDay(G.gameHour);
+
+  // ── Room timers ──
   G.rooms.forEach(r => {
     if (r.status==='occupied') {
-      r.timer--;
-      if (r.timer<=0) {
-        const rate = r.type==='penthouse' ? 200 : r.type==='suite' ? 80 : 30 + G.stars*10;
-        G.money += rate; G.totalEarned += rate;
-        log(`${r.guest} departed Room ${r.id}`, 'out', `+$${rate}`);
-        r.status = G.hasCleaning ? 'empty' : 'dirty'; r.guest=null; r.timer=0;
-        popMoney(rate);
+      // Rooms only tick toward checkout during the day (guests do activities)
+      // At night guests are sleeping — timer pauses
+      if (!night) {
+        r.timer--;
+        if (r.timer<=0) {
+          const rate = r.type==='penthouse' ? 200 : r.type==='suite' ? 80 : 30 + G.stars*10;
+          G.money += rate; G.totalEarned += rate;
+          log(`${r.guest} departed Room ${r.id}`, 'out', `+$${rate}`);
+          r.status = G.hasCleaning ? 'empty' : 'dirty'; r.guest=null; r.timer=0;
+          popMoney(rate);
+        }
       }
     } else if (r.status==='dirty') {
-      r.timer--;
-      if (r.timer<=0) { r.status='empty'; r.timer=0; }
+      // Housekeeping works during day only
+      if (!night) {
+        r.timer--;
+        if (r.timer<=0) { r.status='empty'; r.timer=0; }
+      }
     }
   });
-  if (tick%5===0 && G.amenityIncome>0) { G.money+=G.amenityIncome; G.totalEarned+=G.amenityIncome; }
-  G.sinceGuest++;
-  const rate = Math.max(12, G.arrivalTick - G.stars*8);
-  if (G.sinceGuest>=rate) { G.sinceGuest=0; tryArrive(); }
+
+  // ── Amenity income only during active hours ──
+  if (tick%5===0 && G.amenityIncome>0 && active) {
+    G.money+=G.amenityIncome; G.totalEarned+=G.amenityIncome;
+  }
+
+  // ── Guest arrivals only during check-in window (8am–20pm) ──
+  if (G.gameHour >= 8 && G.gameHour < 20) {
+    G.sinceGuest++;
+    const rate = Math.max(12, G.arrivalTick - G.stars*8);
+    if (G.sinceGuest>=rate) { G.sinceGuest=0; tryArrive(); }
+  }
+
   renderHotel(); updateHeader();
+}
+
+function updateClock() {
+  if (!G) return;
+  const h = G.gameHour;
+  const night = isNight(h);
+  const ampm = h < 12 ? 'AM' : 'PM';
+  const h12 = h % 12 || 12;
+  const timeStr = `${h12}:00 ${ampm}`;
+
+  const clockEl = document.getElementById('hdr-clock-time');
+  const phaseEl = document.getElementById('hdr-clock-phase');
+  if (clockEl) clockEl.textContent = timeStr;
+
+  if (phaseEl) {
+    if (h >= 6 && h < 8)        { phaseEl.innerHTML = '<span class="clock-sun">🌅</span> Dawn'; }
+    else if (h >= 8 && h < 18)  { phaseEl.innerHTML = '<span class="clock-sun">☀</span> Day'; }
+    else if (h >= 18 && h < 22) { phaseEl.innerHTML = '<span class="clock-sun">🌆</span> Evening'; }
+    else                         { phaseEl.innerHTML = '<span class="clock-moon">☽</span> Night'; }
+  }
+
+  // Night mode class on body
+  document.body.classList.toggle('night-mode', night);
+
+  // Sky overlay — gradient shifts from day blue to night indigo
+  const sky = document.getElementById('sky-overlay');
+  if (sky) {
+    if (h >= 6 && h < 8) {
+      sky.style.background = 'linear-gradient(180deg, rgba(255,180,80,0.06) 0%, rgba(255,220,120,0.03) 100%)';
+    } else if (h >= 8 && h < 18) {
+      sky.style.background = 'linear-gradient(180deg, rgba(100,160,255,0.04) 0%, transparent 60%)';
+    } else if (h >= 18 && h < 22) {
+      sky.style.background = 'linear-gradient(180deg, rgba(180,80,40,0.06) 0%, rgba(80,40,120,0.05) 100%)';
+    } else {
+      sky.style.background = 'linear-gradient(180deg, rgba(10,15,50,0.12) 0%, rgba(20,20,60,0.08) 100%)';
+    }
+  }
+
+  // Period badge in room section
+  const badge = document.getElementById('period-badge');
+  if (badge) {
+    if (night) {
+      badge.innerHTML = '<span class="period-badge night">☽ Night — Guests Sleeping</span>';
+    } else if (h >= 8 && h < 22) {
+      badge.innerHTML = '<span class="period-badge day">☀ Day — Guests Active</span>';
+    } else {
+      badge.innerHTML = '<span class="period-badge day">🌅 Dawn — Hotel Waking</span>';
+    }
+  }
 }
 
 function tryArrive() {
@@ -775,7 +931,7 @@ function renderHomeSaves() {
 // ════════════════════════════
 // RENDER — GAME
 // ════════════════════════════
-function renderAll() { renderHotel(); renderTree(); updateHeader(); }
+function renderAll() { renderHotel(); renderTree(); updateHeader(); updateClock(); }
 
 function updateHeader() {
   if(!G) return;
@@ -802,10 +958,16 @@ function renderHotel() {
   G.rooms.forEach(r => {
     const c = document.createElement('div');
     c.className = 'room-cell';
-    if (r.status==='occupied' && (r.type==='suite'||r.type==='penthouse')) c.classList.add('suite-occ');
-    else if ((r.type==='suite'||r.type==='penthouse') && r.status!=='occupied') c.classList.add('suite-empty');
-    else if (r.status==='occupied') c.classList.add('occupied');
-    else if (r.status==='dirty') c.classList.add('dirty');
+    const night = G && isNight(G.gameHour);
+    if (r.status==='occupied' && (r.type==='suite'||r.type==='penthouse')) {
+      c.classList.add(night ? 'guest-sleeping' : 'suite-occ');
+    } else if ((r.type==='suite'||r.type==='penthouse') && r.status!=='occupied') {
+      c.classList.add('suite-empty');
+    } else if (r.status==='occupied') {
+      c.classList.add(night ? 'guest-sleeping' : 'guest-activity');
+    } else if (r.status==='dirty') {
+      c.classList.add('dirty');
+    }
     c.innerHTML = `<span>${roomIcon(r)}</span><span class="rn">${r.id}</span>`;
     c.title = `Room ${r.id} [${r.type}] — ${r.status}${r.guest?' · '+r.guest:''}`;
     grid.appendChild(c);
@@ -813,9 +975,13 @@ function renderHotel() {
 }
 
 function roomIcon(r) {
-  if (r.type==='penthouse') return '👑';
-  if (r.type==='suite') return r.status==='occupied'?'✨':'🌟';
-  if (r.status==='occupied') return '😴';
+  const night = G && isNight(G.gameHour);
+  if (r.type==='penthouse') return r.status==='occupied' ? (night ? '😴' : '👑') : '👑';
+  if (r.type==='suite') {
+    if (r.status==='occupied') return night ? '😴' : '✨';
+    return '🌟';
+  }
+  if (r.status==='occupied') return night ? '😴' : guestActivity(r.id);
   if (r.status==='dirty') return '🧹';
   return '🛏';
 }
