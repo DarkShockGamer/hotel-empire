@@ -780,33 +780,39 @@ function gameTick() {
     const prevHour = G.gameHour;
     G.gameHour = (G.gameHour + 1) % 24;
     // Announce phase transitions
-    if (G.gameHour === 6)  log('The sun rises — guests are stirring', '', '🌅');
-    if (G.gameHour === 8)  log('Morning activity begins across the hotel', '', '☀️');
-    if (G.gameHour === 22) log('Evening falls — guests retiring to their rooms', '', '🌙');
+    if (G.gameHour === 6)  log('The sun rises — good morning', '', '🌅');
+    if (G.gameHour === 11) log('Check-out time — guests departing', '', '🧳');
+    if (G.gameHour === 14) log('Afternoon check-in window now open', '', '☀️');
+    if (G.gameHour === 22) log('Evening falls — guests retiring for the night', '', '🌙');
   }
   updateClock();
 
   const night = isNight(G.gameHour);
   const active = isActiveDay(G.gameHour);
 
-  // ── Room timers ──
+  // ── Room timers — checkout only at 11am ──
   G.rooms.forEach(r => {
     if (r.status==='occupied') {
-      // Rooms only tick toward checkout during the day (guests do activities)
-      // At night guests are sleeping — timer pauses
-      if (!night) {
+      // Decrement stay timer only at 11am each day (morning checkout window)
+      if (G.gameHour === 11 && G.tickInHour === 0) {
         r.timer--;
-        if (r.timer<=0) {
+        if (r.timer <= 0) {
           const rate = r.type==='penthouse' ? 200 : r.type==='suite' ? 80 : 30 + G.stars*10;
           G.money += rate; G.totalEarned += rate;
-          log(`${r.guest} departed Room ${r.id}`, 'out', `+$${rate}`);
-          r.status = G.hasCleaning ? 'empty' : 'dirty'; r.guest=null; r.timer=0;
+          log(`${r.guest} checked out of Room ${r.id}`, 'out', `+$${rate}`);
+          if (G.hasCleaning) {
+            r.status = 'empty';
+          } else {
+            r.status = 'dirty';
+            r.timer = 3; // takes 3 day-hours to clean
+          }
+          r.guest=null;
           popMoney(rate);
         }
       }
     } else if (r.status==='dirty') {
-      // Housekeeping works during day only
-      if (!night) {
+      // Housekeeping works during day only, ticks each hour
+      if (!night && G.tickInHour === 0) {
         r.timer--;
         if (r.timer<=0) { r.status='empty'; r.timer=0; }
       }
@@ -818,8 +824,8 @@ function gameTick() {
     G.money+=G.amenityIncome; G.totalEarned+=G.amenityIncome;
   }
 
-  // ── Guest arrivals only during check-in window (8am–20pm) ──
-  if (G.gameHour >= 8 && G.gameHour < 20) {
+  // ── Guest arrivals only during check-in window (2pm–8pm) ──
+  if (G.gameHour >= 14 && G.gameHour < 20) {
     G.sinceGuest++;
     const rate = Math.max(12, G.arrivalTick - G.stars*8);
     if (G.sinceGuest>=rate) { G.sinceGuest=0; tryArrive(); }
@@ -884,7 +890,8 @@ function tryArrive() {
   const title = TITLES[Math.floor(Math.random()*TITLES.length)];
   const name  = NAMES[Math.floor(Math.random()*NAMES.length)];
   const nights = Math.floor(Math.random()*3)+1;
-  room.status='occupied'; room.guest=`${title} ${name}`; room.timer=nights*3;
+  // timer = nights: counts down by 1 each day at 11am checkout hour
+  room.status='occupied'; room.guest=`${title} ${name}`; room.timer=nights;
   G.totalGuests++;
   log(`${room.guest} checked into Room ${room.id}`, 'in', `${nights}n`);
 }
@@ -958,19 +965,37 @@ function renderHomeSaves() {
       const stars = '★'.repeat(s.stars);
       info.innerHTML = `<div class="home-slot-name"><span>${activeSlot===i?'⬥ ':''}</span>Property ${i+1}</div><div class="home-slot-meta"><span class="home-slot-stars">${stars}</span> &ensp;$${fmt(s.money)} &ensp;${s.rooms} rooms &ensp;· ${ts}</div>`;
       body.append(num, info); div.appendChild(body);
-      const foot = document.createElement('div'); foot.className = 'home-slot-actions';
-      foot.append(
-        mkBtn('Play', 'hsa-btn primary', () => loadGame(i)),
-        mkBtn('Overwrite', 'hsa-btn', () => { if(G&&confirm(`Save current game to slot ${i+1}?`)) saveGame(i); else if(!G) toast('No active game to save.'); }),
-        mkBtn('Delete', 'hsa-btn danger', () => { if(confirm(`Delete Property ${i+1}?`)) deleteSlot(i); })
-      );
+
+      // Normal action row
+      const foot = document.createElement('div');
+      foot.className = 'home-slot-actions';
+
+      const playBtn     = mkBtn('Play',      'hsa-btn primary', () => loadGame(i));
+      const overwriteBtn= mkBtn('Overwrite', 'hsa-btn', () => {
+        if (!G) { toast('No active game to save'); return; }
+        // Show inline confirm
+        foot.innerHTML = '';
+        foot.appendChild(mkBtn('✓ Confirm Overwrite', 'hsa-btn primary', () => { saveGame(i); renderHomeSaves(); }));
+        foot.appendChild(mkBtn('✕ Cancel', 'hsa-btn', () => renderHomeSaves()));
+      });
+      const deleteBtn   = mkBtn('Delete',    'hsa-btn danger', () => {
+        // Show inline confirm
+        foot.innerHTML = '';
+        foot.appendChild(mkBtn('✓ Confirm Delete', 'hsa-btn danger', () => { deleteSlot(i); }));
+        foot.appendChild(mkBtn('✕ Cancel', 'hsa-btn', () => renderHomeSaves()));
+      });
+
+      foot.append(playBtn, overwriteBtn, deleteBtn);
       div.appendChild(foot);
     } else {
       info.innerHTML = `<div class="home-slot-name">Property ${i+1}</div><div class="home-slot-meta">Empty — start a new game</div>`;
       body.append(num, info); div.appendChild(body);
       const foot = document.createElement('div'); foot.className = 'home-slot-actions';
       const nb = mkBtn('New Game', 'hsa-btn primary', () => newGame(i));
-      const sb = mkBtn('Save Here', 'hsa-btn', () => saveGame(i)); if(!G) sb.disabled=true;
+      const sb = mkBtn('Save Here', 'hsa-btn', () => {
+        if (!G) { toast('No active game to save'); return; }
+        saveGame(i);
+      });
       foot.append(nb, sb); div.appendChild(foot);
     }
     c.appendChild(div);
