@@ -64,87 +64,42 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
     radial-gradient(ellipse at 100% 50%, #4a2a10 0%, transparent 35%);
   overflow: hidden;
 }
-
 #screen-home::before {
-  content: '';
-  position: absolute;
-  top: -10%; left: 50%; transform: translateX(-50%);
-  width: 600px; height: 520px;
-  border-radius: 50% 50% 0 0;
-  border: 1px solid rgba(184,150,90,0.18);
-  pointer-events: none;
+  content: ''; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 520px; border-radius: 50% 50% 0 0;
+  border: 1px solid rgba(184,150,90,0.18); pointer-events: none;
 }
 #screen-home::after {
-  content: '';
-  position: absolute;
-  top: -5%; left: 50%; transform: translateX(-50%);
-  width: 440px; height: 400px;
-  border-radius: 50% 50% 0 0;
-  border: 1px solid rgba(184,150,90,0.1);
-  pointer-events: none;
+  content: ''; position: absolute; top: -5%; left: 50%; transform: translateX(-50%);
+  width: 440px; height: 400px; border-radius: 50% 50% 0 0;
+  border: 1px solid rgba(184,150,90,0.1); pointer-events: none;
 }
-
-.home-bg-stars {
-  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-}
+.home-bg-stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .home-bg-stars::before {
   content: '✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦';
   position: absolute; top: 0; left: 0; right: 0;
-  font-size: 0.5rem; color: rgba(184,150,90,0.12);
-  letter-spacing: 24px; line-height: 3; word-break: break-all;
+  font-size: 0.5rem; color: rgba(184,150,90,0.12); letter-spacing: 24px; line-height: 3; word-break: break-all;
 }
-
 .home-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 560px; padding: 0 20px; }
-
 .home-ornament { color: var(--brass-lt); font-size: 0.55rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 14px; opacity: 0.7; }
 .home-the { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: var(--brass-lt); letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 0 40px rgba(212,176,122,0.5); }
 .home-grand { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 4.5rem; color: #fff; letter-spacing: 18px; text-transform: uppercase; line-height: 1; text-shadow: 0 2px 40px rgba(0,0,0,0.5), 0 0 80px rgba(184,150,90,0.2); }
 .home-sub { font-size: 0.58rem; letter-spacing: 5px; color: var(--brass); text-transform: uppercase; margin-top: 8px; }
-.home-divider {
-  width: 280px; height: 1px; margin: 22px 0 16px;
-  background: linear-gradient(90deg, transparent, rgba(184,150,90,0.6), #d4b07a, rgba(184,150,90,0.6), transparent);
-  position: relative;
-}
-.home-divider::before {
-  content: '◆';
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-  color: var(--brass-lt); font-size: 0.5rem; background: transparent;
-  padding: 0 4px;
-}
+.home-divider { width: 280px; height: 1px; margin: 22px 0 16px; background: linear-gradient(90deg, transparent, rgba(184,150,90,0.6), #d4b07a, rgba(184,150,90,0.6), transparent); position: relative; }
+.home-divider::before { content: '◆'; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: var(--brass-lt); font-size: 0.5rem; background: transparent; padding: 0 4px; }
 .home-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(255,255,255,0.35); font-size: 0.95rem; letter-spacing: 2px; margin-bottom: 32px; }
-
 .saves-container { display: flex; flex-direction: column; gap: 8px; width: 100%; }
 .saves-label { font-size: 0.52rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(184,150,90,0.7); margin-bottom: 6px; }
-
-.home-slot {
-  background: rgba(255,255,255,0.055);
-  border: 1px solid rgba(184,150,90,0.25);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: all 0.22s;
-  backdrop-filter: blur(6px);
-}
+.home-slot { background: rgba(255,255,255,0.055); border: 1px solid rgba(184,150,90,0.25); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.22s; backdrop-filter: blur(6px); }
 .home-slot:hover { background: rgba(255,255,255,0.09); border-color: rgba(184,150,90,0.5); transform: translateY(-1px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
 .home-slot-body { display: flex; align-items: center; gap: 14px; padding: 13px 16px; }
-.home-slot-num {
-  width: 36px; height: 36px; border-radius: 8px;
-  background: rgba(184,150,90,0.18); border: 1px solid rgba(184,150,90,0.35);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--brass-lt);
-  flex-shrink: 0;
-}
+.home-slot-num { width: 36px; height: 36px; border-radius: 8px; background: rgba(184,150,90,0.18); border: 1px solid rgba(184,150,90,0.35); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--brass-lt); flex-shrink: 0; }
 .home-slot-info { flex: 1; }
 .home-slot-name { font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 8px; }
 .home-slot-meta { font-size: 0.6rem; color: rgba(255,255,255,0.38); margin-top: 3px; }
 .home-slot-stars { color: var(--brass-lt); }
 .home-slot-actions { display: flex; border-top: 1px solid rgba(184,150,90,0.15); }
-.hsa-btn {
-  flex: 1; padding: 9px 0; background: transparent; border: none;
-  border-right: 1px solid rgba(184,150,90,0.15);
-  font-family: 'Jost', sans-serif; font-size: 0.58rem; font-weight: 600;
-  letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
-  color: rgba(255,255,255,0.38); transition: all 0.15s;
-}
+.hsa-btn { flex: 1; padding: 9px 0; background: transparent; border: none; border-right: 1px solid rgba(184,150,90,0.15); font-family: 'Jost', sans-serif; font-size: 0.58rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: rgba(255,255,255,0.38); transition: all 0.15s; }
 .hsa-btn:last-child { border-right: none; }
 .hsa-btn:hover { background: rgba(184,150,90,0.12); color: var(--brass-lt); }
 .hsa-btn.primary { color: rgba(255,255,255,0.6); }
@@ -153,48 +108,30 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .hsa-btn:disabled { opacity: 0.18; cursor: not-allowed; }
 
 /* ── GAME HEADER ── */
-#header {
-  background: var(--espresso); padding: 0 16px;
-  display: flex; align-items: center; gap: 0; min-height: 52px;
-  position: relative; overflow: hidden; flex-shrink: 0;
-}
-#header::before, #header::after {
-  content: ''; position: absolute; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--brass), var(--brass-lt), var(--brass), transparent);
-}
+#header { background: var(--espresso); padding: 0 16px; display: flex; align-items: center; gap: 0; min-height: 52px; position: relative; overflow: hidden; flex-shrink: 0; }
+#header::before, #header::after { content: ''; position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--brass), var(--brass-lt), var(--brass), transparent); }
 #header::before { top: 7px; } #header::after { bottom: 7px; }
-
 .hotel-wordmark { display: flex; align-items: center; gap: 10px; margin-right: 18px; padding-right: 18px; border-right: 1px solid rgba(184,150,90,0.2); }
 .wordmark-grand { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.3rem; color: var(--ivory); letter-spacing: 6px; text-transform: uppercase; }
-
 .hdr-stats { display: flex; gap: 0; align-items: center; }
 .hdr-stat { display: flex; flex-direction: column; align-items: center; padding: 3px 14px; border-right: 1px solid rgba(184,150,90,0.12); }
 .hdr-stat-label { font-size: 0.48rem; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); margin-bottom: 1px; }
 .hdr-stat-val { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ivory); font-weight: 500; line-height: 1; }
 .spacer { flex: 1; }
-.hdr-btn {
-  background: transparent; border: 1px solid rgba(184,150,90,0.4); color: var(--brass-lt);
-  padding: 5px 12px; font-family: 'Jost', sans-serif; font-size: 0.58rem; font-weight: 600;
-  letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: var(--radius);
-  transition: all 0.2s; margin-left: 8px;
-}
+.hdr-btn { background: transparent; border: 1px solid rgba(184,150,90,0.4); color: var(--brass-lt); padding: 5px 12px; font-family: 'Jost', sans-serif; font-size: 0.58rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: var(--radius); transition: all 0.2s; margin-left: 8px; }
 .hdr-btn:hover { background: rgba(184,150,90,0.15); color: var(--ivory); }
 .hdr-btn.home-btn:hover { background: rgba(184,150,90,0.1); }
+/* Notification bell */
+.hdr-bell { position: relative; }
+.hdr-bell-count { position: absolute; top: -4px; right: -4px; width: 14px; height: 14px; border-radius: 50%; background: #c04040; color: white; font-size: 0.48rem; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--espresso); }
 
 /* ── TABS ── */
-#tabs {
-  background: var(--white); border-bottom: 1px solid var(--linen3);
-  display: flex; padding: 0 16px; flex-shrink: 0;
-}
-.tab {
-  padding: 10px 16px; font-size: 0.6rem; font-weight: 500;
-  letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-lt);
-  cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;
-  display: flex; align-items: center; gap: 6px; margin-bottom: -1px;
-}
+#tabs { background: var(--white); border-bottom: 1px solid var(--linen3); display: flex; padding: 0 16px; flex-shrink: 0; }
+.tab { padding: 10px 16px; font-size: 0.6rem; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-lt); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; display: flex; align-items: center; gap: 6px; margin-bottom: -1px; position: relative; }
 .tab:hover { color: var(--brown); }
 .tab.active { color: var(--espresso); border-bottom-color: var(--brass); font-weight: 600; }
 .tab-icon { font-size: 0.8rem; }
+.tab-badge { background: var(--red); color: white; font-size: 0.45rem; font-weight: 700; padding: 1px 4px; border-radius: 8px; min-width: 14px; text-align: center; }
 
 /* ── PANELS ── */
 #main { overflow: hidden; position: relative; flex: 1; }
@@ -203,13 +140,8 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 
 /* ── LOBBY ── */
 #hotel-panel { padding: 14px; gap: 10px; }
-
 .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.kpi-card {
-  background: var(--white); border: 1px solid var(--linen2);
-  border-radius: var(--radius-lg); padding: 12px 14px;
-  box-shadow: var(--shadow); position: relative; overflow: hidden;
-}
+.kpi-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 12px 14px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
 .kpi-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
 .kpi-card.k1::after { background: linear-gradient(90deg, var(--brass), var(--brass-lt)); }
 .kpi-card.k2::after { background: linear-gradient(90deg, var(--green), #6aaa80); }
@@ -228,6 +160,7 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); margin-left: auto; animation: livePulse 2s infinite; }
 @keyframes livePulse { 0%,100%{box-shadow:0 0 0 2px rgba(74,124,89,0.2)} 50%{box-shadow:0 0 0 5px rgba(74,124,89,0.06)} }
 
+/* ── CONCIERGE LOG ── */
 #desk-log { flex: 1; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 1px; }
 .log-entry { display: flex; align-items: flex-start; gap: 7px; padding: 5px 7px; border-radius: var(--radius); font-size: 0.65rem; color: var(--text-md); line-height: 1.4; transition: background 0.15s; animation: entrySlide 0.25s ease; }
 .log-entry:hover { background: var(--ivory); }
@@ -235,110 +168,178 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .log-tag { font-size: 0.52rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 5px; border-radius: 3px; white-space: nowrap; font-weight: 600; flex-shrink: 0; margin-top: 1px; }
 .log-tag.in  { background: var(--green-lt); color: var(--green); }
 .log-tag.out { background: #fdf6e8; color: var(--brass-dk); }
+.log-tag.event { background: #fff0d0; color: #a06010; }
+.log-tag.urgent { background: #ffe0e0; color: #a03020; }
 .log-msg { flex: 1; }
 .log-time { font-size: 0.55rem; color: var(--text-fnt); margin-left: auto; white-space: nowrap; flex-shrink: 0; }
 
+/* ── ROOM GRID ── */
 #room-grid { padding: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 5px; overflow-y: auto; }
-.room-cell { aspect-ratio: 1; border-radius: var(--radius); background: var(--linen); border: 1px solid var(--linen3); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.95rem; position: relative; transition: all 0.25s; }
+.room-cell { aspect-ratio: 1; border-radius: var(--radius); background: var(--linen); border: 1px solid var(--linen3); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.95rem; position: relative; transition: all 0.25s; cursor: pointer; }
+.room-cell:hover { transform: scale(1.08); z-index: 2; }
 .room-cell .rn { position: absolute; bottom: 2px; font-size: 0.45rem; color: var(--text-fnt); font-weight: 500; }
 .room-cell.occupied { background: var(--green-lt); border-color: #a8d4b4; }
 .room-cell.dirty { background: var(--red-lt); border-color: #e0bbbb; }
 .room-cell.suite-empty { background: #f5f0ff; border-color: #c8b8e8; }
 .room-cell.suite-occ { background: #ede5ff; border-color: #b8a0e0; }
+.room-cell.maintenance { background: #fff3d0; border-color: #e0c070; }
+
+/* ── FINANCES PANEL ── */
+#finance-panel { padding: 14px; gap: 10px; }
+.finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1; }
+.finance-col { display: flex; flex-direction: column; gap: 10px; }
+.chart-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 14px; box-shadow: var(--shadow); }
+.chart-title { font-size: 0.54rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 10px; font-weight: 600; }
+#sparkline { display: flex; align-items: flex-end; gap: 3px; height: 60px; }
+.spark-bar { flex: 1; background: linear-gradient(0deg, var(--brass-dk), var(--brass-lt)); border-radius: 2px 2px 0 0; min-height: 2px; transition: height 0.3s; position: relative; }
+.spark-bar:hover::after { content: attr(data-val); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--espresso); color: var(--ivory); font-size: 0.5rem; padding: 2px 5px; border-radius: 3px; white-space: nowrap; margin-bottom: 3px; pointer-events: none; }
+.income-breakdown { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+.income-row { display: flex; align-items: center; gap: 8px; }
+.income-label { font-size: 0.6rem; color: var(--text-md); flex: 1; }
+.income-bar-bg { flex: 2; height: 6px; background: var(--linen2); border-radius: 3px; overflow: hidden; }
+.income-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+.income-val { font-size: 0.58rem; font-weight: 600; color: var(--espresso); min-width: 36px; text-align: right; }
+.milestone-list { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex: 1; }
+.milestone-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: var(--radius); border: 1px solid var(--linen2); background: var(--white); }
+.milestone-icon { font-size: 1.1rem; flex-shrink: 0; }
+.milestone-info { flex: 1; }
+.milestone-name { font-size: 0.68rem; font-weight: 600; color: var(--espresso); }
+.milestone-desc { font-size: 0.58rem; color: var(--text-lt); margin-top: 2px; }
+.milestone-prog { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+.milestone-bar-bg { flex: 1; height: 5px; background: var(--linen2); border-radius: 3px; overflow: hidden; }
+.milestone-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--green), #6aaa80); transition: width 0.5s; }
+.milestone-pct { font-size: 0.55rem; color: var(--text-lt); white-space: nowrap; }
+.milestone-item.done { background: var(--green-lt); border-color: #a8d4b4; }
+.milestone-item.done .milestone-name { color: var(--green); }
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.stat-tile { background: var(--ivory); border: 1px solid var(--linen2); border-radius: var(--radius); padding: 10px 12px; }
+.stat-tile-label { font-size: 0.5rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 3px; }
+.stat-tile-val { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--espresso); font-weight: 500; }
+
+/* ── REVIEWS PANEL ── */
+#reviews-panel { padding: 14px; gap: 10px; }
+.reviews-header-row { display: flex; gap: 10px; }
+.rating-big-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 16px 20px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+.rating-number { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 600; color: var(--espresso); line-height: 1; }
+.rating-stars { color: var(--brass); font-size: 1.1rem; margin-bottom: 4px; }
+.rating-count { font-size: 0.6rem; color: var(--text-lt); }
+.rating-bars { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.rating-bar-row { display: flex; align-items: center; gap: 7px; font-size: 0.58rem; color: var(--text-lt); }
+.rating-bar-bg { flex: 1; height: 6px; background: var(--linen2); border-radius: 3px; overflow: hidden; }
+.rating-bar-fill { height: 100%; background: var(--brass); border-radius: 3px; transition: width 0.5s; }
+.review-list { display: flex; flex-direction: column; gap: 8px; flex: 1; overflow-y: auto; }
+.review-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 12px 14px; box-shadow: var(--shadow); animation: entrySlide 0.3s ease; }
+.review-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.review-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.review-meta { flex: 1; }
+.review-name { font-size: 0.68rem; font-weight: 600; color: var(--espresso); }
+.review-date { font-size: 0.55rem; color: var(--text-fnt); }
+.review-stars { color: var(--brass); font-size: 0.8rem; }
+.review-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.85rem; color: var(--text-md); line-height: 1.5; }
+.review-tags { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+.review-tag { font-size: 0.52rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
+.review-tag.pos { background: var(--green-lt); color: var(--green); }
+.review-tag.neg { background: var(--red-lt); color: var(--red); }
+
+/* ── EVENTS PANEL (modal overlay) ── */
+#event-modal {
+  position: fixed; inset: 0; z-index: 500; display: flex; align-items: center; justify-content: center;
+  background: rgba(44,31,14,0.65); backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+#event-modal.show { opacity: 1; pointer-events: all; }
+.event-card {
+  background: var(--white); border-radius: 20px; padding: 28px 32px; max-width: 420px; width: 90%;
+  box-shadow: 0 24px 80px rgba(44,31,14,0.35), 0 0 0 1px rgba(184,150,90,0.3);
+  transform: scale(0.9); transition: transform 0.3s; position: relative;
+}
+#event-modal.show .event-card { transform: scale(1); }
+.event-icon-big { font-size: 3rem; text-align: center; margin-bottom: 12px; }
+.event-type-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.52rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; padding: 3px 9px; border-radius: 10px; margin-bottom: 10px; }
+.event-type-badge.crisis { background: var(--red-lt); color: var(--red); }
+.event-type-badge.opportunity { background: var(--green-lt); color: var(--green); }
+.event-type-badge.vip { background: #fdf6e8; color: var(--brass-dk); }
+.event-type-badge.maintenance { background: #fff3d0; color: #a07010; }
+.event-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--espresso); margin-bottom: 8px; }
+.event-desc { font-size: 0.72rem; color: var(--text-md); line-height: 1.6; margin-bottom: 20px; }
+.event-choices { display: flex; flex-direction: column; gap: 8px; }
+.event-choice {
+  padding: 11px 16px; border-radius: var(--radius-lg); border: 1px solid var(--linen2);
+  background: var(--ivory); cursor: pointer; transition: all 0.18s; text-align: left;
+}
+.event-choice:hover { background: var(--linen); border-color: var(--brass); transform: translateX(3px); }
+.ec-label { font-size: 0.68rem; font-weight: 600; color: var(--espresso); margin-bottom: 3px; }
+.ec-effect { font-size: 0.6rem; color: var(--text-lt); }
+.ec-effect.good { color: var(--green); }
+.ec-effect.bad { color: var(--red); }
+
+/* ── DAY SUMMARY ── */
+#day-summary {
+  position: fixed; bottom: 80px; right: 18px; z-index: 400;
+  background: var(--espresso); color: var(--ivory); border-radius: var(--radius-lg);
+  padding: 14px 18px; min-width: 220px; max-width: 280px;
+  box-shadow: var(--shadow-lg); border: 1px solid rgba(184,150,90,0.3);
+  transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+#day-summary.show { transform: translateX(0); }
+.ds-title { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); margin-bottom: 8px; }
+.ds-row { display: flex; justify-content: space-between; font-size: 0.64rem; margin-bottom: 4px; }
+.ds-label { color: rgba(249,245,239,0.55); }
+.ds-val { font-weight: 600; color: var(--ivory); }
+.ds-val.good { color: #80e0a0; }
+.ds-val.bad  { color: #e08080; }
+.ds-divider { border: none; border-top: 1px solid rgba(184,150,90,0.2); margin: 8px 0; }
+.ds-close { position: absolute; top: 10px; right: 12px; background: none; border: none; color: rgba(249,245,239,0.4); cursor: pointer; font-size: 0.9rem; }
+.ds-close:hover { color: var(--ivory); }
 
 /* ── SKILL TREE ── */
 #tree-panel { padding: 0; background: #f0ede6; }
-.tree-wrap {
-  width: 100%; height: 100%; overflow: auto;
-  display: flex; justify-content: center;
-  background:
-    radial-gradient(ellipse at 30% 20%, rgba(74,124,89,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 70%, rgba(112,96,176,0.05) 0%, transparent 45%),
-    #edeae2;
-}
+.tree-wrap { width: 100%; height: 100%; overflow: auto; display: flex; justify-content: center; background: radial-gradient(ellipse at 30% 20%, rgba(74,124,89,0.06) 0%, transparent 50%), radial-gradient(ellipse at 70% 70%, rgba(112,96,176,0.05) 0%, transparent 45%), #edeae2; }
 #tree-canvas { position: relative; }
 #tree-svg { display: block; }
-
-/* Node bubbles */
-.node-bubble {
-  position: absolute; transform: translate(-50%, -50%);
-  display: flex; flex-direction: column; align-items: center;
-  cursor: pointer; transition: transform 0.2s;
-}
+.node-bubble { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s; }
 .node-bubble:hover { transform: translate(-50%, -50%) scale(1.08); }
 .node-bubble.purchased { cursor: default; }
 .node-bubble.purchased:hover { transform: translate(-50%, -50%); }
 .node-bubble.locked { cursor: not-allowed; opacity: 0.5; }
 .node-bubble.locked:hover { transform: translate(-50%, -50%); }
-
-.bubble-ring {
-  position: relative; border-radius: 50%;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  transition: box-shadow 0.2s, border-color 0.2s;
-}
+.bubble-ring { position: relative; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: box-shadow 0.2s, border-color 0.2s; }
 .bubble-ring.size-lg { width: 80px; height: 80px; }
 .bubble-ring.size-md { width: 68px; height: 68px; }
 .bubble-ring.size-sm { width: 56px; height: 56px; }
-
-/* Available pulse */
-.node-bubble.available .bubble-ring {
-  animation: availPulse 2.5s ease-in-out infinite;
-}
-@keyframes availPulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(184,150,90,0.3); }
-  50% { box-shadow: 0 0 0 6px rgba(184,150,90,0); }
-}
-
+.node-bubble.available .bubble-ring { animation: availPulse 2.5s ease-in-out infinite; }
+@keyframes availPulse { 0%,100%{box-shadow:0 0 0 0 rgba(184,150,90,0.3)} 50%{box-shadow:0 0 0 6px rgba(184,150,90,0)} }
 .bubble-icon { font-size: 1.55rem; line-height: 1; margin-bottom: 1px; }
 .bubble-label { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; text-align: center; line-height: 1.2; margin-top: 2px; white-space: nowrap; }
 .bubble-cost { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.56rem; font-weight: 700; white-space: nowrap; }
-
-/* branch colors */
 .branch-rooms    .bubble-ring { background: #e8f5ec; border: 2px solid #80c090; }
 .branch-rooms    .bubble-label { color: #2d6b40; }
 .branch-rooms    .bubble-cost  { color: #3a7a50; }
 .branch-rooms.purchased .bubble-ring { background: #3a7a50; border-color: #2d6040; }
 .branch-rooms.purchased .bubble-label { color: rgba(255,255,255,0.9); }
 .branch-rooms.available .bubble-ring { border-color: #4a9060; }
-
 .branch-amenity  .bubble-ring { background: #fdf6e8; border: 2px solid #d4b07a; }
 .branch-amenity  .bubble-label { color: #8a6030; }
 .branch-amenity  .bubble-cost  { color: #a07030; }
 .branch-amenity.purchased .bubble-ring { background: #b8965a; border-color: #8a6a35; }
 .branch-amenity.purchased .bubble-label { color: rgba(255,255,255,0.9); }
 .branch-amenity.available .bubble-ring { border-color: #c0a060; }
-
 .branch-staff    .bubble-ring { background: #f5f0ff; border: 2px solid #c0a8e8; }
 .branch-staff    .bubble-label { color: #5040a0; }
 .branch-staff    .bubble-cost  { color: #6050b0; }
 .branch-staff.purchased .bubble-ring { background: #7060b0; border-color: #5040a0; }
 .branch-staff.purchased .bubble-label { color: rgba(255,255,255,0.9); }
 .branch-staff.available .bubble-ring { border-color: #9080d0; }
-
 .branch-prestige .bubble-ring { background: #fff8ed; border: 2px solid #d4b060; }
 .branch-prestige .bubble-label { color: #8a6020; }
 .branch-prestige .bubble-cost  { color: #a07020; }
 .branch-prestige.purchased .bubble-ring { background: #c09840; border-color: #906020; }
 .branch-prestige.purchased .bubble-label { color: rgba(255,255,255,0.9); }
 .branch-prestige.available .bubble-ring { border-color: #d4a840; }
-
 .branch-root .bubble-ring { background: var(--espresso); border: 2px solid var(--brass); }
 .branch-root .bubble-label { color: var(--brass-lt); }
-
-.node-bubble .owned-badge {
-  position: absolute; top: -5px; right: -5px;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: var(--green); border: 2px solid var(--white);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.45rem; color: white; font-weight: 700;
-}
-
-/* Legend */
-.tree-legend {
-  position: sticky; top: 0; left: 0; right: 0; z-index: 5;
-  background: var(--white); border-bottom: 1px solid var(--linen2);
-  padding: 8px 16px; display: flex; align-items: center; gap: 16px;
-}
+.node-bubble .owned-badge { position: absolute; top: -5px; right: -5px; width: 16px; height: 16px; border-radius: 50%; background: var(--green); border: 2px solid var(--white); display: flex; align-items: center; justify-content: center; font-size: 0.45rem; color: white; font-weight: 700; }
+.tree-legend { position: sticky; top: 0; left: 0; right: 0; z-index: 5; background: var(--white); border-bottom: 1px solid var(--linen2); padding: 8px 16px; display: flex; align-items: center; gap: 16px; }
 .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.55rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); font-weight: 600; }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid; }
 .legend-dot.rooms    { background: #e8f5ec; border-color: #80c090; }
@@ -347,13 +348,7 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .legend-dot.prestige { background: #fff8ed; border-color: #d4b060; }
 
 /* ── TOOLTIP ── */
-#tooltip {
-  position: fixed; background: var(--espresso); color: var(--ivory);
-  border-radius: var(--radius-lg); padding: 12px 15px; font-size: 0.7rem;
-  pointer-events: none; z-index: 200; max-width: 180px;
-  box-shadow: var(--shadow-lg); display: none;
-  border: 1px solid rgba(184,150,90,0.3);
-}
+#tooltip { position: fixed; background: var(--espresso); color: var(--ivory); border-radius: var(--radius-lg); padding: 12px 15px; font-size: 0.7rem; pointer-events: none; z-index: 200; max-width: 180px; box-shadow: var(--shadow-lg); display: none; border: 1px solid rgba(184,150,90,0.3); }
 #tooltip .tt-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 500; margin-bottom: 4px; }
 #tooltip .tt-desc { color: rgba(249,245,239,0.65); line-height: 1.5; font-size: 0.65rem; }
 #tooltip .tt-cost { color: var(--brass-lt); margin-top: 6px; font-weight: 500; }
@@ -361,77 +356,75 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 #tooltip .tt-status.locked { color: #e07070; }
 #tooltip .tt-status.owned  { color: #80cc90; }
 
+/* ── ROOM DETAIL POPUP ── */
+#room-popup {
+  position: fixed; z-index: 300; background: var(--white);
+  border: 1px solid var(--linen2); border-radius: var(--radius-lg);
+  padding: 14px; min-width: 200px; box-shadow: var(--shadow-lg);
+  display: none; font-size: 0.68rem;
+}
+#room-popup.show { display: block; }
+.rp-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+.rp-row { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 4px; color: var(--text-md); }
+.rp-row span:last-child { font-weight: 600; color: var(--espresso); }
+.rp-actions { display: flex; gap: 6px; margin-top: 10px; border-top: 1px solid var(--linen2); padding-top: 10px; }
+.rp-btn { flex: 1; padding: 6px 8px; border-radius: var(--radius); border: 1px solid var(--linen2); background: var(--ivory); font-family: 'Jost', sans-serif; font-size: 0.55rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; color: var(--text-md); transition: all 0.15s; }
+.rp-btn:hover { background: var(--linen); border-color: var(--brass); color: var(--espresso); }
+.rp-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
 /* ── MISC ── */
-.money-pop {
-  position: fixed; pointer-events: none;
-  font-family: 'Cormorant Garamond', serif; font-size: 1rem;
-  font-style: italic; color: var(--brass-dk); font-weight: 500;
-  z-index: 999; animation: mfloat 1.4s ease forwards;
-}
+.money-pop { position: fixed; pointer-events: none; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: var(--brass-dk); font-weight: 500; z-index: 999; animation: mfloat 1.4s ease forwards; }
 @keyframes mfloat { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-48px)} }
-
-#toast {
-  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
-  background: var(--espresso); color: var(--ivory); padding: 7px 18px;
-  border-radius: 20px; font-size: 0.68rem; font-weight: 500; letter-spacing: 1px;
-  z-index: 1000; opacity: 0; transition: opacity 0.25s; pointer-events: none;
-  border: 1px solid rgba(184,150,90,0.3); box-shadow: var(--shadow-lg);
-}
+#toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--espresso); color: var(--ivory); padding: 7px 18px; border-radius: 20px; font-size: 0.68rem; font-weight: 500; letter-spacing: 1px; z-index: 1000; opacity: 0; transition: opacity 0.25s; pointer-events: none; border: 1px solid rgba(184,150,90,0.3); box-shadow: var(--shadow-lg); }
 #toast.show { opacity: 1; }
-
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--linen3); border-radius: 4px; }
 
 /* ── CLOCK ── */
-.hdr-clock {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 3px 16px; border-right: 1px solid rgba(184,150,90,0.12);
-  gap: 2px;
-}
-.clock-time {
-  font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
-  color: var(--ivory); font-weight: 500; letter-spacing: 2px; line-height: 1;
-}
-.clock-phase {
-  font-size: 0.48rem; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--brass); display: flex; align-items: center; gap: 4px;
-}
+.hdr-clock { display: flex; flex-direction: column; align-items: center; padding: 3px 16px; border-right: 1px solid rgba(184,150,90,0.12); gap: 2px; }
+.clock-time { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--ivory); font-weight: 500; letter-spacing: 2px; line-height: 1; }
+.clock-phase { font-size: 0.48rem; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); display: flex; align-items: center; gap: 4px; }
 .clock-sun  { color: #f0c060; }
 .clock-moon { color: #a0b8e0; }
-
-/* sky gradient overlay on the game panel area */
-#sky-overlay {
-  position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  transition: background 2s ease, opacity 2s ease;
-  opacity: 0;
-}
+#sky-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 0; transition: background 2s ease, opacity 2s ease; opacity: 0; }
 body.in-game #sky-overlay { opacity: 1; }
-
-/* day-phase tint on the room cells */
 .room-cell.guest-sleeping  { background: #e8edf5 !important; border-color: #b0bcd4 !important; }
 .room-cell.guest-activity  { background: #e8f5e8 !important; border-color: #90c890 !important; }
-
-/* night mode: header dims slightly */
-body.night-mode #header {
-  background: #150e06;
-  transition: background 1.5s;
-}
-body.night-mode #header::before,
-body.night-mode #header::after {
-  background: linear-gradient(90deg, transparent, #6080b0, #8090c0, #6080b0, transparent);
-}
+body.night-mode #header { background: #150e06; transition: background 1.5s; }
+body.night-mode #header::before, body.night-mode #header::after { background: linear-gradient(90deg, transparent, #6080b0, #8090c0, #6080b0, transparent); }
 body.night-mode .clock-phase { color: #8090c0; }
-
-/* day-period badge */
-.period-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 1px 7px; border-radius: 10px; font-size: 0.52rem;
-  font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-  margin-left: 6px;
-}
+.period-badge { display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px; border-radius: 10px; font-size: 0.52rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-left: 6px; }
 .period-badge.day   { background: #fff5d0; color: #8a6010; border: 1px solid #d4a820; }
 .period-badge.night { background: #1a2040; color: #9090d0; border: 1px solid #4050a0; }
+
+/* ── SATISFACTION METER ── */
+.satisfaction-bar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--ivory); border-bottom: 1px solid var(--linen2); }
+.sat-label { font-size: 0.52rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); font-weight: 600; width: 70px; flex-shrink: 0; }
+.sat-bar-bg { flex: 1; height: 7px; background: var(--linen2); border-radius: 4px; overflow: hidden; }
+.sat-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s, background 0.5s; }
+.sat-val { font-size: 0.6rem; font-weight: 700; min-width: 32px; text-align: right; }
+
+/* ── STAFF PANEL ── */
+#staff-panel { padding: 14px; gap: 10px; }
+.staff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.staff-card { background: var(--white); border: 1px solid var(--linen2); border-radius: var(--radius-lg); padding: 14px; box-shadow: var(--shadow); transition: all 0.2s; }
+.staff-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.staff-card.locked-card { opacity: 0.55; background: var(--ivory); }
+.sc-icon { font-size: 2rem; margin-bottom: 8px; }
+.sc-name { font-size: 0.68rem; font-weight: 700; color: var(--espresso); letter-spacing: 0.5px; }
+.sc-role { font-size: 0.56rem; color: var(--text-lt); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.sc-desc { font-size: 0.62rem; color: var(--text-md); line-height: 1.5; margin-bottom: 10px; }
+.sc-status { display: flex; align-items: center; gap: 5px; font-size: 0.58rem; font-weight: 600; }
+.sc-dot { width: 6px; height: 6px; border-radius: 50%; }
+.sc-dot.active { background: var(--green); }
+.sc-dot.idle   { background: var(--brass); }
+.sc-dot.locked { background: var(--linen3); }
+.sc-action { margin-top: 10px; padding: 7px; border-radius: var(--radius); border: 1px solid var(--linen2); background: var(--ivory); font-family: 'Jost', sans-serif; font-size: 0.58rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; color: var(--text-md); width: 100%; transition: all 0.15s; }
+.sc-action:hover:not(:disabled) { background: var(--linen); border-color: var(--brass); color: var(--espresso); }
+.sc-action:disabled { opacity: 0.35; cursor: not-allowed; }
+.sc-action.on-cooldown { color: var(--text-fnt); }
+.sc-cooldown { font-size: 0.52rem; color: var(--text-fnt); margin-top: 4px; text-align: center; }
 </style>
 </head>
 <body>
@@ -469,7 +462,7 @@ body.night-mode .clock-phase { color: #8090c0; }
       <div class="hdr-stat"><div class="hdr-stat-label">Balance</div><div class="hdr-stat-val" id="hdr-money">$50</div></div>
       <div class="hdr-stat"><div class="hdr-stat-label">Rating</div><div class="hdr-stat-val" id="hdr-stars">★</div></div>
       <div class="hdr-stat"><div class="hdr-stat-label">Guests</div><div class="hdr-stat-val" id="hdr-guests">0</div></div>
-      <div class="hdr-stat"><div class="hdr-stat-label">Revenue</div><div class="hdr-stat-val" id="hdr-rev">$0</div></div>
+      <div class="hdr-stat"><div class="hdr-stat-label">Satisfaction</div><div class="hdr-stat-val" id="hdr-sat">—</div></div>
     </div>
     <div class="spacer"></div>
     <button class="hdr-btn home-btn" onclick="goHome()">⌂ Menu</button>
@@ -478,6 +471,9 @@ body.night-mode .clock-phase { color: #8090c0; }
 
   <div id="tabs">
     <div class="tab active" data-tab="hotel-panel"><span class="tab-icon">🏨</span>Lobby</div>
+    <div class="tab" data-tab="staff-panel"><span class="tab-icon">👔</span>Staff</div>
+    <div class="tab" data-tab="reviews-panel"><span class="tab-icon">⭐</span>Reviews <span class="tab-badge" id="new-reviews-badge" style="display:none">0</span></div>
+    <div class="tab" data-tab="finance-panel"><span class="tab-icon">📊</span>Finances</div>
     <div class="tab" data-tab="tree-panel"><span class="tab-icon">✦</span>Investments</div>
   </div>
 
@@ -488,7 +484,7 @@ body.night-mode .clock-phase { color: #8090c0; }
         <div class="kpi-card k1">
           <div class="kpi-label">Treasury</div>
           <div class="kpi-val brass" id="kpi-money">$50</div>
-          <div class="kpi-sub" id="kpi-earned">$0 total</div>
+          <div class="kpi-sub" id="kpi-earned">$0 total earned</div>
         </div>
         <div class="kpi-card k2">
           <div class="kpi-label">Occupancy</div>
@@ -501,9 +497,9 @@ body.night-mode .clock-phase { color: #8090c0; }
           <div class="kpi-sub">all time</div>
         </div>
         <div class="kpi-card k4">
-          <div class="kpi-label">Amenity Income</div>
-          <div class="kpi-val" id="kpi-amenity">$0</div>
-          <div class="kpi-sub">per cycle</div>
+          <div class="kpi-label">Satisfaction</div>
+          <div class="kpi-val" id="kpi-sat">–</div>
+          <div class="kpi-sub" id="kpi-sat-sub">no data yet</div>
         </div>
       </div>
       <div class="content-row" style="flex:1;min-height:0">
@@ -516,10 +512,71 @@ body.night-mode .clock-phase { color: #8090c0; }
             <span class="section-title">Room Status</span>
             <span id="period-badge"></span>
             <span style="margin-left:auto;font-size:0.54rem;color:var(--text-fnt);letter-spacing:1px">
-              <span style="color:var(--green)">●</span> active &ensp;<span style="color:#8090c0">●</span> sleeping &ensp;<span style="color:#c04040">●</span> dirty &ensp;<span style="color:#9060d0">●</span> suite &ensp;<span style="color:var(--linen3)">●</span> vacant
+              <span style="color:var(--green)">●</span> active &ensp;<span style="color:#8090c0">●</span> sleeping &ensp;<span style="color:#c04040">●</span> dirty &ensp;<span style="color:#e0a010">●</span> maint. &ensp;<span style="color:#9060d0">●</span> suite &ensp;<span style="color:var(--linen3)">●</span> vacant
             </span>
           </div>
           <div id="room-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAFF -->
+    <div class="panel" id="staff-panel">
+      <div style="padding:14px;flex:1;overflow-y:auto;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--espresso);margin-bottom:4px;">Hotel Staff</div>
+        <div style="font-size:0.62rem;color:var(--text-lt);margin-bottom:14px;letter-spacing:0.5px;">Hire staff and dispatch them for special actions. Unlock more staff via Investments.</div>
+        <div class="staff-grid" id="staff-grid"></div>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="panel" id="reviews-panel">
+      <div style="padding:14px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;">
+        <div class="reviews-header-row">
+          <div class="rating-big-card">
+            <div>
+              <div class="rating-number" id="rv-score">—</div>
+              <div class="rating-stars" id="rv-stars">☆☆☆☆☆</div>
+              <div class="rating-count" id="rv-count">No reviews yet</div>
+            </div>
+            <div class="rating-bars" id="rv-bars"></div>
+          </div>
+          <div style="flex:1;background:var(--white);border:1px solid var(--linen2);border-radius:var(--radius-lg);padding:14px;box-shadow:var(--shadow);">
+            <div class="chart-title">Guest Sentiment</div>
+            <div id="sentiment-chart" style="display:flex;flex-direction:column;gap:6px;"></div>
+          </div>
+        </div>
+        <div class="review-list" id="review-list"></div>
+      </div>
+    </div>
+
+    <!-- FINANCES -->
+    <div class="panel" id="finance-panel">
+      <div style="padding:14px;display:flex;flex-direction:column;gap:10px;flex:1;overflow-y:auto;">
+        <div class="finance-grid">
+          <div class="finance-col">
+            <div class="chart-card">
+              <div class="chart-title">Daily Revenue (last 14 days)</div>
+              <div id="sparkline"></div>
+              <div style="display:flex;justify-content:space-between;font-size:0.52rem;color:var(--text-fnt);margin-top:5px;">
+                <span id="spark-min">$0</span><span id="spark-max">$0</span>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title">Income Breakdown</div>
+              <div class="income-breakdown" id="income-breakdown"></div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title">Key Statistics</div>
+              <div class="stat-grid" id="stat-grid"></div>
+            </div>
+          </div>
+          <div class="finance-col">
+            <div class="chart-card" style="flex:1;display:flex;flex-direction:column;">
+              <div class="chart-title">Milestones</div>
+              <div class="milestone-list" id="milestone-list"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -543,6 +600,39 @@ body.night-mode .clock-phase { color: #8090c0; }
   </div>
 </div>
 
+<!-- EVENT MODAL -->
+<div id="event-modal">
+  <div class="event-card">
+    <div class="event-icon-big" id="ev-icon"></div>
+    <div id="ev-type-badge" class="event-type-badge"></div>
+    <div class="event-title" id="ev-title"></div>
+    <div class="event-desc" id="ev-desc"></div>
+    <div class="event-choices" id="ev-choices"></div>
+  </div>
+</div>
+
+<!-- ROOM POPUP -->
+<div id="room-popup">
+  <div class="rp-title" id="rp-title">Room 1</div>
+  <div class="rp-row"><span>Type</span><span id="rp-type">Standard</span></div>
+  <div class="rp-row"><span>Status</span><span id="rp-status">Empty</span></div>
+  <div class="rp-row" id="rp-guest-row"><span>Guest</span><span id="rp-guest">—</span></div>
+  <div class="rp-row" id="rp-nights-row"><span>Nights Left</span><span id="rp-nights">—</span></div>
+  <div class="rp-row" id="rp-rate-row"><span>Nightly Rate</span><span id="rp-rate">$30</span></div>
+  <div class="rp-actions">
+    <button class="rp-btn" id="rp-clean" onclick="cleanRoom()">🧹 Clean</button>
+    <button class="rp-btn" id="rp-upgrade" onclick="upgradeRoom()">⬆ Upgrade</button>
+    <button class="rp-btn" onclick="closeRoomPopup()">✕ Close</button>
+  </div>
+</div>
+
+<!-- DAY SUMMARY -->
+<div id="day-summary">
+  <button class="ds-close" onclick="closeDaySummary()">✕</button>
+  <div class="ds-title">Night Report</div>
+  <div id="ds-content"></div>
+</div>
+
 <div id="tooltip">
   <div class="tt-name" id="tt-name"></div>
   <div class="tt-desc" id="tt-desc"></div>
@@ -554,88 +644,190 @@ body.night-mode .clock-phase { color: #8090c0; }
 <script>
 // ════════════════════════════════════════
 // TREE DEFINITION
-// Changes from original:
-//   - Rooms branch shifted further left (x values reduced ~100px)
-//   - Prestige branch shifted further right (x values increased ~100px)
-//   - Amenity branch shifted left slightly to avoid overlap with rooms
-//   - root's direct children (room2, amenity1, staff1, prestige_path) start unlocked:true
 // ════════════════════════════════════════
 const TREE_DATA = [
-  // ROOT (center top)
-  { id:'root', label:'Grand Opening', icon:'🏨', cost:0, x:620, y:80, branch:'root', size:'lg',
-    children:['room2','amenity1','staff1','prestige_path'],
-    desc:'Your empire begins here.', unlocked:true, purchased:true },
+  { id:'root', label:'Grand Opening', icon:'🏨', cost:0, x:620, y:80, branch:'root', size:'lg', children:['room2','amenity1','staff1','prestige_path'], desc:'Your empire begins here.', unlocked:true, purchased:true },
+  { id:'room2',  label:'2nd Room',   icon:'🛏', cost:150,   x:60,  y:230, branch:'rooms', size:'md', children:['room4','suite_path'], desc:'Add a second guest room.', unlocked:true, purchased:false },
+  { id:'room4',  label:'4 Rooms',    icon:'🛏', cost:400,   x:30,  y:390, branch:'rooms', size:'md', children:['room8'], desc:'Expand to four rooms.', unlocked:false, purchased:false },
+  { id:'suite_path', label:'Suites', icon:'✨', cost:800,   x:160, y:390, branch:'rooms', size:'md', children:['room8','suite2'], desc:'Luxury suites. +$80 per stay.', unlocked:false, purchased:false },
+  { id:'room8',  label:'8 Rooms',    icon:'🏠', cost:900,   x:60,  y:555, branch:'rooms', size:'md', children:['room16'], desc:'A proper hotel floor.', unlocked:false, purchased:false },
+  { id:'suite2', label:'Penthouse',  icon:'👑', cost:3000,  x:185, y:555, branch:'rooms', size:'md', children:['room16'], desc:'The penthouse. +$200/stay.', unlocked:false, purchased:false },
+  { id:'room16', label:'16 Rooms',   icon:'🏠', cost:2500,  x:100, y:710, branch:'rooms', size:'md', children:['room32'], desc:'Two full floors.', unlocked:false, purchased:false },
+  { id:'room32', label:'32 Rooms',   icon:'🏗', cost:7000,  x:35,  y:865, branch:'rooms', size:'md', children:['room64'], desc:'A major expansion wing.', unlocked:false, purchased:false },
+  { id:'room64', label:'64 Rooms',   icon:'🏢', cost:20000, x:175, y:865, branch:'rooms', size:'sm', children:[], desc:'Grand tower — fully realized.', unlocked:false, purchased:false },
+  { id:'amenity1', label:'Vending',    icon:'🥤', cost:120,   x:360, y:250, branch:'amenity', size:'md', children:['amenity2'], desc:'Vending machine. +$10/cycle.', unlocked:true, purchased:false },
+  { id:'amenity2', label:'Café',       icon:'☕', cost:500,   x:320, y:420, branch:'amenity', size:'md', children:['amenity3a','amenity3b'], desc:'In-house café. +$30/cycle.', unlocked:false, purchased:false },
+  { id:'amenity3a', label:'Restaurant',icon:'🍽', cost:1500,  x:250, y:590, branch:'amenity', size:'md', children:['amenity4'], desc:'Fine dining. +$80/cycle.', unlocked:false, purchased:false },
+  { id:'amenity3b', label:'Bar',       icon:'🍸', cost:1200,  x:390, y:590, branch:'amenity', size:'md', children:['amenity4'], desc:'In-house bar. +$60/cycle.', unlocked:false, purchased:false },
+  { id:'amenity4', label:'Rooftop',    icon:'🌇', cost:4000,  x:320, y:750, branch:'amenity', size:'md', children:['amenity5'], desc:'Rooftop bar. +$150/cycle.', unlocked:false, purchased:false },
+  { id:'amenity5', label:'Spa & Pool', icon:'🏊', cost:10000, x:320, y:900, branch:'amenity', size:'sm', children:[], desc:'Luxury spa. +$300/cycle.', unlocked:false, purchased:false },
+  { id:'staff1',   label:'Bellhop',    icon:'🧳', cost:200,   x:880, y:250, branch:'staff', size:'md', children:['staff2a','staff2b'], desc:'Faster guest check-in.', unlocked:true, purchased:false },
+  { id:'staff2a',  label:'Concierge',  icon:'🎩', cost:600,   x:810, y:420, branch:'staff', size:'md', children:['staff3'], desc:'Guest satisfaction +15%.', unlocked:false, purchased:false },
+  { id:'staff2b',  label:'Chef',       icon:'👨‍🍳', cost:800,  x:950, y:420, branch:'staff', size:'md', children:['staff3'], desc:'Restaurant revenue +25%.', unlocked:false, purchased:false },
+  { id:'staff3',   label:'Housekeeping',icon:'🧹',cost:1100,  x:880, y:590, branch:'staff', size:'md', children:['staff4'], desc:'Rooms clean instantly.', unlocked:false, purchased:false },
+  { id:'staff4',   label:'Manager',    icon:'👔', cost:3000,  x:810, y:750, branch:'staff', size:'md', children:['staff5'], desc:'Auto-assigns guests.', unlocked:false, purchased:false },
+  { id:'staff5',   label:'Full Team',  icon:'👥', cost:8000,  x:950, y:750, branch:'staff', size:'sm', children:[], desc:'All staff bonuses +20%.', unlocked:false, purchased:false },
+  { id:'prestige_path', label:'2-Star', icon:'⭐', cost:500,  x:1180,y:230, branch:'prestige', size:'md', children:['prestige2a','prestige2b'], desc:'Rated 2 stars. More guests.', unlocked:true, purchased:false },
+  { id:'prestige2a', label:'3-Star',    icon:'⭐', cost:2000, x:1110,y:400, branch:'prestige', size:'md', children:['prestige3'], desc:'Business travelers come.', unlocked:false, purchased:false },
+  { id:'prestige2b', label:'Awards',    icon:'🏅', cost:1500, x:1250,y:400, branch:'prestige', size:'md', children:['prestige3'], desc:'Media coverage. +guests.', unlocked:false, purchased:false },
+  { id:'prestige3', label:'5-Star',     icon:'🏆', cost:15000,x:1180,y:570, branch:'prestige', size:'md', children:['prestige4a','prestige4b'], desc:'The pinnacle of luxury.', unlocked:false, purchased:false },
+  { id:'prestige4a', label:'VIP Club',  icon:'💎', cost:8000, x:1110,y:740, branch:'prestige', size:'md', children:[], desc:'VIP members spend 3x more.', unlocked:false, purchased:false },
+  { id:'prestige4b', label:'Michelin',  icon:'🌟', cost:12000,x:1250,y:740, branch:'prestige', size:'sm', children:[], desc:'Michelin star restaurant.', unlocked:false, purchased:false },
+];
+const CANVAS_W = 1360, CANVAS_H = 980;
+const B_STROKE = { root:'#b8965a', rooms:'#2d8a50', amenity:'#c08020', staff:'#6040b8', prestige:'#b08020' };
 
-  // ── ROOMS BRANCH (far left) ──
-  { id:'room2',  label:'2nd Room',   icon:'🛏', cost:150,   x:60,  y:230, branch:'rooms', size:'md',
-    children:['room4','suite_path'], desc:'Add a second guest room.', unlocked:true, purchased:false },
-  { id:'room4',  label:'4 Rooms',    icon:'🛏', cost:400,   x:30,  y:390, branch:'rooms', size:'md',
-    children:['room8'],              desc:'Expand to four rooms.', unlocked:false, purchased:false },
-  { id:'suite_path', label:'Suites', icon:'✨', cost:800,   x:160, y:390, branch:'rooms', size:'md',
-    children:['room8','suite2'],     desc:'Luxury suites. +$80 per stay.', unlocked:false, purchased:false },
-  { id:'room8',  label:'8 Rooms',    icon:'🏠', cost:900,   x:60,  y:555, branch:'rooms', size:'md',
-    children:['room16'],             desc:'A proper hotel floor.', unlocked:false, purchased:false },
-  { id:'suite2', label:'Penthouse',  icon:'👑', cost:3000,  x:185, y:555, branch:'rooms', size:'md',
-    children:['room16'],             desc:'The penthouse. +$200/stay.', unlocked:false, purchased:false },
-  { id:'room16', label:'16 Rooms',   icon:'🏠', cost:2500,  x:100, y:710, branch:'rooms', size:'md',
-    children:['room32'],             desc:'Two full floors.', unlocked:false, purchased:false },
-  { id:'room32', label:'32 Rooms',   icon:'🏗', cost:7000,  x:35,  y:865, branch:'rooms', size:'md',
-    children:['room64'],             desc:'A major expansion wing.', unlocked:false, purchased:false },
-  { id:'room64', label:'64 Rooms',   icon:'🏢', cost:20000, x:175, y:865, branch:'rooms', size:'sm',
-    children:[],                     desc:'Grand tower — fully realized.', unlocked:false, purchased:false },
-
-  // ── AMENITIES BRANCH (center-left, shifted left to avoid rooms overlap) ──
-  { id:'amenity1', label:'Vending',    icon:'🥤', cost:120,   x:360, y:250, branch:'amenity', size:'md',
-    children:['amenity2'],             desc:'Vending machine. +$10/cycle.', unlocked:true, purchased:false },
-  { id:'amenity2', label:'Café',       icon:'☕', cost:500,   x:320, y:420, branch:'amenity', size:'md',
-    children:['amenity3a','amenity3b'],desc:'In-house café. +$30/cycle.', unlocked:false, purchased:false },
-  { id:'amenity3a', label:'Restaurant',icon:'🍽', cost:1500,  x:250, y:590, branch:'amenity', size:'md',
-    children:['amenity4'],             desc:'Fine dining. +$80/cycle.', unlocked:false, purchased:false },
-  { id:'amenity3b', label:'Bar',       icon:'🍸', cost:1200,  x:390, y:590, branch:'amenity', size:'md',
-    children:['amenity4'],             desc:'In-house bar. +$60/cycle.', unlocked:false, purchased:false },
-  { id:'amenity4', label:'Rooftop',    icon:'🌇', cost:4000,  x:320, y:750, branch:'amenity', size:'md',
-    children:['amenity5'],             desc:'Rooftop bar. +$150/cycle.', unlocked:false, purchased:false },
-  { id:'amenity5', label:'Spa & Pool', icon:'🏊', cost:10000, x:320, y:900, branch:'amenity', size:'sm',
-    children:[],                       desc:'Luxury spa. +$300/cycle.', unlocked:false, purchased:false },
-
-  // ── STAFF BRANCH (center-right) ──
-  { id:'staff1',   label:'Bellhop',    icon:'🧳', cost:200,   x:880, y:250, branch:'staff', size:'md',
-    children:['staff2a','staff2b'],    desc:'Faster guest check-in.', unlocked:true, purchased:false },
-  { id:'staff2a',  label:'Concierge',  icon:'🎩', cost:600,   x:810, y:420, branch:'staff', size:'md',
-    children:['staff3'],               desc:'Guest satisfaction +15%.', unlocked:false, purchased:false },
-  { id:'staff2b',  label:'Chef',       icon:'👨‍🍳', cost:800,  x:950, y:420, branch:'staff', size:'md',
-    children:['staff3'],               desc:'Restaurant revenue +25%.', unlocked:false, purchased:false },
-  { id:'staff3',   label:'Housekeeping',icon:'🧹',cost:1100,  x:880, y:590, branch:'staff', size:'md',
-    children:['staff4'],               desc:'Rooms clean instantly.', unlocked:false, purchased:false },
-  { id:'staff4',   label:'Manager',    icon:'👔', cost:3000,  x:810, y:750, branch:'staff', size:'md',
-    children:['staff5'],               desc:'Auto-assigns guests.', unlocked:false, purchased:false },
-  { id:'staff5',   label:'Full Team',  icon:'👥', cost:8000,  x:950, y:750, branch:'staff', size:'sm',
-    children:[],                       desc:'All staff bonuses +20%.', unlocked:false, purchased:false },
-
-  // ── PRESTIGE BRANCH (far right) ──
-  { id:'prestige_path', label:'2-Star', icon:'⭐', cost:500,  x:1180,y:230, branch:'prestige', size:'md',
-    children:['prestige2a','prestige2b'], desc:'Rated 2 stars. More guests.', unlocked:true, purchased:false },
-  { id:'prestige2a', label:'3-Star',    icon:'⭐', cost:2000, x:1110,y:400, branch:'prestige', size:'md',
-    children:['prestige3'],              desc:'Business travelers come.', unlocked:false, purchased:false },
-  { id:'prestige2b', label:'Awards',    icon:'🏅', cost:1500, x:1250,y:400, branch:'prestige', size:'md',
-    children:['prestige3'],              desc:'Media coverage. +guests.', unlocked:false, purchased:false },
-  { id:'prestige3', label:'5-Star',     icon:'🏆', cost:15000,x:1180,y:570, branch:'prestige', size:'md',
-    children:['prestige4a','prestige4b'],desc:'The pinnacle of luxury.', unlocked:false, purchased:false },
-  { id:'prestige4a', label:'VIP Club',  icon:'💎', cost:8000, x:1110,y:740, branch:'prestige', size:'md',
-    children:[],                         desc:'VIP members spend 3x more.', unlocked:false, purchased:false },
-  { id:'prestige4b', label:'Michelin',  icon:'🌟', cost:12000,x:1250,y:740, branch:'prestige', size:'sm',
-    children:[],                         desc:'Michelin star restaurant.', unlocked:false, purchased:false },
+// ════════════════════════════
+// RANDOM EVENTS
+// ════════════════════════════
+const EVENTS = [
+  {
+    id:'water_leak', type:'crisis', icon:'💧', title:'Pipe Leak in Room 3',
+    desc:'Maintenance reports a burst pipe in Room 3. Water is seeping into the corridor. Guests are looking uncomfortable.',
+    choices:[
+      { label:'Emergency Repair', effect:'Pay $80 for immediate fix. Room available tonight.', cost:80, sat:+5, tag:'good' },
+      { label:'Temporary Patch', effect:'Free fix but room out of service 1 day. Slight guest dissatisfaction.', cost:0, sat:-8, roomDown:1, tag:'bad' },
+    ]
+  },
+  {
+    id:'vip_arrival', type:'vip', icon:'💎', title:'VIP Guest Requests Suite',
+    desc:'A well-known socialite is requesting your finest room. Word of her stay could boost your reputation enormously.',
+    choices:[
+      { label:'Roll Out the Red Carpet', effect:'Spend $50 on champagne. Gain +20 satisfaction & press coverage.', cost:50, sat:+20, guests:+5, tag:'good' },
+      { label:'Standard Welcome', effect:'Normal check-in. Modest satisfaction boost.', cost:0, sat:+5, tag:'good' },
+    ]
+  },
+  {
+    id:'food_complaint', type:'crisis', icon:'🍽', title:'Kitchen Complaint',
+    desc:'Several guests have complained about the quality of room service. The kitchen seems overwhelmed tonight.',
+    choices:[
+      { label:'Complimentary Meal', effect:'Offer free dinner to affected guests. Costs $60, +10 satisfaction.', cost:60, sat:+10, tag:'good' },
+      { label:'Apologise & Move On', effect:'Issue a formal apology. No cost, -5 satisfaction.', cost:0, sat:-5, tag:'bad' },
+    ]
+  },
+  {
+    id:'review_team', type:'opportunity', icon:'📰', title:'Travel Magazine Journalist',
+    desc:'A journalist from "Luxury Escapes" magazine is checking in anonymously. A great experience means a glowing feature.',
+    choices:[
+      { label:'Assign Best Room & Butler', effect:'Spend $100 to impress. +30 satisfaction, unlock press bonus.', cost:100, sat:+30, bonus:'press', tag:'good' },
+      { label:'Normal Service', effect:'Risk it. 50/50 chance of neutral or negative review.', cost:0, sat:-10, tag:'bad' },
+    ]
+  },
+  {
+    id:'power_cut', type:'maintenance', icon:'⚡', title:'Power Outage — Wing B',
+    desc:'A blown fuse has knocked out power to an entire wing. Guests are frustrated and the elevator is stuck.',
+    choices:[
+      { label:'24/7 Electrician', effect:'Pay $120 for overnight fix. Minimal disruption.', cost:120, sat:+3, tag:'good' },
+      { label:'Wait Until Morning', effect:'Free but -15 satisfaction. A few guests may check out early.', cost:0, sat:-15, guestLeave:1, tag:'bad' },
+    ]
+  },
+  {
+    id:'wedding_party', type:'opportunity', icon:'💒', title:'Wedding Party Enquiry',
+    desc:'A couple wants to book your hotel for their entire wedding party — 6 rooms for 3 nights.',
+    choices:[
+      { label:'Accept & Decorate', effect:'Spend $100 on décor. +$280 bonus revenue. Great reviews.', cost:100, money:+280, sat:+15, tag:'good' },
+      { label:'Standard Rate Only', effect:'Accept at normal rates. +$150 revenue.', cost:0, money:+150, sat:+5, tag:'good' },
+    ]
+  },
+  {
+    id:'competitor', type:'opportunity', icon:'🤝', title:'Rival Hotel Partnership',
+    desc:'The hotel across the street wants to refer overflow guests to you in exchange for a small referral fee.',
+    choices:[
+      { label:'Accept Partnership', effect:'Pay $40 setup. Receive +8 extra guests over next week.', cost:40, sat:0, guestBoost:8, tag:'good' },
+      { label:'Decline', effect:'No cost or benefit. Preserve independence.', cost:0, sat:0, tag:'bad' },
+    ]
+  },
+  {
+    id:'noise_complaint', type:'crisis', icon:'📢', title:'Noise Complaint — Room 7',
+    desc:'Guests on the top floor are complaining about a loud birthday party in Room 7. It\'s 1am.',
+    choices:[
+      { label:'Politely Intervene', effect:'Staff mediates. -$0. Small satisfaction gain.', cost:0, sat:+5, tag:'good' },
+      { label:'Offer Earplugs & Apology', effect:'Free, but the other guests remain annoyed. -8 satisfaction.', cost:0, sat:-8, tag:'bad' },
+    ]
+  },
+  {
+    id:'seasonal_rush', type:'opportunity', icon:'🌸', title:'Seasonal Weekend Rush',
+    desc:'A local festival this weekend will drive huge demand. You can raise rates or focus on high-volume bookings.',
+    choices:[
+      { label:'Raise Rates 30%', effect:'More revenue per guest. Some price-sensitive guests skip you.', cost:0, money:+120, sat:-5, tag:'good' },
+      { label:'Discount for Volume', effect:'Full occupancy. Standard rates. +satisfaction.', cost:0, money:+60, sat:+10, tag:'good' },
+    ]
+  },
 ];
 
-const CANVAS_W = 1360;
-const CANVAS_H = 980;
+// ════════════════════════════
+// REVIEW TEMPLATES
+// ════════════════════════════
+const REVIEW_TEMPLATES = {
+  5: [
+    { text:"An absolute dream. The staff remembered my name every morning and the bed was the finest I've slept in outside of Monaco.", tags:['Exceptional Staff','Luxurious Beds'] },
+    { text:"Genuinely the most thoughtful hotel experience I've had. Every detail attended to. We will return.", tags:['Attentive Service','Will Return'] },
+    { text:"The Grand lives up to its name. Breakfast was outstanding, the lobby immaculate. Five stars without hesitation.", tags:['Outstanding Breakfast','Beautiful Lobby'] },
+  ],
+  4: [
+    { text:"A lovely stay — very comfortable and clean. The front desk staff were particularly warm and helpful.", tags:['Clean Rooms','Friendly Staff'] },
+    { text:"Excellent value for the calibre of accommodation. A few minor waits at check-in but nothing that dampened our stay.", tags:['Good Value','Minor Wait'] },
+    { text:"Charming hotel with a real sense of character. The amenities were well-maintained and the room felt spacious.", tags:['Good Amenities','Spacious Rooms'] },
+  ],
+  3: [
+    { text:"Decent enough. The room was clean but nothing memorable. Service felt a little stretched at peak hours.", tags:['Adequate Cleanliness','Slow Service'] },
+    { text:"Average experience. The location works and the beds are comfortable, but it lacks that something special.", tags:['Good Location','Nothing Special'] },
+    { text:"Fine for a business trip. Reliable but not inspiring. The room service menu could use some variety.", tags:['Business Friendly','Limited Menu'] },
+  ],
+  2: [
+    { text:"Disappointed. The room wasn't ready on arrival and the bathroom needed attention. Expected more.", tags:['Late Check-in','Poor Cleanliness'] },
+    { text:"Understaffed and it shows. Waited 25 minutes for anyone to acknowledge us at the desk.", tags:['Long Wait','Understaffed'] },
+  ],
+  1: [
+    { text:"A regrettable stay. Noise complaints ignored, room still dirty when we arrived. Will not be returning.", tags:['Noise Issues','Dirty Room'] },
+    { text:"Management has a lot to learn. Basic standards of hospitality were not met.", tags:['Poor Management','Poor Standards'] },
+  ]
+};
 
-const B_STROKE = { root:'#b8965a', rooms:'#2d8a50', amenity:'#c08020', staff:'#6040b8', prestige:'#b08020' };
+// ════════════════════════════
+// MILESTONES
+// ════════════════════════════
+const MILESTONES = [
+  { id:'first_guest',  icon:'🚶', name:'Grand Opening',       desc:'Welcome your first guest',              check: g => g.totalGuests >= 1,   target: () => 1,  val: g => Math.min(g.totalGuests,1) },
+  { id:'guests_10',    icon:'🎉', name:'Ten Guests Served',   desc:'Host 10 guests total',                  check: g => g.totalGuests >= 10,  target: () => 10, val: g => g.totalGuests },
+  { id:'guests_50',    icon:'🏅', name:'Fifty Guests',        desc:'Host 50 guests total',                  check: g => g.totalGuests >= 50,  target: () => 50, val: g => g.totalGuests },
+  { id:'guests_100',   icon:'🌟', name:'Century Mark',        desc:'Host 100 guests total',                 check: g => g.totalGuests >= 100, target: () => 100, val: g => g.totalGuests },
+  { id:'earn_500',     icon:'💰', name:'First Fortune',       desc:'Earn $500 total',                       check: g => g.totalEarned >= 500,  target: () => 500, val: g => g.totalEarned },
+  { id:'earn_5000',    icon:'💎', name:'Five Thousand',       desc:'Earn $5,000 total',                     check: g => g.totalEarned >= 5000, target: () => 5000, val: g => g.totalEarned },
+  { id:'earn_25000',   icon:'🏆', name:'The Grand Earner',    desc:'Earn $25,000 total',                    check: g => g.totalEarned >= 25000,target: () => 25000, val: g => g.totalEarned },
+  { id:'rooms_4',      icon:'🏠', name:'Four Rooms',          desc:'Expand to 4 rooms',                     check: g => g.rooms.length >= 4,  target: () => 4,  val: g => g.rooms.length },
+  { id:'rooms_16',     icon:'🏢', name:'A Proper Hotel',      desc:'Reach 16 rooms',                        check: g => g.rooms.length >= 16, target: () => 16, val: g => g.rooms.length },
+  { id:'full_house',   icon:'🔑', name:'No Vacancy',          desc:'Achieve 100% occupancy',                check: g => g.rooms.length > 0 && g.rooms.every(r=>r.status==='occupied'), target: () => 1, val: g => g.rooms.length > 0 && g.rooms.every(r=>r.status==='occupied') ? 1 : 0 },
+  { id:'reviews_5',    icon:'⭐', name:'First Five Stars',    desc:'Receive a 5-star review',               check: g => (g.reviews||[]).some(r=>r.stars===5), target: () => 1, val: g => (g.reviews||[]).some(r=>r.stars===5)?1:0 },
+  { id:'sat_80',       icon:'😊', name:'Happy Guests',        desc:'Reach 80%+ satisfaction',               check: g => g.satisfaction >= 80, target: () => 80, val: g => g.satisfaction||0 },
+  { id:'prestige_5',   icon:'👑', name:'Five Star Hotel',     desc:'Achieve 5-star hotel rating',           check: g => g.stars >= 5,         target: () => 5,  val: g => g.stars },
+  { id:'events_5',     icon:'🎭', name:'Crisis Veteran',      desc:'Resolve 5 hotel events',                check: g => (g.eventsResolved||0) >= 5, target: () => 5, val: g => g.eventsResolved||0 },
+];
+
+// ════════════════════════════
+// STAFF ROSTER
+// ════════════════════════════
+const STAFF_ROSTER = [
+  { id:'bellhop',      name:'Marcus',  icon:'🧳', role:'Bellhop',       desc:'Handles luggage & first impressions. Can rush a guest check-in.', requiresUpgrade:'staff1',
+    action:{ label:'Rush Check-In', cooldownTicks:20, effect: g => { tryArrive(); toast('Marcus rushed a check-in!'); log('Marcus expedited a guest arrival','in'); } } },
+  { id:'concierge',    name:'Sophie',  icon:'🎩', role:'Concierge',     desc:'Improves guest satisfaction. Can send a surprise gift to a guest.', requiresUpgrade:'staff2a',
+    action:{ label:'Surprise Gift', cooldownTicks:30, effect: g => { g.satisfaction = Math.min(100, (g.satisfaction||60)+15); G.money -= 25; popMoney(-25); log('Sophie sent a surprise gift to a guest ❤️','in'); toast('Guest satisfaction +15%'); } } },
+  { id:'chef',         name:'Henri',   icon:'👨‍🍳', role:'Head Chef',    desc:'Manages kitchen. Can run a special dinner service for bonus income.', requiresUpgrade:'staff2b',
+    action:{ label:'Special Dinner', cooldownTicks:40, effect: g => { const earn = 40 + g.rooms.filter(r=>r.status==='occupied').length*12; g.money += earn; g.totalEarned += earn; popMoney(earn); log(`Henri ran a special dinner — +$${earn}`,'out',`+$${earn}`); toast(`Special dinner earned $${earn}!`); } } },
+  { id:'housekeeper',  name:'Rosa',    icon:'🧹', role:'Housekeeper',   desc:'Cleans rooms. Can do a deep-clean sweep of all dirty rooms instantly.', requiresUpgrade:'staff3',
+    action:{ label:'Deep Clean', cooldownTicks:25, effect: g => { const dirty = g.rooms.filter(r=>r.status==='dirty').length; g.rooms.forEach(r=>{if(r.status==='dirty')r.status='empty';}); log(`Rosa deep-cleaned ${dirty} room(s) ✨`,'in'); toast(`${dirty} rooms cleaned!`); } } },
+  { id:'manager',      name:'Victor',  icon:'👔', role:'Hotel Manager',  desc:'Oversees operations. Can run an efficiency audit for a cash bonus.', requiresUpgrade:'staff4',
+    action:{ label:'Efficiency Audit', cooldownTicks:50, effect: g => { const earn = Math.floor(g.totalEarned * 0.04); g.money += earn; g.totalEarned += earn; popMoney(earn); log(`Victor's audit uncovered $${fmt(earn)} in savings`,'out',`+$${fmt(earn)}`); toast(`Audit recovered $${fmt(earn)}!`); } } },
+  { id:'pr',           name:'Camille', icon:'📣', role:'PR Director',    desc:'Manages reputation. Can run a social media campaign to boost arrivals.', requiresUpgrade:'staff5',
+    action:{ label:'PR Campaign', cooldownTicks:60, effect: g => { g.arrivalTick = Math.max(8, g.arrivalTick - 8); log('Camille launched a PR campaign — more guests incoming! 📣','in'); toast('Guest arrival rate boosted!'); setTimeout(()=>{ g.arrivalTick = Math.min(80, g.arrivalTick + 8); }, 30000); } } },
+];
 
 // ════════════════════════════
 // STATE
 // ════════════════════════════
 let G = null, activeSlot = null, loop = null, tick = 0;
+let selectedRoomId = null;
+let staffCooldowns = {}; // staffId -> ticks remaining
 
 const fresh = () => ({
   money:50, totalEarned:0,
@@ -643,118 +835,93 @@ const fresh = () => ({
   upgrades: JSON.parse(JSON.stringify(TREE_DATA)),
   stars:1, amenityIncome:0, hasCleaning:false,
   totalGuests:0, arrivalTick:80, sinceGuest:0,
-  gameHour: 8,   // start at 8am
-  tickInHour: 0, // ticks elapsed in current hour
+  gameHour:8, tickInHour:0,
+  satisfaction:60, // 0–100
+  reviews:[], newReviewCount:0,
+  revenueHistory:[], // last 14 days
+  dayRevenue:0, // accumulated today
+  eventsResolved:0,
+  pendingGuestBoost:0,
+  completedMilestones:[],
+  // Income tracking
+  roomRevenue:0, amenityRevenue:0,
+  // Day summary
+  dayCheckIns:0, dayCheckOuts:0, dayAmenityEarned:0,
 });
 
-// 1 game-hour = 6 real ticks (each tick ~680ms → 1 day ≈ 97s real time)
 const TICKS_PER_HOUR = 6;
-// Night = 22:00–06:00  |  Day = 06:00–22:00
 const isNight = h => h >= 22 || h < 6;
-// Activity hours: guests roam 08:00–21:00
 const isActiveDay = h => h >= 8 && h < 22;
-
-// Day-phase activity icons (shown instead of sleeping icon)
-const DAY_ACTIVITIES = ['🍽','☕','🏊','🍸','🎾','💆','🛍','📖','🌇'];
-// Each occupied room tracks which activity its guest is doing
-function guestActivity(roomId) {
-  return DAY_ACTIVITIES[roomId % DAY_ACTIVITIES.length];
-}
+const DAY_ACTIVITIES = ['🍽','☕','🏊','🍸','🎾','💆','🛍','📖','🌇','🧘','🎲','🌿'];
+const guestActivity = id => DAY_ACTIVITIES[id % DAY_ACTIVITIES.length];
 
 // ════════════════════════════
 // PERSISTENCE
 // ════════════════════════════
-const SAVE_KEY = 'grand_v5';
-const getSaves = () => {
-  try {
-    // Try current key first
-    const cur = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
-    // If empty, try to migrate from v4
-    if (!Object.keys(cur).length) {
-      const old = JSON.parse(localStorage.getItem('grand_v4') || '{}');
-      if (Object.keys(old).length) return old; // will be re-saved under v5 on next save
-    }
-    return cur;
-  } catch { return {}; }
-};
-const putSaves = s => { try { localStorage.setItem(SAVE_KEY, JSON.stringify(s)); } catch(e) { console.error('putSaves failed', e); } };
+const SAVE_KEY = 'grand_v6';
+const getSaves = () => { try { return JSON.parse(localStorage.getItem(SAVE_KEY) || '{}'); } catch { return {}; } };
+const putSaves = s => { try { localStorage.setItem(SAVE_KEY, JSON.stringify(s)); } catch(e) {} };
 
 function saveGame(slot) {
   if (!G) return;
   try {
     const s = getSaves();
-    s[slot] = { state: JSON.parse(JSON.stringify(G)), at:Date.now(), stars:G.stars, money:G.money, rooms:G.rooms.length };
-    putSaves(s); activeSlot = slot;
-    toast(`Saved to Property ${slot+1}`); renderHomeSaves();
-  } catch(e) {
-    console.error('Save failed:', e);
-    toast('Save failed — storage error');
-  }
+    s[slot] = { state: JSON.parse(JSON.stringify(G)), at:Date.now(), stars:G.stars, money:G.money, rooms:G.rooms.length, sat:G.satisfaction };
+    putSaves(s); activeSlot = slot; toast(`Saved to Property ${slot+1}`); renderHomeSaves();
+  } catch(e) { toast('Save failed'); }
 }
 function loadGame(slot) {
-  const s = getSaves();
-  if (!s[slot]) return;
+  const s = getSaves(); if (!s[slot]) return;
   if (loop) clearInterval(loop);
   G = JSON.parse(JSON.stringify(s[slot].state));
-  migrateState(G);
-  activeSlot = slot;
-  startLoop(); renderAll(); enterGame();
-  toast(`Property ${slot+1} loaded`);
+  migrateState(G); activeSlot = slot;
+  startLoop(); renderAll(); enterGame(); toast(`Property ${slot+1} loaded`);
 }
 function deleteSlot(slot) {
   const s = getSaves(); delete s[slot]; putSaves(s);
   if (activeSlot===slot) { G=null; activeSlot=null; if(loop) clearInterval(loop); }
-  renderHomeSaves();
-  toast(`Property ${slot+1} removed`);
+  renderHomeSaves(); toast(`Property ${slot+1} removed`);
 }
 function newGame(slot) {
   if (loop) clearInterval(loop);
   G = fresh(); activeSlot = slot;
-  saveGame(slot); startLoop(); renderAll(); enterGame();
-  toast(`Welcome to Property ${slot+1}`);
+  staffCooldowns = {};
+  saveGame(slot); startLoop(); renderAll(); enterGame(); toast(`Welcome to Property ${slot+1}`);
 }
-
-// Patch any missing fields so old saves don't crash with new code
 function migrateState(g) {
   if (g.gameHour  === undefined) g.gameHour  = 8;
   if (g.tickInHour === undefined) g.tickInHour = 0;
   if (g.sinceGuest === undefined) g.sinceGuest = 0;
-  // Ensure upgrade list has all nodes from TREE_DATA (add any missing ones)
+  if (g.satisfaction === undefined) g.satisfaction = 60;
+  if (g.reviews === undefined) g.reviews = [];
+  if (g.newReviewCount === undefined) g.newReviewCount = 0;
+  if (g.revenueHistory === undefined) g.revenueHistory = [];
+  if (g.dayRevenue === undefined) g.dayRevenue = 0;
+  if (g.eventsResolved === undefined) g.eventsResolved = 0;
+  if (g.pendingGuestBoost === undefined) g.pendingGuestBoost = 0;
+  if (g.completedMilestones === undefined) g.completedMilestones = [];
+  if (g.roomRevenue === undefined) g.roomRevenue = 0;
+  if (g.amenityRevenue === undefined) g.amenityRevenue = 0;
+  if (g.dayCheckIns === undefined) g.dayCheckIns = 0;
+  if (g.dayCheckOuts === undefined) g.dayCheckOuts = 0;
+  if (g.dayAmenityEarned === undefined) g.dayAmenityEarned = 0;
   TREE_DATA.forEach(def => {
-    if (!g.upgrades.find(u => u.id === def.id)) {
-      g.upgrades.push(JSON.parse(JSON.stringify(def)));
-    }
+    if (!g.upgrades.find(u => u.id === def.id)) g.upgrades.push(JSON.parse(JSON.stringify(def)));
   });
-  // Fix unlock state: direct children of purchased nodes must be unlocked
   const byId = {};
   g.upgrades.forEach(u => byId[u.id] = u);
   g.upgrades.forEach(u => {
-    if (u.purchased) {
-      u.children.forEach(cid => { if (byId[cid]) byId[cid].unlocked = true; });
-    }
-  });
-}
-
-// Keep old name working too
-function migrateUnlocks(upgrades) {
-  const byId = {};
-  upgrades.forEach(u => byId[u.id] = u);
-  upgrades.forEach(u => {
-    if (u.purchased) {
-      u.children.forEach(cid => { if (byId[cid]) byId[cid].unlocked = true; });
-    }
+    if (u.purchased) u.children.forEach(cid => { if (byId[cid]) byId[cid].unlocked = true; });
   });
 }
 
 function enterGame() {
   document.body.classList.add('in-game');
-  // Restore last active tab, default to lobby
   const lastTab = sessionStorage.getItem('grand_tab') || 'hotel-panel';
   switchTab(lastTab);
   if (lastTab === 'tree-panel') renderTree();
   sessionStorage.setItem('grand_screen', 'game');
 }
-
 function goHome() {
   document.body.classList.remove('in-game');
   sessionStorage.setItem('grand_screen', 'home');
@@ -764,74 +931,109 @@ function goHome() {
 // ════════════════════════════
 // GAME LOOP
 // ════════════════════════════
-const NAMES  = ['Aria','Blake','Casey','Dana','Eli','Fiona','Grey','Hana','Ivan','Jade','Kai','Luna','Max','Nova','Owen','Petra','Quinn','Rae','Seth','Tara','Wren','Yuki','Zoe','Hugo','Isla'];
-const TITLES = ['Mr.','Ms.','Dr.','Prof.','Sir','Lady'];
+const NAMES  = ['Aria','Blake','Casey','Dana','Eli','Fiona','Grey','Hana','Ivan','Jade','Kai','Luna','Max','Nova','Owen','Petra','Quinn','Rae','Seth','Tara','Wren','Yuki','Zoe','Hugo','Isla','Felix','Nora','Liam','Cora','Theo'];
+const TITLES = ['Mr.','Ms.','Dr.','Prof.','Sir','Lady','Mx.'];
+let eventPending = false;
+let nextEventIn = 60 + Math.floor(Math.random()*40); // ticks until next event
 
-function startLoop() { if(loop) clearInterval(loop); loop = setInterval(() => { try { gameTick(); } catch(e) { console.error('gameTick error:', e); } }, 680); }
+function startLoop() { if(loop) clearInterval(loop); loop = setInterval(() => { try { gameTick(); } catch(e) { console.error(e); } }, 680); }
 
 function gameTick() {
   if (!G) return;
   tick++;
 
-  // ── Advance game clock ──
+  // ── Advance clock ──
   G.tickInHour = (G.tickInHour || 0) + 1;
+  const prevHour = G.gameHour;
   if (G.tickInHour >= TICKS_PER_HOUR) {
     G.tickInHour = 0;
-    const prevHour = G.gameHour;
     G.gameHour = (G.gameHour + 1) % 24;
-    // Announce phase transitions
-    if (G.gameHour === 6)  log('The sun rises — good morning', '', '🌅');
-    if (G.gameHour === 11) log('Check-out time — guests departing', '', '🧳');
-    if (G.gameHour === 14) log('Afternoon check-in window now open', '', '☀️');
-    if (G.gameHour === 22) log('Evening falls — guests retiring for the night', '', '🌙');
+    if (G.gameHour === 6)  log('The sun rises — good morning','','🌅');
+    if (G.gameHour === 11) log('Check-out time — guests departing','','🧳');
+    if (G.gameHour === 14) log('Afternoon check-in window now open','','☀️');
+    if (G.gameHour === 22) {
+      log('Evening falls — guests retiring for the night','','🌙');
+      // Night summary
+      showNightSummary();
+      // Archive day revenue
+      G.revenueHistory.push(G.dayRevenue);
+      if (G.revenueHistory.length > 14) G.revenueHistory.shift();
+      G.dayRevenue = 0;
+      G.dayCheckIns = 0; G.dayCheckOuts = 0; G.dayAmenityEarned = 0;
+    }
   }
   updateClock();
 
   const night = isNight(G.gameHour);
   const active = isActiveDay(G.gameHour);
 
-  // ── Room timers — checkout only at 11am ──
+  // ── Room timers ──
   G.rooms.forEach(r => {
     if (r.status==='occupied') {
-      // Decrement stay timer only at 11am each day (morning checkout window)
       if (G.gameHour === 11 && G.tickInHour === 0) {
         r.timer--;
         if (r.timer <= 0) {
           const rate = r.type==='penthouse' ? 200 : r.type==='suite' ? 80 : 30 + G.stars*10;
-          G.money += rate; G.totalEarned += rate;
+          G.money += rate; G.totalEarned += rate; G.dayRevenue += rate; G.roomRevenue += rate; G.dayCheckOuts++;
           log(`${r.guest} checked out of Room ${r.id}`, 'out', `+$${rate}`);
-          if (G.hasCleaning) {
-            r.status = 'empty';
-          } else {
-            r.status = 'dirty';
-            r.timer = 3; // takes 3 day-hours to clean
-          }
-          r.guest=null;
-          popMoney(rate);
+          // Generate review
+          generateReview(r.guest, rate);
+          if (G.hasCleaning) { r.status='empty'; } else { r.status='dirty'; r.timer=3; }
+          r.guest=null; popMoney(rate);
         }
       }
     } else if (r.status==='dirty') {
-      // Housekeeping works during day only, ticks each hour
-      if (!night && G.tickInHour === 0) {
-        r.timer--;
-        if (r.timer<=0) { r.status='empty'; r.timer=0; }
-      }
+      if (!night && G.tickInHour === 0) { r.timer--; if (r.timer<=0) { r.status='empty'; r.timer=0; } }
+    } else if (r.status==='maintenance') {
+      if (G.tickInHour === 0) { r.timer--; if (r.timer<=0) { r.status='empty'; r.timer=0; log(`Room ${r.id} maintenance complete`,'','🔧'); } }
     }
   });
 
-  // ── Amenity income only during active hours ──
+  // ── Amenity income ──
   if (tick%5===0 && G.amenityIncome>0 && active) {
-    G.money+=G.amenityIncome; G.totalEarned+=G.amenityIncome;
+    G.money+=G.amenityIncome; G.totalEarned+=G.amenityIncome; G.dayRevenue+=G.amenityIncome; G.amenityRevenue+=G.amenityIncome; G.dayAmenityEarned+=G.amenityIncome;
   }
 
-  // ── Guest arrivals only during check-in window (2pm–8pm) ──
+  // ── Satisfaction drift ──
+  if (tick%8===0) {
+    const dirtyRatio = G.rooms.filter(r=>r.status==='dirty').length / Math.max(1,G.rooms.length);
+    const occRatio   = G.rooms.filter(r=>r.status==='occupied').length / Math.max(1,G.rooms.length);
+    let drift = 0;
+    if (dirtyRatio > 0.3) drift -= 1;
+    if (occRatio > 0.8) drift += 1; // busy = good
+    if (G.amenityIncome > 100) drift += 1; // good amenities
+    drift += (G.stars - 2) * 0.5;
+    G.satisfaction = Math.max(10, Math.min(100, (G.satisfaction||60) + drift));
+  }
+
+  // ── Guest arrivals ──
   if (G.gameHour >= 14 && G.gameHour < 20) {
     G.sinceGuest++;
+    if (G.pendingGuestBoost > 0) { G.pendingGuestBoost--; tryArrive(); }
     const rate = Math.max(12, G.arrivalTick - G.stars*8);
-    if (G.sinceGuest>=rate) { G.sinceGuest=0; tryArrive(); }
+    if (G.sinceGuest >= rate) { G.sinceGuest=0; tryArrive(); }
   }
 
-  renderHotel(); updateHeader();
+  // ── Staff cooldowns ──
+  STAFF_ROSTER.forEach(s => { if (staffCooldowns[s.id] > 0) staffCooldowns[s.id]--; });
+
+  // ── Random events ──
+  if (!eventPending && !night) {
+    nextEventIn--;
+    if (nextEventIn <= 0) {
+      nextEventIn = 80 + Math.floor(Math.random()*80);
+      triggerRandomEvent();
+    }
+  }
+
+  // ── Milestone checks ──
+  checkMilestones();
+
+  const activeTab = document.querySelector('.tab.active')?.dataset.tab;
+  if (activeTab === 'hotel-panel') { renderHotel(); updateHeader(); }
+  else if (activeTab === 'staff-panel') { renderStaff(); updateHeader(); }
+  else if (activeTab === 'finance-panel') { renderFinances(); updateHeader(); }
+  else updateHeader();
 }
 
 function updateClock() {
@@ -840,46 +1042,28 @@ function updateClock() {
   const night = isNight(h);
   const ampm = h < 12 ? 'AM' : 'PM';
   const h12 = h % 12 || 12;
-  const timeStr = `${h12}:00 ${ampm}`;
-
   const clockEl = document.getElementById('hdr-clock-time');
   const phaseEl = document.getElementById('hdr-clock-phase');
-  if (clockEl) clockEl.textContent = timeStr;
-
+  if (clockEl) clockEl.textContent = `${h12}:00 ${ampm}`;
   if (phaseEl) {
-    if (h >= 6 && h < 8)        { phaseEl.innerHTML = '<span class="clock-sun">🌅</span> Dawn'; }
-    else if (h >= 8 && h < 18)  { phaseEl.innerHTML = '<span class="clock-sun">☀</span> Day'; }
-    else if (h >= 18 && h < 22) { phaseEl.innerHTML = '<span class="clock-sun">🌆</span> Evening'; }
-    else                         { phaseEl.innerHTML = '<span class="clock-moon">☽</span> Night'; }
+    if (h>=6&&h<8) phaseEl.innerHTML='<span class="clock-sun">🌅</span> Dawn';
+    else if (h>=8&&h<18) phaseEl.innerHTML='<span class="clock-sun">☀</span> Day';
+    else if (h>=18&&h<22) phaseEl.innerHTML='<span class="clock-sun">🌆</span> Evening';
+    else phaseEl.innerHTML='<span class="clock-moon">☽</span> Night';
   }
-
-  // Night mode class on body
   document.body.classList.toggle('night-mode', night);
-
-  // Sky overlay — gradient shifts from day blue to night indigo
   const sky = document.getElementById('sky-overlay');
   if (sky) {
-    if (h >= 6 && h < 8) {
-      sky.style.background = 'linear-gradient(180deg, rgba(255,180,80,0.06) 0%, rgba(255,220,120,0.03) 100%)';
-    } else if (h >= 8 && h < 18) {
-      sky.style.background = 'linear-gradient(180deg, rgba(100,160,255,0.04) 0%, transparent 60%)';
-    } else if (h >= 18 && h < 22) {
-      sky.style.background = 'linear-gradient(180deg, rgba(180,80,40,0.06) 0%, rgba(80,40,120,0.05) 100%)';
-    } else {
-      sky.style.background = 'linear-gradient(180deg, rgba(10,15,50,0.12) 0%, rgba(20,20,60,0.08) 100%)';
-    }
+    if (h>=6&&h<8) sky.style.background='linear-gradient(180deg, rgba(255,180,80,0.06) 0%, rgba(255,220,120,0.03) 100%)';
+    else if (h>=8&&h<18) sky.style.background='linear-gradient(180deg, rgba(100,160,255,0.04) 0%, transparent 60%)';
+    else if (h>=18&&h<22) sky.style.background='linear-gradient(180deg, rgba(180,80,40,0.06) 0%, rgba(80,40,120,0.05) 100%)';
+    else sky.style.background='linear-gradient(180deg, rgba(10,15,50,0.12) 0%, rgba(20,20,60,0.08) 100%)';
   }
-
-  // Period badge in room section
   const badge = document.getElementById('period-badge');
   if (badge) {
-    if (night) {
-      badge.innerHTML = '<span class="period-badge night">☽ Night — Guests Sleeping</span>';
-    } else if (h >= 8 && h < 22) {
-      badge.innerHTML = '<span class="period-badge day">☀ Day — Guests Active</span>';
-    } else {
-      badge.innerHTML = '<span class="period-badge day">🌅 Dawn — Hotel Waking</span>';
-    }
+    if (night) badge.innerHTML='<span class="period-badge night">☽ Night — Guests Sleeping</span>';
+    else if (h>=8&&h<22) badge.innerHTML='<span class="period-badge day">☀ Day — Guests Active</span>';
+    else badge.innerHTML='<span class="period-badge day">🌅 Dawn — Hotel Waking</span>';
   }
 }
 
@@ -890,10 +1074,137 @@ function tryArrive() {
   const title = TITLES[Math.floor(Math.random()*TITLES.length)];
   const name  = NAMES[Math.floor(Math.random()*NAMES.length)];
   const nights = Math.floor(Math.random()*3)+1;
-  // timer = nights: counts down by 1 each day at 11am checkout hour
   room.status='occupied'; room.guest=`${title} ${name}`; room.timer=nights;
-  G.totalGuests++;
+  G.totalGuests++; G.dayCheckIns++;
   log(`${room.guest} checked into Room ${room.id}`, 'in', `${nights}n`);
+}
+
+// ════════════════════════════
+// REVIEWS
+// ════════════════════════════
+function generateReview(guestName, rate) {
+  const sat = G.satisfaction || 60;
+  let stars;
+  if (sat >= 85) stars = Math.random() < 0.7 ? 5 : 4;
+  else if (sat >= 70) stars = Math.random() < 0.6 ? 4 : (Math.random()<0.5?5:3);
+  else if (sat >= 50) stars = Math.random() < 0.5 ? 3 : (Math.random()<0.5?4:2);
+  else if (sat >= 30) stars = Math.random() < 0.5 ? 2 : (Math.random()<0.5?3:1);
+  else stars = Math.random() < 0.6 ? 1 : 2;
+  const templates = REVIEW_TEMPLATES[stars];
+  const t = templates[Math.floor(Math.random()*templates.length)];
+  const avatars = ['🧑','👩','👨','🧔','👩‍🦱','👨‍🦳','👩‍🦰','🧑‍🦲'];
+  const review = {
+    id: Date.now() + Math.random(),
+    guest: guestName,
+    stars, text: t.text, tags: t.tags,
+    avatar: avatars[Math.floor(Math.random()*avatars.length)],
+    dayNum: Math.floor(G.totalEarned / 100),
+    isNew: true,
+  };
+  G.reviews.unshift(review);
+  if (G.reviews.length > 50) G.reviews.pop();
+  G.newReviewCount = (G.newReviewCount||0) + 1;
+  updateReviewBadge();
+}
+
+function updateReviewBadge() {
+  const badge = document.getElementById('new-reviews-badge');
+  if (!badge || !G) return;
+  if (G.newReviewCount > 0) { badge.textContent = G.newReviewCount; badge.style.display='inline'; }
+  else badge.style.display='none';
+}
+
+// ════════════════════════════
+// EVENTS
+// ════════════════════════════
+function triggerRandomEvent() {
+  if (!G || G.rooms.filter(r=>r.status==='occupied').length === 0) return; // no guests = no events
+  eventPending = true;
+  const ev = EVENTS[Math.floor(Math.random()*EVENTS.length)];
+  showEvent(ev);
+}
+
+function showEvent(ev) {
+  document.getElementById('ev-icon').textContent = ev.icon;
+  const badge = document.getElementById('ev-type-badge');
+  badge.className = `event-type-badge ${ev.type}`;
+  const typeLabel = {crisis:'⚠ Incident', opportunity:'✦ Opportunity', vip:'💎 VIP Arrival', maintenance:'🔧 Maintenance'}[ev.type] || ev.type;
+  badge.textContent = typeLabel;
+  document.getElementById('ev-title').textContent = ev.title;
+  document.getElementById('ev-desc').textContent = ev.desc;
+  const choicesDiv = document.getElementById('ev-choices');
+  choicesDiv.innerHTML = '';
+  ev.choices.forEach((c,i) => {
+    const btn = document.createElement('div');
+    btn.className = 'event-choice';
+    btn.innerHTML = `<div class="ec-label">${c.label}</div><div class="ec-effect ${c.tag}">${c.effect}</div>`;
+    btn.onclick = () => resolveEvent(ev, c);
+    choicesDiv.appendChild(btn);
+  });
+  document.getElementById('event-modal').classList.add('show');
+  log(`Hotel event: ${ev.title}`, 'event', ev.icon);
+}
+
+function resolveEvent(ev, choice) {
+  document.getElementById('event-modal').classList.remove('show');
+  eventPending = false;
+  G.eventsResolved = (G.eventsResolved||0) + 1;
+  if (choice.cost) { G.money -= choice.cost; if (choice.cost > 0) { G.money -= 0; /* already deducted */ } }
+  if (choice.money) { G.money += choice.money; G.totalEarned += choice.money; G.dayRevenue += choice.money; popMoney(choice.money); }
+  if (choice.sat) { G.satisfaction = Math.max(0, Math.min(100, (G.satisfaction||60) + choice.sat)); }
+  if (choice.guests) { G.pendingGuestBoost = (G.pendingGuestBoost||0) + choice.guests; }
+  if (choice.guestBoost) { G.pendingGuestBoost = (G.pendingGuestBoost||0) + choice.guestBoost; }
+  if (choice.guestLeave) {
+    const occupied = G.rooms.filter(r=>r.status==='occupied');
+    for (let i=0;i<Math.min(choice.guestLeave, occupied.length);i++) {
+      const r = occupied[i]; r.status='dirty'; r.timer=3; r.guest=null;
+    }
+  }
+  if (choice.roomDown) {
+    const empties = G.rooms.filter(r=>r.status==='empty');
+    if (empties.length) { empties[0].status='maintenance'; empties[0].timer=8; }
+  }
+  log(`Resolved: "${ev.title}" — ${choice.label}`, 'in');
+  toast(`Event resolved: ${choice.label}`);
+  renderHotel(); updateHeader();
+}
+
+// ════════════════════════════
+// NIGHT SUMMARY
+// ════════════════════════════
+function showNightSummary() {
+  const el = document.getElementById('day-summary');
+  const content = document.getElementById('ds-content');
+  const occ = G.rooms.filter(r=>r.status==='occupied').length;
+  const occPct = G.rooms.length ? Math.round(occ/G.rooms.length*100) : 0;
+  const satClass = G.satisfaction >= 70 ? 'good' : G.satisfaction >= 50 ? '' : 'bad';
+
+  content.innerHTML = `
+    <div class="ds-row"><span class="ds-label">Revenue Today</span><span class="ds-val good">+$${fmt(G.dayRevenue)}</span></div>
+    <div class="ds-row"><span class="ds-label">Check-ins</span><span class="ds-val">${G.dayCheckIns}</span></div>
+    <div class="ds-row"><span class="ds-label">Check-outs</span><span class="ds-val">${G.dayCheckOuts}</span></div>
+    <div class="ds-row"><span class="ds-label">Occupancy</span><span class="ds-val">${occPct}%</span></div>
+    <hr class="ds-divider">
+    <div class="ds-row"><span class="ds-label">Satisfaction</span><span class="ds-val ${satClass}">${Math.round(G.satisfaction)}%</span></div>
+    <div class="ds-row"><span class="ds-label">Total Earned</span><span class="ds-val">$${fmt(G.totalEarned)}</span></div>
+  `;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 6000);
+}
+function closeDaySummary() { document.getElementById('day-summary').classList.remove('show'); }
+
+// ════════════════════════════
+// MILESTONES
+// ════════════════════════════
+function checkMilestones() {
+  if (!G) return;
+  MILESTONES.forEach(m => {
+    if (!G.completedMilestones.includes(m.id) && m.check(G)) {
+      G.completedMilestones.push(m.id);
+      log(`🏆 Milestone: ${m.name} — ${m.desc}`, 'in', '🏅');
+      toast(`🏆 ${m.name} unlocked!`);
+    }
+  });
 }
 
 // ════════════════════════════
@@ -919,20 +1230,20 @@ function apply(id) {
     case 'room2':  grow(2); break; case 'room4': grow(4); break;
     case 'room8':  grow(8); break; case 'room16': grow(16); break;
     case 'room32': grow(32); break; case 'room64': grow(64); break;
-    case 'suite_path': G.rooms.slice(0, Math.max(1, Math.floor(G.rooms.length/4))).forEach(r=>r.type='suite'); break;
+    case 'suite_path': G.rooms.slice(0,Math.max(1,Math.floor(G.rooms.length/4))).forEach(r=>r.type='suite'); break;
     case 'suite2': G.rooms[0].type='penthouse'; break;
     case 'amenity1': G.amenityIncome+=10; break; case 'amenity2': G.amenityIncome+=30; break;
     case 'amenity3a': G.amenityIncome+=80; break; case 'amenity3b': G.amenityIncome+=60; break;
     case 'amenity4': G.amenityIncome+=150; break; case 'amenity5': G.amenityIncome+=300; break;
     case 'staff1': G.arrivalTick=Math.max(10,G.arrivalTick-15); break;
-    case 'staff2a': G.arrivalTick=Math.max(10,G.arrivalTick-10); break;
+    case 'staff2a': G.arrivalTick=Math.max(10,G.arrivalTick-10); G.satisfaction=Math.min(100,(G.satisfaction||60)+15); break;
     case 'staff2b': G.amenityIncome=Math.floor(G.amenityIncome*1.25); break;
     case 'staff3': G.hasCleaning=true; G.rooms.forEach(r=>{if(r.status==='dirty')r.status='empty';}); break;
     case 'staff4': G.arrivalTick=Math.max(8,G.arrivalTick-5); break;
     case 'staff5': G.amenityIncome=Math.floor(G.amenityIncome*1.2); break;
     case 'prestige_path': G.stars=Math.max(G.stars,2); G.arrivalTick=Math.max(10,G.arrivalTick-10); break;
     case 'prestige2a': G.stars=Math.max(G.stars,3); G.arrivalTick=Math.max(10,G.arrivalTick-8); break;
-    case 'prestige2b': G.arrivalTick=Math.max(10,G.arrivalTick-6); break;
+    case 'prestige2b': G.arrivalTick=Math.max(10,G.arrivalTick-6); G.satisfaction=Math.min(100,(G.satisfaction||60)+10); break;
     case 'prestige3': G.stars=5; G.arrivalTick=Math.max(8,G.arrivalTick-15); break;
     case 'prestige4a': G.amenityIncome=Math.floor(G.amenityIncome*1.3); break;
     case 'prestige4b': G.amenityIncome+=400; break;
@@ -940,63 +1251,99 @@ function apply(id) {
 }
 
 // ════════════════════════════
+// ROOM POPUP
+// ════════════════════════════
+function openRoomPopup(roomId, event) {
+  if (!G) return;
+  const r = G.rooms.find(x=>x.id===roomId); if (!r) return;
+  selectedRoomId = roomId;
+  const popup = document.getElementById('room-popup');
+  document.getElementById('rp-title').textContent = `Room ${r.id}`;
+  document.getElementById('rp-type').textContent = r.type.charAt(0).toUpperCase()+r.type.slice(1);
+  document.getElementById('rp-status').textContent = r.status.charAt(0).toUpperCase()+r.status.slice(1);
+  document.getElementById('rp-guest').textContent = r.guest || '—';
+  document.getElementById('rp-nights').textContent = r.status==='occupied' ? `${r.timer} night(s)` : '—';
+  const rate = r.type==='penthouse'?200:r.type==='suite'?80:30+G.stars*10;
+  document.getElementById('rp-rate').textContent = `$${rate}/night`;
+  document.getElementById('rp-clean').disabled = r.status!=='dirty';
+  document.getElementById('rp-upgrade').disabled = r.type==='penthouse';
+  popup.classList.add('show');
+  const rect = event.target.getBoundingClientRect();
+  popup.style.left = Math.min(rect.left, window.innerWidth-220)+'px';
+  popup.style.top = (rect.bottom+8)+'px';
+}
+function closeRoomPopup() { document.getElementById('room-popup').classList.remove('show'); selectedRoomId=null; }
+function cleanRoom() {
+  if (!G||!selectedRoomId) return;
+  const r = G.rooms.find(x=>x.id===selectedRoomId);
+  if (!r||r.status!=='dirty') return;
+  const cost = 10;
+  if (G.money < cost) { toast('Not enough funds to clean'); return; }
+  G.money -= cost; r.status='empty'; r.timer=0;
+  log(`Room ${r.id} cleaned manually (-$${cost})`,'in');
+  toast(`Room ${r.id} cleaned for $${cost}`);
+  closeRoomPopup(); renderHotel();
+}
+function upgradeRoom() {
+  if (!G||!selectedRoomId) return;
+  const r = G.rooms.find(x=>x.id===selectedRoomId);
+  if (!r||r.type==='penthouse') return;
+  const cost = r.type==='standard'?800:0;
+  const newType = r.type==='standard'?'suite':'penthouse';
+  if (newType==='suite' && !G.upgrades.find(u=>u.id==='suite_path'&&u.purchased)) { toast('Unlock Suites in Investments first'); return; }
+  if (G.money < cost) { toast(`Costs $${cost} to upgrade`); return; }
+  G.money -= cost; r.type = newType;
+  log(`Room ${r.id} upgraded to ${newType}`,'in',`-$${cost}`);
+  toast(`Room ${r.id} is now a ${newType}!`);
+  closeRoomPopup(); renderHotel();
+}
+
+// Close popup on outside click
+document.addEventListener('click', e => {
+  const popup = document.getElementById('room-popup');
+  if (popup.classList.contains('show') && !popup.contains(e.target) && !e.target.closest('.room-cell')) closeRoomPopup();
+});
+
+// ════════════════════════════
 // RENDER — HOME
 // ════════════════════════════
 function renderHomeSaves() {
-  const c = document.getElementById('home-slots');
-  c.innerHTML = '';
+  const c = document.getElementById('home-slots'); c.innerHTML='';
   const saves = getSaves();
-  for (let i=0; i<3; i++) {
+  for (let i=0;i<3;i++) {
     const s = saves[i];
-    const div = document.createElement('div');
-    div.className = 'home-slot';
+    const div = document.createElement('div'); div.className='home-slot';
     if (activeSlot===i) div.style.borderColor='rgba(184,150,90,0.5)';
-
-    const body = document.createElement('div');
-    body.className = 'home-slot-body';
-    const num = document.createElement('div');
-    num.className = 'home-slot-num'; num.textContent = i+1;
-    const info = document.createElement('div');
-    info.className = 'home-slot-info';
-
+    const body = document.createElement('div'); body.className='home-slot-body';
+    const num = document.createElement('div'); num.className='home-slot-num'; num.textContent=i+1;
+    const info = document.createElement('div'); info.className='home-slot-info';
     if (s) {
       const d = new Date(s.at);
-      const ts = d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' · ' + d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-      const stars = '★'.repeat(s.stars);
-      info.innerHTML = `<div class="home-slot-name"><span>${activeSlot===i?'⬥ ':''}</span>Property ${i+1}</div><div class="home-slot-meta"><span class="home-slot-stars">${stars}</span> &ensp;$${fmt(s.money)} &ensp;${s.rooms} rooms &ensp;· ${ts}</div>`;
-      body.append(num, info); div.appendChild(body);
-
-      // Normal action row
-      const foot = document.createElement('div');
-      foot.className = 'home-slot-actions';
-
-      const playBtn     = mkBtn('Play',      'hsa-btn primary', () => loadGame(i));
-      const overwriteBtn= mkBtn('Overwrite', 'hsa-btn', () => {
-        if (!G) { toast('No active game to save'); return; }
-        // Show inline confirm
-        foot.innerHTML = '';
-        foot.appendChild(mkBtn('✓ Confirm Overwrite', 'hsa-btn primary', () => { saveGame(i); renderHomeSaves(); }));
-        foot.appendChild(mkBtn('✕ Cancel', 'hsa-btn', () => renderHomeSaves()));
+      const ts = d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      const stars='★'.repeat(s.stars);
+      const satStr = s.sat !== undefined ? ` · ${Math.round(s.sat)}% sat` : '';
+      info.innerHTML=`<div class="home-slot-name">${activeSlot===i?'⬥ ':''}Property ${i+1}</div><div class="home-slot-meta"><span class="home-slot-stars">${stars}</span> &ensp;$${fmt(s.money)} &ensp;${s.rooms} rooms${satStr} &ensp;· ${ts}</div>`;
+      body.append(num,info); div.appendChild(body);
+      const foot=document.createElement('div'); foot.className='home-slot-actions';
+      const playBtn=mkBtn('Play','hsa-btn primary',()=>loadGame(i));
+      const overBtn=mkBtn('Overwrite','hsa-btn',()=>{
+        if(!G){toast('No active game');return;}
+        foot.innerHTML='';
+        foot.appendChild(mkBtn('✓ Confirm','hsa-btn primary',()=>{saveGame(i);renderHomeSaves();}));
+        foot.appendChild(mkBtn('✕ Cancel','hsa-btn',()=>renderHomeSaves()));
       });
-      const deleteBtn   = mkBtn('Delete',    'hsa-btn danger', () => {
-        // Show inline confirm
-        foot.innerHTML = '';
-        foot.appendChild(mkBtn('✓ Confirm Delete', 'hsa-btn danger', () => { deleteSlot(i); }));
-        foot.appendChild(mkBtn('✕ Cancel', 'hsa-btn', () => renderHomeSaves()));
+      const delBtn=mkBtn('Delete','hsa-btn danger',()=>{
+        foot.innerHTML='';
+        foot.appendChild(mkBtn('✓ Confirm Delete','hsa-btn danger',()=>deleteSlot(i)));
+        foot.appendChild(mkBtn('✕ Cancel','hsa-btn',()=>renderHomeSaves()));
       });
-
-      foot.append(playBtn, overwriteBtn, deleteBtn);
-      div.appendChild(foot);
+      foot.append(playBtn,overBtn,delBtn); div.appendChild(foot);
     } else {
-      info.innerHTML = `<div class="home-slot-name">Property ${i+1}</div><div class="home-slot-meta">Empty — start a new game</div>`;
-      body.append(num, info); div.appendChild(body);
-      const foot = document.createElement('div'); foot.className = 'home-slot-actions';
-      const nb = mkBtn('New Game', 'hsa-btn primary', () => newGame(i));
-      const sb = mkBtn('Save Here', 'hsa-btn', () => {
-        if (!G) { toast('No active game to save'); return; }
-        saveGame(i);
-      });
-      foot.append(nb, sb); div.appendChild(foot);
+      info.innerHTML=`<div class="home-slot-name">Property ${i+1}</div><div class="home-slot-meta">Empty — start a new game</div>`;
+      body.append(num,info); div.appendChild(body);
+      const foot=document.createElement('div'); foot.className='home-slot-actions';
+      foot.append(mkBtn('New Game','hsa-btn primary',()=>newGame(i)),mkBtn('Save Here','hsa-btn',()=>{if(!G){toast('No active game');return;}saveGame(i);}));
+      div.appendChild(foot);
     }
     c.appendChild(div);
   }
@@ -1005,15 +1352,15 @@ function renderHomeSaves() {
 // ════════════════════════════
 // RENDER — GAME
 // ════════════════════════════
-function renderAll() { renderHotel(); renderTree(); updateHeader(); updateClock(); }
+function renderAll() { renderHotel(); renderStaff(); renderReviews(); renderFinances(); renderTree(); updateHeader(); updateClock(); updateReviewBadge(); }
 
 function updateHeader() {
-  if(!G) return;
-  document.getElementById('hdr-money').textContent  = '$'+fmt(G.money);
-  document.getElementById('hdr-stars').textContent  = '★'.repeat(G.stars);
+  if (!G) return;
+  document.getElementById('hdr-money').textContent = '$'+fmt(G.money);
+  document.getElementById('hdr-stars').textContent = '★'.repeat(G.stars);
   document.getElementById('hdr-guests').textContent = G.totalGuests;
-  const nightly = G.rooms.length*(30+G.stars*10)+G.amenityIncome*5;
-  document.getElementById('hdr-rev').textContent    = '$'+fmt(nightly);
+  const sat = Math.round(G.satisfaction||0);
+  document.getElementById('hdr-sat').textContent = sat+'%';
 }
 
 function renderHotel() {
@@ -1021,43 +1368,237 @@ function renderHotel() {
   const occ = G.rooms.filter(r=>r.status==='occupied').length;
   const pct = G.rooms.length ? Math.round(occ/G.rooms.length*100) : 0;
   document.getElementById('kpi-money').textContent   = '$'+fmt(G.money);
-  document.getElementById('kpi-earned').textContent  = '$'+fmt(G.totalEarned)+' total';
+  document.getElementById('kpi-earned').textContent  = '$'+fmt(G.totalEarned)+' total earned';
   document.getElementById('kpi-occ').textContent     = pct+'%';
   document.getElementById('kpi-rooms').textContent   = G.rooms.length+' rooms · '+occ+' occupied';
   document.getElementById('kpi-guests').textContent  = G.totalGuests;
-  document.getElementById('kpi-amenity').textContent = '$'+fmt(G.amenityIncome);
+  const sat = Math.round(G.satisfaction||0);
+  document.getElementById('kpi-sat').textContent     = sat+'%';
+  const satColor = sat>=80?'#4a7c59':sat>=60?'#8a6a35':sat>=40?'#a07030':'#8b3a3a';
+  document.getElementById('kpi-sat').style.color     = satColor;
+  document.getElementById('kpi-sat-sub').textContent = sat>=80?'Excellent':sat>=65?'Good':sat>=50?'Fair':sat>=35?'Poor':'Critical';
 
   const grid = document.getElementById('room-grid');
   grid.innerHTML = '';
   G.rooms.forEach(r => {
-    const c = document.createElement('div');
-    c.className = 'room-cell';
+    const c = document.createElement('div'); c.className='room-cell';
     const night = G && isNight(G.gameHour);
-    if (r.status==='occupied' && (r.type==='suite'||r.type==='penthouse')) {
-      c.classList.add(night ? 'guest-sleeping' : 'suite-occ');
-    } else if ((r.type==='suite'||r.type==='penthouse') && r.status!=='occupied') {
-      c.classList.add('suite-empty');
-    } else if (r.status==='occupied') {
-      c.classList.add(night ? 'guest-sleeping' : 'guest-activity');
-    } else if (r.status==='dirty') {
-      c.classList.add('dirty');
-    }
-    c.innerHTML = `<span>${roomIcon(r)}</span><span class="rn">${r.id}</span>`;
-    c.title = `Room ${r.id} [${r.type}] — ${r.status}${r.guest?' · '+r.guest:''}`;
+    if (r.status==='maintenance') c.classList.add('maintenance');
+    else if (r.status==='occupied' && (r.type==='suite'||r.type==='penthouse')) c.classList.add(night?'guest-sleeping':'suite-occ');
+    else if ((r.type==='suite'||r.type==='penthouse')&&r.status!=='occupied') c.classList.add('suite-empty');
+    else if (r.status==='occupied') c.classList.add(night?'guest-sleeping':'guest-activity');
+    else if (r.status==='dirty') c.classList.add('dirty');
+    c.innerHTML=`<span>${roomIcon(r)}</span><span class="rn">${r.id}</span>`;
+    c.title=`Room ${r.id} [${r.type}] — ${r.status}${r.guest?' · '+r.guest:''}`;
+    c.addEventListener('click', e => openRoomPopup(r.id, e));
     grid.appendChild(c);
   });
 }
 
 function roomIcon(r) {
   const night = G && isNight(G.gameHour);
-  if (r.type==='penthouse') return r.status==='occupied' ? (night ? '😴' : '👑') : '👑';
-  if (r.type==='suite') {
-    if (r.status==='occupied') return night ? '😴' : '✨';
-    return '🌟';
-  }
-  if (r.status==='occupied') return night ? '😴' : guestActivity(r.id);
+  if (r.status==='maintenance') return '🔧';
+  if (r.type==='penthouse') return r.status==='occupied'?(night?'😴':'👑'):'👑';
+  if (r.type==='suite') { if(r.status==='occupied') return night?'😴':'✨'; return '🌟'; }
+  if (r.status==='occupied') return night?'😴':guestActivity(r.id);
   if (r.status==='dirty') return '🧹';
   return '🛏';
+}
+
+// ════════════════════════════
+// RENDER — STAFF
+// ════════════════════════════
+function renderStaff() {
+  if (!G) return;
+  const grid = document.getElementById('staff-grid'); if (!grid) return;
+  grid.innerHTML = '';
+  STAFF_ROSTER.forEach(s => {
+    const upgrade = G.upgrades.find(u=>u.id===s.requiresUpgrade);
+    const isUnlocked = upgrade && upgrade.purchased;
+    const card = document.createElement('div');
+    card.className = `staff-card${isUnlocked?'':' locked-card'}`;
+    const cd = staffCooldowns[s.id]||0;
+    const actionDisabled = !isUnlocked || cd > 0;
+    const cdSecs = Math.ceil(cd * 0.68);
+    card.innerHTML = `
+      <div class="sc-icon">${s.icon}</div>
+      <div class="sc-name">${s.name}</div>
+      <div class="sc-role">${s.role}</div>
+      <div class="sc-desc">${s.desc}</div>
+      <div class="sc-status">
+        <div class="sc-dot ${isUnlocked?'active':'locked'}"></div>
+        ${isUnlocked?'On Duty':'Locked — see Investments'}
+      </div>
+      ${isUnlocked?`
+        <button class="sc-action${cd>0?' on-cooldown':''}" ${actionDisabled?'disabled':''}
+          data-sid="${s.id}">
+          ${cd>0?`⏳ ${s.action.label} (${cdSecs}s)`:s.action.label}
+        </button>
+      `:''}
+    `;
+    if (isUnlocked) {
+      const btn = card.querySelector(`[data-sid="${s.id}"]`);
+      if (btn) btn.addEventListener('click', () => {
+        if (staffCooldowns[s.id]>0) return;
+        s.action.effect(G);
+        staffCooldowns[s.id] = s.action.cooldownTicks;
+        renderStaff();
+      });
+    }
+    grid.appendChild(card);
+  });
+}
+
+// ════════════════════════════
+// RENDER — REVIEWS
+// ════════════════════════════
+function renderReviews() {
+  if (!G) return;
+  const reviews = G.reviews||[];
+  // Mark all as read
+  if (document.querySelector('.tab.active')?.dataset.tab === 'reviews-panel') {
+    G.newReviewCount = 0; updateReviewBadge();
+    reviews.forEach(r=>r.isNew=false);
+  }
+
+  // Score
+  const avg = reviews.length ? (reviews.reduce((s,r)=>s+r.stars,0)/reviews.length) : 0;
+  const scoreEl = document.getElementById('rv-score');
+  const starsEl = document.getElementById('rv-stars');
+  const countEl = document.getElementById('rv-count');
+  if (scoreEl) scoreEl.textContent = reviews.length ? avg.toFixed(1) : '—';
+  if (starsEl) {
+    const full=Math.round(avg); starsEl.textContent='★'.repeat(full)+'☆'.repeat(5-full);
+  }
+  if (countEl) countEl.textContent = reviews.length?`${reviews.length} review${reviews.length!==1?'s':''}`:' No reviews yet';
+
+  // Bars
+  const barsEl = document.getElementById('rv-bars');
+  if (barsEl) {
+    barsEl.innerHTML='';
+    [5,4,3,2,1].forEach(n=>{
+      const cnt = reviews.filter(r=>r.stars===n).length;
+      const pct = reviews.length ? Math.round(cnt/reviews.length*100) : 0;
+      barsEl.innerHTML += `<div class="rating-bar-row"><span>${'★'.repeat(n)}</span><div class="rating-bar-bg"><div class="rating-bar-fill" style="width:${pct}%"></div></div><span>${cnt}</span></div>`;
+    });
+  }
+
+  // Sentiment
+  const sentEl = document.getElementById('sentiment-chart');
+  if (sentEl) {
+    const aspects = [
+      { label:'Cleanliness', score: Math.min(100, 30 + (G.satisfaction||60)*0.7 - G.rooms.filter(r=>r.status==='dirty').length*5) },
+      { label:'Service',     score: Math.min(100, (G.satisfaction||60) + (G.upgrades.find(u=>u.id==='staff2a'&&u.purchased)?15:0)) },
+      { label:'Value',       score: Math.min(100, 40 + G.stars*12) },
+      { label:'Amenities',   score: Math.min(100, 20 + Math.min(G.amenityIncome, 500)/5) },
+      { label:'Location',    score: 72 },
+    ];
+    sentEl.innerHTML = aspects.map(a => {
+      const pct = Math.max(0,Math.round(a.score));
+      const color = pct>=80?'#4a7c59':pct>=60?'#b8965a':'#8b3a3a';
+      return `<div class="income-row"><span class="income-label">${a.label}</span><div class="income-bar-bg"><div class="income-bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="income-val">${pct}%</span></div>`;
+    }).join('');
+  }
+
+  // Review list
+  const listEl = document.getElementById('review-list');
+  if (listEl) {
+    if (!reviews.length) {
+      listEl.innerHTML = '<div style="padding:20px;text-align:center;font-size:0.7rem;color:var(--text-fnt);font-style:italic;">No reviews yet — check out your first guest to receive one.</div>';
+      return;
+    }
+    listEl.innerHTML='';
+    reviews.slice(0,20).forEach(rv=>{
+      const d = document.createElement('div');
+      d.className='review-card';
+      const stars='★'.repeat(rv.stars)+'☆'.repeat(5-rv.stars);
+      const avatarColors=['#e8f0eb','#fdf6e8','#f5f0ff','#fff3d0','#f5e8e8'];
+      const bgColor = avatarColors[rv.stars-1]||'#f5f5f5';
+      d.innerHTML=`
+        <div class="review-top">
+          <div class="review-avatar" style="background:${bgColor}">${rv.avatar}</div>
+          <div class="review-meta">
+            <div class="review-name">${rv.guest||'Anonymous Guest'}</div>
+            <div class="review-stars">${stars}</div>
+          </div>
+          ${rv.isNew?'<span style="font-size:0.5rem;background:var(--green);color:white;padding:2px 6px;border-radius:8px;font-weight:700">NEW</span>':''}
+        </div>
+        <div class="review-text">${rv.text}</div>
+        <div class="review-tags">${(rv.tags||[]).map(t=>`<span class="review-tag ${rv.stars>=3?'pos':'neg'}">${t}</span>`).join('')}</div>
+      `;
+      listEl.appendChild(d);
+    });
+  }
+}
+
+// ════════════════════════════
+// RENDER — FINANCES
+// ════════════════════════════
+function renderFinances() {
+  if (!G) return;
+  // Sparkline
+  const sp = document.getElementById('sparkline');
+  if (sp) {
+    const hist = G.revenueHistory||[];
+    if (hist.length === 0) { sp.innerHTML='<div style="font-size:0.6rem;color:var(--text-fnt);padding:20px">No data yet — revenue records after each day.</div>'; }
+    else {
+      const max = Math.max(...hist, 1);
+      sp.innerHTML = hist.map(v=>`<div class="spark-bar" style="height:${Math.max(4,Math.round(v/max*56))}px" data-val="$${fmt(v)}"></div>`).join('');
+      document.getElementById('spark-min').textContent='$'+fmt(Math.min(...hist));
+      document.getElementById('spark-max').textContent='$'+fmt(max);
+    }
+  }
+  // Income breakdown
+  const ib = document.getElementById('income-breakdown');
+  if (ib) {
+    const total = (G.roomRevenue||0) + (G.amenityRevenue||0) + 1;
+    const items = [
+      { label:'Room Revenue',    val:G.roomRevenue||0,    color:'var(--brass)' },
+      { label:'Amenity Income',  val:G.amenityRevenue||0, color:'var(--green)' },
+    ];
+    ib.innerHTML = items.map(it=>`
+      <div class="income-row">
+        <span class="income-label">${it.label}</span>
+        <div class="income-bar-bg"><div class="income-bar-fill" style="width:${Math.round(it.val/total*100)}%;background:${it.color}"></div></div>
+        <span class="income-val">$${fmt(it.val)}</span>
+      </div>`).join('');
+  }
+  // Stats grid
+  const sg = document.getElementById('stat-grid');
+  if (sg) {
+    const avgRev = G.revenueHistory?.length ? fmt(G.revenueHistory.reduce((a,b)=>a+b,0)/G.revenueHistory.length) : '—';
+    const avgSat = G.reviews?.length ? (G.reviews.reduce((s,r)=>s+r.stars,0)/G.reviews.length).toFixed(1) : '—';
+    const tiles = [
+      { label:'Avg Daily Revenue', val:'$'+avgRev },
+      { label:'Review Score', val:avgSat+'/5' },
+      { label:'Total Rooms', val:G.rooms.length },
+      { label:'Days Operated', val:G.revenueHistory?.length||0 },
+      { label:'Events Handled', val:G.eventsResolved||0 },
+      { label:'Milestones', val:`${G.completedMilestones?.length||0}/${MILESTONES.length}` },
+    ];
+    sg.innerHTML = tiles.map(t=>`<div class="stat-tile"><div class="stat-tile-label">${t.label}</div><div class="stat-tile-val">${t.val}</div></div>`).join('');
+  }
+  // Milestones
+  const ml = document.getElementById('milestone-list');
+  if (ml) {
+    ml.innerHTML='';
+    MILESTONES.forEach(m=>{
+      const done = G.completedMilestones?.includes(m.id);
+      const cur = Math.min(m.val(G), m.target());
+      const pct = Math.round(cur/m.target()*100);
+      const div = document.createElement('div');
+      div.className=`milestone-item${done?' done':''}`;
+      div.innerHTML=`
+        <div class="milestone-icon">${done?'✅':m.icon}</div>
+        <div class="milestone-info">
+          <div class="milestone-name">${m.name}</div>
+          <div class="milestone-desc">${m.desc}</div>
+          ${!done?`<div class="milestone-prog"><div class="milestone-bar-bg"><div class="milestone-bar-fill" style="width:${pct}%"></div></div><span class="milestone-pct">${cur}/${m.target()}</span></div>`:''}
+        </div>
+      `;
+      ml.appendChild(div);
+    });
+  }
 }
 
 // ════════════════════════════
@@ -1068,111 +1609,78 @@ function renderTree() {
   const ups = G.upgrades;
   const svg = document.getElementById('tree-svg');
   const nodesDiv = document.getElementById('tree-nodes');
-  svg.setAttribute('width', CANVAS_W);
-  svg.setAttribute('height', CANVAS_H);
-  svg.innerHTML = '';
-  nodesDiv.innerHTML = '';
-  document.getElementById('tree-canvas').style.width = CANVAS_W+'px';
-  document.getElementById('tree-canvas').style.height = CANVAS_H+'px';
-
-  // Subtle dot grid for depth
-  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
-  const pat = document.createElementNS('http://www.w3.org/2000/svg','pattern');
-  pat.setAttribute('id','dotgrid'); pat.setAttribute('patternUnits','userSpaceOnUse');
-  pat.setAttribute('width','40'); pat.setAttribute('height','40');
-  const dotc = document.createElementNS('http://www.w3.org/2000/svg','circle');
-  dotc.setAttribute('cx','20'); dotc.setAttribute('cy','20'); dotc.setAttribute('r','1');
-  dotc.setAttribute('fill','rgba(100,80,40,0.15)');
+  svg.setAttribute('width', CANVAS_W); svg.setAttribute('height', CANVAS_H);
+  svg.innerHTML=''; nodesDiv.innerHTML='';
+  document.getElementById('tree-canvas').style.width=CANVAS_W+'px';
+  document.getElementById('tree-canvas').style.height=CANVAS_H+'px';
+  const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+  const pat=document.createElementNS('http://www.w3.org/2000/svg','pattern');
+  pat.setAttribute('id','dotgrid'); pat.setAttribute('patternUnits','userSpaceOnUse'); pat.setAttribute('width','40'); pat.setAttribute('height','40');
+  const dotc=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  dotc.setAttribute('cx','20'); dotc.setAttribute('cy','20'); dotc.setAttribute('r','1'); dotc.setAttribute('fill','rgba(100,80,40,0.15)');
   pat.appendChild(dotc); defs.appendChild(pat); svg.appendChild(defs);
-  const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
-  bg.setAttribute('width','100%'); bg.setAttribute('height','100%');
-  bg.setAttribute('fill','url(#dotgrid)'); svg.appendChild(bg);
-
-  // Build lookup
-  const byId = {};
-  ups.forEach(u => byId[u.id] = u);
-
-  // Draw connections
-  const deduped = new Set();
-  ups.forEach(parent => {
-    parent.children.forEach(cid => {
-      const key = parent.id+'→'+cid;
-      if (deduped.has(key)) return;
-      deduped.add(key);
-      const child = byId[cid]; if (!child) return;
-      const active = parent.purchased;
-      const col = B_STROKE[child.branch] || '#ccc';
-      const px = parent.x, py = parent.y, cx = child.x, cy = child.y;
-
-      const pR = parent.size==='lg' ? 40 : parent.size==='md' ? 34 : 28;
-      const cR = child.size==='lg'  ? 40 : child.size==='md'  ? 34 : 28;
-
-      const dx = cx - px, dy = cy - py;
-      const len = Math.sqrt(dx*dx+dy*dy);
-      const ux = dx/len, uy = dy/len;
-      const x1 = px + ux*pR, y1 = py + uy*pR;
-      const x2 = cx - ux*cR, y2 = cy - uy*cR;
-
-      const mx = (x1+x2)/2, my = (y1+y2)/2 - 20;
-      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  const bg=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  bg.setAttribute('width','100%'); bg.setAttribute('height','100%'); bg.setAttribute('fill','url(#dotgrid)'); svg.appendChild(bg);
+  const byId={};
+  ups.forEach(u=>byId[u.id]=u);
+  const deduped=new Set();
+  ups.forEach(parent=>{
+    parent.children.forEach(cid=>{
+      const key=parent.id+'→'+cid; if(deduped.has(key)) return; deduped.add(key);
+      const child=byId[cid]; if(!child) return;
+      const active=parent.purchased;
+      const col=B_STROKE[child.branch]||'#ccc';
+      const px=parent.x,py=parent.y,cx=child.x,cy=child.y;
+      const pR=parent.size==='lg'?40:parent.size==='md'?34:28;
+      const cR=child.size==='lg'?40:child.size==='md'?34:28;
+      const dx=cx-px,dy=cy-py,len=Math.sqrt(dx*dx+dy*dy);
+      const ux=dx/len,uy=dy/len;
+      const x1=px+ux*pR,y1=py+uy*pR,x2=cx-ux*cR,y2=cy-uy*cR;
+      const mx=(x1+x2)/2,my=(y1+y2)/2-20;
+      const path=document.createElementNS('http://www.w3.org/2000/svg','path');
       path.setAttribute('d',`M${x1},${y1} Q${mx},${my} ${x2},${y2}`);
       path.setAttribute('fill','none');
-      path.setAttribute('stroke', active && child.unlocked ? col : '#b8b0a0');
-      path.setAttribute('stroke-width', active && child.unlocked ? '3' : '2');
-      path.setAttribute('stroke-dasharray', child.purchased ? 'none' : '8,4');
-      path.setAttribute('opacity', active ? (child.purchased?'1':'0.7') : '0.3');
+      path.setAttribute('stroke',active&&child.unlocked?col:'#b8b0a0');
+      path.setAttribute('stroke-width',active&&child.unlocked?'3':'2');
+      path.setAttribute('stroke-dasharray',child.purchased?'none':'8,4');
+      path.setAttribute('opacity',active?(child.purchased?'1':'0.7'):'0.3');
       path.setAttribute('stroke-linecap','round');
       svg.appendChild(path);
-
-      if (active && child.unlocked && !child.purchased) {
-        const mx2 = (x1+x2)/2, my2 = (y1+y2)/2;
-        const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
-        dot.setAttribute('cx', mx2); dot.setAttribute('cy', my2);
-        dot.setAttribute('r','4');
-        dot.setAttribute('fill', col); dot.setAttribute('opacity','0.6');
+      if(active&&child.unlocked&&!child.purchased){
+        const mx2=(x1+x2)/2,my2=(y1+y2)/2;
+        const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
+        dot.setAttribute('cx',mx2); dot.setAttribute('cy',my2); dot.setAttribute('r','4');
+        dot.setAttribute('fill',col); dot.setAttribute('opacity','0.6');
         svg.appendChild(dot);
       }
     });
   });
-
-  // Draw node bubbles
-  ups.forEach(u => {
-    const def = TREE_DATA.find(d=>d.id===u.id);
-    const size = def ? def.size : 'md';
-    const bubble = document.createElement('div');
-    bubble.className = `node-bubble branch-${u.branch}`;
-    if (u.purchased) bubble.classList.add('purchased');
-    else if (!u.unlocked) bubble.classList.add('locked');
+  ups.forEach(u=>{
+    const def=TREE_DATA.find(d=>d.id===u.id);
+    const size=def?def.size:'md';
+    const bubble=document.createElement('div');
+    bubble.className=`node-bubble branch-${u.branch}`;
+    if(u.purchased) bubble.classList.add('purchased');
+    else if(!u.unlocked) bubble.classList.add('locked');
     else bubble.classList.add('available');
-    bubble.style.left = u.x + 'px';
-    bubble.style.top  = u.y + 'px';
-
-    const sizeClass = size==='lg'?'size-lg':size==='md'?'size-md':'size-sm';
-    const ring = document.createElement('div');
-    ring.className = `bubble-ring ${sizeClass}`;
-    ring.innerHTML = `<span class="bubble-icon">${u.icon}</span><span class="bubble-label">${u.label}</span>`;
-
-    if (u.purchased) {
-      const badge = document.createElement('div');
-      badge.className = 'owned-badge'; badge.textContent = '✓';
-      ring.appendChild(badge);
-    }
+    bubble.style.left=u.x+'px'; bubble.style.top=u.y+'px';
+    const sizeClass=size==='lg'?'size-lg':size==='md'?'size-md':'size-sm';
+    const ring=document.createElement('div');
+    ring.className=`bubble-ring ${sizeClass}`;
+    ring.innerHTML=`<span class="bubble-icon">${u.icon}</span><span class="bubble-label">${u.label}</span>`;
+    if(u.purchased){const badge=document.createElement('div');badge.className='owned-badge';badge.textContent='✓';ring.appendChild(badge);}
     bubble.appendChild(ring);
-
-    if (!u.purchased && u.cost > 0) {
-      const cost = document.createElement('div');
-      cost.className = 'bubble-cost';
-      const canAfford = G && G.money >= u.cost;
-      cost.style.color = u.unlocked ? (canAfford ? (B_STROKE[u.branch]||'#888') : '#c06060') : '#ccc';
-      cost.textContent = '$'+fmt(u.cost);
+    if(!u.purchased&&u.cost>0){
+      const cost=document.createElement('div');cost.className='bubble-cost';
+      const canAfford=G&&G.money>=u.cost;
+      cost.style.color=u.unlocked?(canAfford?(B_STROKE[u.branch]||'#888'):'#c06060'):'#ccc';
+      cost.textContent='$'+fmt(u.cost);
       bubble.appendChild(cost);
     }
-
-    bubble.addEventListener('mouseenter', e => showTip(u, e));
-    bubble.addEventListener('mousemove', moveTip);
-    bubble.addEventListener('mouseleave', hideTip);
-    if (!u.purchased && u.unlocked) bubble.addEventListener('click', () => buy(u.id));
-
+    bubble.addEventListener('mouseenter',e=>showTip(u,e));
+    bubble.addEventListener('mousemove',moveTip);
+    bubble.addEventListener('mouseleave',hideTip);
+    if(!u.purchased&&u.unlocked) bubble.addEventListener('click',()=>buy(u.id));
     nodesDiv.appendChild(bubble);
   });
 }
@@ -1180,105 +1688,74 @@ function renderTree() {
 // ════════════════════════════
 // TOOLTIP
 // ════════════════════════════
-function showTip(u, e) {
-  const t = document.getElementById('tooltip');
-  document.getElementById('tt-name').textContent = u.label;
-  document.getElementById('tt-desc').textContent = u.desc;
-  document.getElementById('tt-cost').textContent = u.purchased ? '' : u.cost>0 ? `Investment: $${fmt(u.cost)}` : '';
-  const st = document.getElementById('tt-status');
-  if (u.purchased) { st.className='tt-status owned'; st.textContent='✓ Acquired'; }
-  else if (!u.unlocked) { st.className='tt-status locked'; st.textContent='Locked — complete prerequisites'; }
-  else { st.className='tt-status'; st.textContent = G && G.money>=u.cost ? 'Click to acquire' : 'Insufficient funds'; }
+function showTip(u,e){
+  const t=document.getElementById('tooltip');
+  document.getElementById('tt-name').textContent=u.label;
+  document.getElementById('tt-desc').textContent=u.desc;
+  document.getElementById('tt-cost').textContent=u.purchased?'':(u.cost>0?`Investment: $${fmt(u.cost)}`:'');
+  const st=document.getElementById('tt-status');
+  if(u.purchased){st.className='tt-status owned';st.textContent='✓ Acquired';}
+  else if(!u.unlocked){st.className='tt-status locked';st.textContent='Locked — complete prerequisites';}
+  else{st.className='tt-status';st.textContent=G&&G.money>=u.cost?'Click to acquire':'Insufficient funds';}
   t.style.display='block'; moveTip(e);
 }
-function moveTip(e) {
-  const t = document.getElementById('tooltip');
-  t.style.left = (e.clientX+16)+'px'; t.style.top = (e.clientY-10)+'px';
-}
-function hideTip() { document.getElementById('tooltip').style.display='none'; }
+function moveTip(e){const t=document.getElementById('tooltip');t.style.left=(e.clientX+16)+'px';t.style.top=(e.clientY-10)+'px';}
+function hideTip(){document.getElementById('tooltip').style.display='none';}
 
 // ════════════════════════════
 // HELPERS
 // ════════════════════════════
-function mkBtn(label, cls, onclick) {
-  const b = document.createElement('button');
-  b.className=cls; b.textContent=label; b.onclick=onclick; return b;
+function mkBtn(label,cls,onclick){const b=document.createElement('button');b.className=cls;b.textContent=label;b.onclick=onclick;return b;}
+function log(msg,type='',extra=''){
+  const box=document.getElementById('desk-log'); if(!box) return;
+  const row=document.createElement('div'); row.className='log-entry';
+  const tag=type?`<span class="log-tag ${type}">${type==='in'?'In':type==='out'?'Out':type==='event'?'Event':'!'}</span>`:'';
+  const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  row.innerHTML=`${tag}<span class="log-msg">${msg}</span>${extra?`<span style="font-size:0.6rem;color:var(--brass-dk);font-weight:600">${extra}</span>`:''}<span class="log-time">${now}</span>`;
+  box.insertBefore(row,box.firstChild);
+  while(box.children.length>50) box.removeChild(box.lastChild);
 }
-
-function log(msg, type='', extra='') {
-  const box = document.getElementById('desk-log');
-  if (!box) return;
-  const row = document.createElement('div'); row.className='log-entry';
-  const tag = type ? `<span class="log-tag ${type}">${type==='in'?'In':'Out'}</span>` : '';
-  const now = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-  row.innerHTML = `${tag}<span class="log-msg">${msg}</span>${extra?`<span style="font-size:0.6rem;color:var(--brass-dk);font-weight:600">${extra}</span>`:''}<span class="log-time">${now}</span>`;
-  box.insertBefore(row, box.firstChild);
-  while (box.children.length>40) box.removeChild(box.lastChild);
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function popMoney(n){
+  if(n<=0) return;
+  const p=document.createElement('div'); p.className='money-pop'; p.textContent='+$'+n;
+  p.style.left=(80+Math.random()*180)+'px'; p.style.top=(200+Math.random()*80)+'px';
+  document.body.appendChild(p); setTimeout(()=>p.remove(),1500);
 }
-
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2200);
-}
-
-function popMoney(n) {
-  const p = document.createElement('div');
-  p.className='money-pop'; p.textContent='+$'+n;
-  p.style.left=(80+Math.random()*180)+'px';
-  p.style.top=(200+Math.random()*80)+'px';
-  document.body.appendChild(p);
-  setTimeout(()=>p.remove(), 1500);
-}
-
-function fmt(n) {
-  n=Math.floor(n);
-  if(n>=1000000) return (n/1e6).toFixed(1)+'M';
-  if(n>=1000) return (n/1000).toFixed(1)+'K';
-  return n+'';
-}
-
-function switchTab(id) {
+function fmt(n){n=Math.floor(n);if(n>=1000000)return(n/1e6).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return n+'';}
+function switchTab(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
   document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
-  sessionStorage.setItem('grand_tab', id);
+  sessionStorage.setItem('grand_tab',id);
+  if(id==='reviews-panel'&&G){G.newReviewCount=0;updateReviewBadge();renderReviews();}
+  if(id==='finance-panel') renderFinances();
+  if(id==='staff-panel') renderStaff();
+  if(id==='tree-panel') renderTree();
 }
 
 // ════════════════════════════
 // INIT
 // ════════════════════════════
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{ switchTab(t.dataset.tab); if(t.dataset.tab==='tree-panel') renderTree(); }));
-document.getElementById('save-btn').addEventListener('click',()=>{
-  if(!G){toast('No active property');return;}
-  if(activeSlot!==null) saveGame(activeSlot); else toast('No slot selected');
-});
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+document.getElementById('save-btn').addEventListener('click',()=>{if(!G){toast('No active property');return;}if(activeSlot!==null)saveGame(activeSlot);else toast('No slot selected');});
 
-(function init() {
+(function init(){
   renderHomeSaves();
-
-  const saves = getSaves();
-  // Find the most recently saved slot to have G ready (for "Overwrite" / "Save Here")
-  let latest = null, lt = 0;
-  for (let i = 0; i < 3; i++) if (saves[i] && saves[i].at > lt) { lt = saves[i].at; latest = i; }
-
-  if (latest !== null) {
-    // Load state into memory so the game is ready, but DON'T auto-enter
-    G = JSON.parse(JSON.stringify(saves[latest].state));
-    migrateState(G);
-    activeSlot = latest;
-    startLoop();
-    renderAll();
+  const saves=getSaves();
+  let latest=null,lt=0;
+  for(let i=0;i<3;i++) if(saves[i]&&saves[i].at>lt){lt=saves[i].at;latest=i;}
+  if(latest!==null){
+    G=JSON.parse(JSON.stringify(saves[latest].state));
+    migrateState(G); activeSlot=latest;
+    staffCooldowns={};
+    startLoop(); renderAll();
   }
-
-  // Only restore game screen if we were in it before refresh (same session)
-  if (sessionStorage.getItem('grand_screen') === 'game' && G) {
+  if(sessionStorage.getItem('grand_screen')==='game'&&G){
     document.body.classList.add('in-game');
-    const lastTab = sessionStorage.getItem('grand_tab') || 'hotel-panel';
+    const lastTab=sessionStorage.getItem('grand_tab')||'hotel-panel';
     switchTab(lastTab);
-    if (lastTab === 'tree-panel') renderTree();
-    log('Welcome back to The Grand', 'in');
+    log('Welcome back to The Grand','in');
   }
-  // Otherwise stay on home screen (default)
 })();
 </script>
 </body>
