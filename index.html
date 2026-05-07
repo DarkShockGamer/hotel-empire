@@ -746,8 +746,20 @@ function migrateUnlocks(upgrades) {
   });
 }
 
-function enterGame() { document.body.classList.add('in-game'); switchTab('hotel-panel'); }
-function goHome() { document.body.classList.remove('in-game'); renderHomeSaves(); }
+function enterGame() {
+  document.body.classList.add('in-game');
+  // Restore last active tab, default to lobby
+  const lastTab = sessionStorage.getItem('grand_tab') || 'hotel-panel';
+  switchTab(lastTab);
+  if (lastTab === 'tree-panel') renderTree();
+  sessionStorage.setItem('grand_screen', 'game');
+}
+
+function goHome() {
+  document.body.classList.remove('in-game');
+  sessionStorage.setItem('grand_screen', 'home');
+  renderHomeSaves();
+}
 
 // ════════════════════════════
 // GAME LOOP
@@ -1204,6 +1216,7 @@ function fmt(n) {
 function switchTab(id) {
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
   document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
+  sessionStorage.setItem('grand_tab', id);
 }
 
 // ════════════════════════════
@@ -1217,15 +1230,30 @@ document.getElementById('save-btn').addEventListener('click',()=>{
 
 (function init() {
   renderHomeSaves();
+
   const saves = getSaves();
-  let latest=null, lt=0;
-  for(let i=0;i<3;i++) if(saves[i]&&saves[i].at>lt){lt=saves[i].at;latest=i;}
-  if(latest!==null) {
-    G=JSON.parse(JSON.stringify(saves[latest].state));
+  // Find the most recently saved slot to have G ready (for "Overwrite" / "Save Here")
+  let latest = null, lt = 0;
+  for (let i = 0; i < 3; i++) if (saves[i] && saves[i].at > lt) { lt = saves[i].at; latest = i; }
+
+  if (latest !== null) {
+    // Load state into memory so the game is ready, but DON'T auto-enter
+    G = JSON.parse(JSON.stringify(saves[latest].state));
     migrateState(G);
-    activeSlot=latest; startLoop(); renderAll(); enterGame();
-    log('Welcome back to The Grand','in');
+    activeSlot = latest;
+    startLoop();
+    renderAll();
   }
+
+  // Only restore game screen if we were in it before refresh (same session)
+  if (sessionStorage.getItem('grand_screen') === 'game' && G) {
+    document.body.classList.add('in-game');
+    const lastTab = sessionStorage.getItem('grand_tab') || 'hotel-panel';
+    switchTab(lastTab);
+    if (lastTab === 'tree-panel') renderTree();
+    log('Welcome back to The Grand', 'in');
+  }
+  // Otherwise stay on home screen (default)
 })();
 </script>
 </body>
