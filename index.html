@@ -65,7 +65,6 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
   overflow: hidden;
 }
 
-/* Decorative art-deco arch behind the title */
 #screen-home::before {
   content: '';
   position: absolute;
@@ -497,80 +496,83 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 
 <script>
 // ════════════════════════════════════════
-// TREE DEFINITION — proper branching layout
-// x/y are the node center positions in the canvas
+// TREE DEFINITION
+// Changes from original:
+//   - Rooms branch shifted further left (x values reduced ~100px)
+//   - Prestige branch shifted further right (x values increased ~100px)
+//   - Amenity branch shifted left slightly to avoid overlap with rooms
+//   - root's direct children (room2, amenity1, staff1, prestige_path) start unlocked:true
 // ════════════════════════════════════════
 const TREE_DATA = [
   // ROOT (center top)
-  { id:'root', label:'Grand Opening', icon:'🏨', cost:0, x:560, y:80, branch:'root', size:'lg',
+  { id:'root', label:'Grand Opening', icon:'🏨', cost:0, x:620, y:80, branch:'root', size:'lg',
     children:['room2','amenity1','staff1','prestige_path'],
     desc:'Your empire begins here.', unlocked:true, purchased:true },
 
-  // ── ROOMS BRANCH (left) ──
-  { id:'room2',  label:'2nd Room',   icon:'🛏', cost:150,   x:130, y:230, branch:'rooms', size:'md',
-    children:['room4','suite_path'], desc:'Add a second guest room.', unlocked:false, purchased:false },
-  { id:'room4',  label:'4 Rooms',    icon:'🛏', cost:400,   x:60,  y:390, branch:'rooms', size:'md',
+  // ── ROOMS BRANCH (far left) ──
+  { id:'room2',  label:'2nd Room',   icon:'🛏', cost:150,   x:60,  y:230, branch:'rooms', size:'md',
+    children:['room4','suite_path'], desc:'Add a second guest room.', unlocked:true, purchased:false },
+  { id:'room4',  label:'4 Rooms',    icon:'🛏', cost:400,   x:30,  y:390, branch:'rooms', size:'md',
     children:['room8'],              desc:'Expand to four rooms.', unlocked:false, purchased:false },
-  { id:'suite_path', label:'Suites', icon:'✨', cost:800,   x:210, y:390, branch:'rooms', size:'md',
+  { id:'suite_path', label:'Suites', icon:'✨', cost:800,   x:160, y:390, branch:'rooms', size:'md',
     children:['room8','suite2'],     desc:'Luxury suites. +$80 per stay.', unlocked:false, purchased:false },
-  { id:'room8',  label:'8 Rooms',    icon:'🏠', cost:900,   x:80,  y:555, branch:'rooms', size:'md',
+  { id:'room8',  label:'8 Rooms',    icon:'🏠', cost:900,   x:60,  y:555, branch:'rooms', size:'md',
     children:['room16'],             desc:'A proper hotel floor.', unlocked:false, purchased:false },
-  { id:'suite2', label:'Penthouse',  icon:'👑', cost:3000,  x:230, y:555, branch:'rooms', size:'md',
+  { id:'suite2', label:'Penthouse',  icon:'👑', cost:3000,  x:185, y:555, branch:'rooms', size:'md',
     children:['room16'],             desc:'The penthouse. +$200/stay.', unlocked:false, purchased:false },
-  { id:'room16', label:'16 Rooms',   icon:'🏠', cost:2500,  x:145, y:710, branch:'rooms', size:'md',
+  { id:'room16', label:'16 Rooms',   icon:'🏠', cost:2500,  x:100, y:710, branch:'rooms', size:'md',
     children:['room32'],             desc:'Two full floors.', unlocked:false, purchased:false },
-  { id:'room32', label:'32 Rooms',   icon:'🏗', cost:7000,  x:75,  y:865, branch:'rooms', size:'md',
+  { id:'room32', label:'32 Rooms',   icon:'🏗', cost:7000,  x:35,  y:865, branch:'rooms', size:'md',
     children:['room64'],             desc:'A major expansion wing.', unlocked:false, purchased:false },
-  { id:'room64', label:'64 Rooms',   icon:'🏢', cost:20000, x:215, y:865, branch:'rooms', size:'sm',
+  { id:'room64', label:'64 Rooms',   icon:'🏢', cost:20000, x:175, y:865, branch:'rooms', size:'sm',
     children:[],                     desc:'Grand tower — fully realized.', unlocked:false, purchased:false },
 
-  // ── AMENITIES BRANCH (center-left) ──
-  { id:'amenity1', label:'Vending',    icon:'🥤', cost:120,   x:400, y:250, branch:'amenity', size:'md',
-    children:['amenity2'],             desc:'Vending machine. +$10/cycle.', unlocked:false, purchased:false },
-  { id:'amenity2', label:'Café',       icon:'☕', cost:500,   x:360, y:420, branch:'amenity', size:'md',
+  // ── AMENITIES BRANCH (center-left, shifted left to avoid rooms overlap) ──
+  { id:'amenity1', label:'Vending',    icon:'🥤', cost:120,   x:360, y:250, branch:'amenity', size:'md',
+    children:['amenity2'],             desc:'Vending machine. +$10/cycle.', unlocked:true, purchased:false },
+  { id:'amenity2', label:'Café',       icon:'☕', cost:500,   x:320, y:420, branch:'amenity', size:'md',
     children:['amenity3a','amenity3b'],desc:'In-house café. +$30/cycle.', unlocked:false, purchased:false },
-  { id:'amenity3a', label:'Restaurant',icon:'🍽', cost:1500,  x:290, y:590, branch:'amenity', size:'md',
+  { id:'amenity3a', label:'Restaurant',icon:'🍽', cost:1500,  x:250, y:590, branch:'amenity', size:'md',
     children:['amenity4'],             desc:'Fine dining. +$80/cycle.', unlocked:false, purchased:false },
-  { id:'amenity3b', label:'Bar',       icon:'🍸', cost:1200,  x:430, y:590, branch:'amenity', size:'md',
+  { id:'amenity3b', label:'Bar',       icon:'🍸', cost:1200,  x:390, y:590, branch:'amenity', size:'md',
     children:['amenity4'],             desc:'In-house bar. +$60/cycle.', unlocked:false, purchased:false },
-  { id:'amenity4', label:'Rooftop',    icon:'🌇', cost:4000,  x:360, y:750, branch:'amenity', size:'md',
+  { id:'amenity4', label:'Rooftop',    icon:'🌇', cost:4000,  x:320, y:750, branch:'amenity', size:'md',
     children:['amenity5'],             desc:'Rooftop bar. +$150/cycle.', unlocked:false, purchased:false },
-  { id:'amenity5', label:'Spa & Pool', icon:'🏊', cost:10000, x:360, y:900, branch:'amenity', size:'sm',
+  { id:'amenity5', label:'Spa & Pool', icon:'🏊', cost:10000, x:320, y:900, branch:'amenity', size:'sm',
     children:[],                       desc:'Luxury spa. +$300/cycle.', unlocked:false, purchased:false },
 
   // ── STAFF BRANCH (center-right) ──
-  { id:'staff1',   label:'Bellhop',    icon:'🧳', cost:200,   x:720, y:250, branch:'staff', size:'md',
-    children:['staff2a','staff2b'],    desc:'Faster guest check-in.', unlocked:false, purchased:false },
-  { id:'staff2a',  label:'Concierge',  icon:'🎩', cost:600,   x:650, y:420, branch:'staff', size:'md',
+  { id:'staff1',   label:'Bellhop',    icon:'🧳', cost:200,   x:880, y:250, branch:'staff', size:'md',
+    children:['staff2a','staff2b'],    desc:'Faster guest check-in.', unlocked:true, purchased:false },
+  { id:'staff2a',  label:'Concierge',  icon:'🎩', cost:600,   x:810, y:420, branch:'staff', size:'md',
     children:['staff3'],               desc:'Guest satisfaction +15%.', unlocked:false, purchased:false },
-  { id:'staff2b',  label:'Chef',       icon:'👨‍🍳', cost:800,  x:790, y:420, branch:'staff', size:'md',
+  { id:'staff2b',  label:'Chef',       icon:'👨‍🍳', cost:800,  x:950, y:420, branch:'staff', size:'md',
     children:['staff3'],               desc:'Restaurant revenue +25%.', unlocked:false, purchased:false },
-  { id:'staff3',   label:'Housekeeping',icon:'🧹',cost:1100,  x:720, y:590, branch:'staff', size:'md',
+  { id:'staff3',   label:'Housekeeping',icon:'🧹',cost:1100,  x:880, y:590, branch:'staff', size:'md',
     children:['staff4'],               desc:'Rooms clean instantly.', unlocked:false, purchased:false },
-  { id:'staff4',   label:'Manager',    icon:'👔', cost:3000,  x:650, y:750, branch:'staff', size:'md',
+  { id:'staff4',   label:'Manager',    icon:'👔', cost:3000,  x:810, y:750, branch:'staff', size:'md',
     children:['staff5'],               desc:'Auto-assigns guests.', unlocked:false, purchased:false },
-  { id:'staff5',   label:'Full Team',  icon:'👥', cost:8000,  x:790, y:750, branch:'staff', size:'sm',
+  { id:'staff5',   label:'Full Team',  icon:'👥', cost:8000,  x:950, y:750, branch:'staff', size:'sm',
     children:[],                       desc:'All staff bonuses +20%.', unlocked:false, purchased:false },
 
-  // ── PRESTIGE BRANCH (right) ──
-  { id:'prestige_path', label:'2-Star', icon:'⭐', cost:500,  x:990, y:230, branch:'prestige', size:'md',
-    children:['prestige2a','prestige2b'], desc:'Rated 2 stars. More guests.', unlocked:false, purchased:false },
-  { id:'prestige2a', label:'3-Star',    icon:'⭐', cost:2000, x:920, y:400, branch:'prestige', size:'md',
+  // ── PRESTIGE BRANCH (far right) ──
+  { id:'prestige_path', label:'2-Star', icon:'⭐', cost:500,  x:1180,y:230, branch:'prestige', size:'md',
+    children:['prestige2a','prestige2b'], desc:'Rated 2 stars. More guests.', unlocked:true, purchased:false },
+  { id:'prestige2a', label:'3-Star',    icon:'⭐', cost:2000, x:1110,y:400, branch:'prestige', size:'md',
     children:['prestige3'],              desc:'Business travelers come.', unlocked:false, purchased:false },
-  { id:'prestige2b', label:'Awards',    icon:'🏅', cost:1500, x:1060,y:400, branch:'prestige', size:'md',
+  { id:'prestige2b', label:'Awards',    icon:'🏅', cost:1500, x:1250,y:400, branch:'prestige', size:'md',
     children:['prestige3'],              desc:'Media coverage. +guests.', unlocked:false, purchased:false },
-  { id:'prestige3', label:'5-Star',     icon:'🏆', cost:15000,x:990, y:570, branch:'prestige', size:'md',
+  { id:'prestige3', label:'5-Star',     icon:'🏆', cost:15000,x:1180,y:570, branch:'prestige', size:'md',
     children:['prestige4a','prestige4b'],desc:'The pinnacle of luxury.', unlocked:false, purchased:false },
-  { id:'prestige4a', label:'VIP Club',  icon:'💎', cost:8000, x:920, y:740, branch:'prestige', size:'md',
+  { id:'prestige4a', label:'VIP Club',  icon:'💎', cost:8000, x:1110,y:740, branch:'prestige', size:'md',
     children:[],                         desc:'VIP members spend 3x more.', unlocked:false, purchased:false },
-  { id:'prestige4b', label:'Michelin',  icon:'🌟', cost:12000,x:1060,y:740, branch:'prestige', size:'sm',
+  { id:'prestige4b', label:'Michelin',  icon:'🌟', cost:12000,x:1250,y:740, branch:'prestige', size:'sm',
     children:[],                         desc:'Michelin star restaurant.', unlocked:false, purchased:false },
 ];
 
-const CANVAS_W = 1160;
+const CANVAS_W = 1360;
 const CANVAS_H = 980;
 
-// Branch stroke colors for connections — strong saturated colors
 const B_STROKE = { root:'#b8965a', rooms:'#2d8a50', amenity:'#c08020', staff:'#6040b8', prestige:'#b08020' };
 
 // ════════════════════════════
@@ -604,6 +606,8 @@ function loadGame(slot) {
   if (!s[slot]) return;
   if (loop) clearInterval(loop);
   G = JSON.parse(JSON.stringify(s[slot].state));
+  // Migrate old saves: ensure direct children of root are unlocked
+  migrateUnlocks(G.upgrades);
   activeSlot = slot;
   startLoop(); renderAll(); enterGame();
   toast(`Property ${slot+1} loaded`);
@@ -619,6 +623,17 @@ function newGame(slot) {
   G = fresh(); activeSlot = slot;
   saveGame(slot); startLoop(); renderAll(); enterGame();
   toast(`Welcome to Property ${slot+1}`);
+}
+
+// Ensure any node that is a direct child of a purchased node is unlocked
+function migrateUnlocks(upgrades) {
+  const byId = {};
+  upgrades.forEach(u => byId[u.id] = u);
+  upgrades.forEach(u => {
+    if (u.purchased) {
+      u.children.forEach(cid => { if (byId[cid]) byId[cid].unlocked = true; });
+    }
+  });
 }
 
 function enterGame() { document.body.classList.add('in-game'); switchTab('hotel-panel'); }
@@ -837,7 +852,7 @@ function renderTree() {
   const byId = {};
   ups.forEach(u => byId[u.id] = u);
 
-  // Draw connections (SVG lines behind nodes)
+  // Draw connections
   const deduped = new Set();
   ups.forEach(parent => {
     parent.children.forEach(cid => {
@@ -849,18 +864,15 @@ function renderTree() {
       const col = B_STROKE[child.branch] || '#ccc';
       const px = parent.x, py = parent.y, cx = child.x, cy = child.y;
 
-      // Determine radius to pull from
       const pR = parent.size==='lg' ? 40 : parent.size==='md' ? 34 : 28;
       const cR = child.size==='lg'  ? 40 : child.size==='md'  ? 34 : 28;
 
-      // Vector from parent to child
       const dx = cx - px, dy = cy - py;
       const len = Math.sqrt(dx*dx+dy*dy);
       const ux = dx/len, uy = dy/len;
       const x1 = px + ux*pR, y1 = py + uy*pR;
       const x2 = cx - ux*cR, y2 = cy - uy*cR;
 
-      // Bezier control
       const mx = (x1+x2)/2, my = (y1+y2)/2 - 20;
       const path = document.createElementNS('http://www.w3.org/2000/svg','path');
       path.setAttribute('d',`M${x1},${y1} Q${mx},${my} ${x2},${y2}`);
@@ -872,7 +884,6 @@ function renderTree() {
       path.setAttribute('stroke-linecap','round');
       svg.appendChild(path);
 
-      // Draw arrow chevron at midpoint if active+available
       if (active && child.unlocked && !child.purchased) {
         const mx2 = (x1+x2)/2, my2 = (y1+y2)/2;
         const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
@@ -884,7 +895,7 @@ function renderTree() {
     });
   });
 
-  // Draw node bubbles (HTML divs for rich styling)
+  // Draw node bubbles
   ups.forEach(u => {
     const def = TREE_DATA.find(d=>d.id===u.id);
     const size = def ? def.size : 'md';
@@ -917,7 +928,6 @@ function renderTree() {
       bubble.appendChild(cost);
     }
 
-    // Events
     bubble.addEventListener('mouseenter', e => showTip(u, e));
     bubble.addEventListener('mousemove', moveTip);
     bubble.addEventListener('mouseleave', hideTip);
@@ -1009,6 +1019,7 @@ document.getElementById('save-btn').addEventListener('click',()=>{
   for(let i=0;i<3;i++) if(saves[i]&&saves[i].at>lt){lt=saves[i].at;latest=i;}
   if(latest!==null) {
     G=JSON.parse(JSON.stringify(saves[latest].state));
+    migrateUnlocks(G.upgrades);
     activeSlot=latest; startLoop(); renderAll(); enterGame();
     log('Welcome back to The Grand','in');
   }
