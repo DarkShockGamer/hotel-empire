@@ -450,11 +450,27 @@ body.night-mode .clock-phase { color: #8090c0; }
 /* ── PULSE ON NEW GUEST ── */
 @keyframes newGuestPulse { 0%{box-shadow:0 0 0 0 rgba(74,124,89,0.6)} 70%{box-shadow:0 0 0 8px rgba(74,124,89,0)} 100%{box-shadow:0 0 0 0 rgba(74,124,89,0)} }
 .room-cell.just-arrived { animation: newGuestPulse 0.8s ease; }
+
+/* ── PAUSED OVERLAY ── */
+#paused-overlay {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(44,31,14,0.55); backdrop-filter: blur(2px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+#paused-overlay.show { opacity: 1; pointer-events: all; }
+.paused-badge {
+  background: var(--espresso); border: 1px solid rgba(184,150,90,0.4);
+  color: var(--brass-lt); padding: 10px 24px; border-radius: 20px;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  box-shadow: var(--shadow-lg);
+}
 </style>
 </head>
 <body>
 
 <div id="sky-overlay"></div>
+<div id="paused-overlay"><div class="paused-badge">⏸ Game Paused</div></div>
 
 <!-- HOME SCREEN -->
 <div id="screen-home">
@@ -737,7 +753,6 @@ const TICKER_PHRASES = [
 function initTicker() {
   const inner = document.getElementById('ticker-inner');
   if (!inner) return;
-  // Duplicate for seamless loop
   const phrases = [...TICKER_PHRASES, ...TICKER_PHRASES];
   inner.innerHTML = phrases.map(p => `<span class="ticker-item"><span class="ticker-dot"></span>${p}</span>`).join('');
 }
@@ -913,6 +928,7 @@ const STAFF_ROSTER = [
 let G = null, activeSlot = null, loop = null, tick = 0;
 let selectedRoomId = null;
 let staffCooldowns = {};
+let gamePaused = false;
 
 const fresh = () => ({
   money:50, totalEarned:0,
@@ -932,7 +948,7 @@ const fresh = () => ({
   dayCheckIns:0, dayCheckOuts:0, dayAmenityEarned:0,
 });
 
-// ── TIME: faster (4 ticks/hour, 350ms loop) ──
+// ── TIME ──
 const TICKS_PER_HOUR = 4;
 const LOOP_MS = 350;
 
@@ -961,6 +977,7 @@ function loadGame(slot) {
   if (loop) clearInterval(loop);
   G = JSON.parse(JSON.stringify(s[slot].state));
   migrateState(G); activeSlot = slot;
+  gamePaused = false;
   startLoop(); renderAll(); enterGame(); toast(`Property ${slot+1} loaded`);
 }
 function deleteSlot(slot) {
@@ -972,6 +989,7 @@ function newGame(slot) {
   if (loop) clearInterval(loop);
   G = fresh(); activeSlot = slot;
   staffCooldowns = {};
+  gamePaused = false;
   saveGame(slot); startLoop(); renderAll(); enterGame(); toast(`Welcome to Property ${slot+1}`);
 }
 function migrateState(g) {
@@ -1001,8 +1019,19 @@ function migrateState(g) {
   });
 }
 
+function pauseGame() {
+  gamePaused = true;
+  document.getElementById('paused-overlay').classList.add('show');
+}
+
+function resumeGame() {
+  gamePaused = false;
+  document.getElementById('paused-overlay').classList.remove('show');
+}
+
 function enterGame() {
   document.body.classList.add('in-game');
+  resumeGame();
   initTicker();
   startWalkers();
   const lastTab = sessionStorage.getItem('grand_tab') || 'hotel-panel';
@@ -1010,7 +1039,12 @@ function enterGame() {
   if (lastTab === 'tree-panel') renderTree();
   sessionStorage.setItem('grand_screen', 'game');
 }
+
 function goHome() {
+  // Auto-save before going to menu
+  if (G && activeSlot !== null) saveGame(activeSlot);
+  // Pause the game loop
+  pauseGame();
   document.body.classList.remove('in-game');
   stopWalkers();
   sessionStorage.setItem('grand_screen', 'home');
@@ -1020,7 +1054,7 @@ function goHome() {
 function startWalkers() {
   stopWalkers();
   walkerInterval = setInterval(() => {
-    if (G && G.totalGuests > 0 && !isNight(G.gameHour)) {
+    if (G && G.totalGuests > 0 && !isNight(G.gameHour) && !gamePaused) {
       spawnLobbyGuest();
     }
   }, 4000 + Math.random() * 3000);
@@ -1035,11 +1069,18 @@ function stopWalkers() {
 const NAMES  = ['Aria','Blake','Casey','Dana','Eli','Fiona','Grey','Hana','Ivan','Jade','Kai','Luna','Max','Nova','Owen','Petra','Quinn','Rae','Seth','Tara','Wren','Yuki','Zoe','Hugo','Isla','Felix','Nora','Liam','Cora','Theo'];
 const TITLES = ['Mr.','Ms.','Dr.','Prof.','Sir','Lady','Mx.'];
 let eventPending = false;
-// Events start much later and are less frequent — minimum 5 guests before any event
 let nextEventIn = 200 + Math.floor(Math.random()*120);
-let eventsSinceLast = 0;
 
-function startLoop() { if(loop) clearInterval(loop); loop = setInterval(() => { try { gameTick(); } catch(e) { console.error(e); } }, LOOP_MS); }
+function startLoop() {
+  if(loop) clearInterval(loop);
+  loop = setInterval(() => {
+    try {
+      // Skip tick if paused
+      if (gamePaused) return;
+      gameTick();
+    } catch(e) { console.error(e); }
+  }, LOOP_MS);
+}
 
 function gameTick() {
   if (!G) return;
@@ -1118,11 +1159,10 @@ function gameTick() {
   // ── Staff cooldowns ──
   STAFF_ROSTER.forEach(s => { if (staffCooldowns[s.id] > 0) staffCooldowns[s.id]--; });
 
-  // ── Random events — delayed, needs 5+ guests, no events during first 3 days ──
+  // ── Random events ──
   if (!eventPending && !night && G.totalGuests >= 5) {
     nextEventIn--;
     if (nextEventIn <= 0) {
-      // Minimum gap between events: 150 ticks
       nextEventIn = 180 + Math.floor(Math.random()*140);
       triggerRandomEvent();
     }
@@ -1188,7 +1228,6 @@ function tryArrive() {
   G.totalGuests++; G.dayCheckIns++;
   log(`${room.guest} checked into Room ${room.id}`, 'in', `${nights}n`);
   bumpStat('hdr-guests');
-  // Flash the room cell
   setTimeout(() => {
     const cells = document.querySelectorAll('.room-cell');
     cells.forEach(c => {
@@ -1198,7 +1237,6 @@ function tryArrive() {
       }
     });
   }, 50);
-  // Spawn a walker immediately
   spawnLobbyGuest();
 }
 
@@ -1443,27 +1481,27 @@ function renderHomeSaves() {
       const ts = d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
       const stars='★'.repeat(s.stars);
       const satStr = s.sat !== undefined ? ` · ${Math.round(s.sat)}% sat` : '';
-      info.innerHTML=`<div class="home-slot-name">${activeSlot===i?'⬥ ':''}Property ${i+1}</div><div class="home-slot-meta"><span class="home-slot-stars">${stars}</span> &ensp;$${fmt(s.money)} &ensp;${s.rooms} rooms${satStr} &ensp;· ${ts}</div>`;
+      const isActive = activeSlot === i;
+      info.innerHTML=`<div class="home-slot-name">${isActive?'⬥ ':''}Property ${i+1}</div><div class="home-slot-meta"><span class="home-slot-stars">${stars}</span> &ensp;$${fmt(s.money)} &ensp;${s.rooms} rooms${satStr} &ensp;· ${ts}</div>`;
       body.append(num,info); div.appendChild(body);
       const foot=document.createElement('div'); foot.className='home-slot-actions';
-      const playBtn=mkBtn('Play','hsa-btn primary',()=>loadGame(i));
-      const overBtn=mkBtn('Overwrite','hsa-btn',()=>{
-        if(!G){toast('No active game');return;}
-        foot.innerHTML='';
-        foot.appendChild(mkBtn('✓ Confirm','hsa-btn primary',()=>{saveGame(i);renderHomeSaves();}));
-        foot.appendChild(mkBtn('✕ Cancel','hsa-btn',()=>renderHomeSaves()));
-      });
+
+      // If this is the active slot — show "Continue" and "Delete"
+      // If it's a different slot — show "Play" and "Delete"
+      const playLabel = isActive ? '▶ Continue' : 'Play';
+      const playBtn = mkBtn(playLabel, 'hsa-btn primary', () => loadGame(i));
+
       const delBtn=mkBtn('Delete','hsa-btn danger',()=>{
         foot.innerHTML='';
         foot.appendChild(mkBtn('✓ Confirm Delete','hsa-btn danger',()=>deleteSlot(i)));
         foot.appendChild(mkBtn('✕ Cancel','hsa-btn',()=>renderHomeSaves()));
       });
-      foot.append(playBtn,overBtn,delBtn); div.appendChild(foot);
+      foot.append(playBtn, delBtn); div.appendChild(foot);
     } else {
       info.innerHTML=`<div class="home-slot-name">Property ${i+1}</div><div class="home-slot-meta">Empty — start a new game</div>`;
       body.append(num,info); div.appendChild(body);
       const foot=document.createElement('div'); foot.className='home-slot-actions';
-      foot.append(mkBtn('New Game','hsa-btn primary',()=>newGame(i)),mkBtn('Save Here','hsa-btn',()=>{if(!G){toast('No active game');return;}saveGame(i);}));
+      foot.append(mkBtn('New Game','hsa-btn primary',()=>newGame(i)));
       div.appendChild(foot);
     }
     c.appendChild(div);
@@ -1870,6 +1908,7 @@ document.getElementById('save-btn').addEventListener('click',()=>{if(!G){toast('
   }
   if(sessionStorage.getItem('grand_screen')==='game'&&G){
     document.body.classList.add('in-game');
+    gamePaused = false;
     initTicker();
     startWalkers();
     const lastTab=sessionStorage.getItem('grand_tab')||'hotel-panel';
