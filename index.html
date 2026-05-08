@@ -186,22 +186,100 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .log-time { font-size: 0.57rem; color: var(--text-fnt); margin-left: auto; white-space: nowrap; flex-shrink: 0; }
 
 /* ── ROOM GRID ── */
-#room-grid { padding: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 5px; overflow-y: auto; }
-.room-cell { aspect-ratio: 1; border-radius: var(--radius); background: var(--linen); border: 1px solid var(--linen3); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 1rem; position: relative; transition: all 0.25s; cursor: pointer; }
-.room-cell:hover { transform: scale(1.1); z-index: 2; box-shadow: 0 4px 12px rgba(44,31,14,0.15); }
-.room-cell .rn { position: absolute; bottom: 2px; font-size: 0.48rem; color: var(--text-fnt); font-weight: 500; }
-.room-cell.occupied { background: var(--green-lt); border-color: #a8d4b4; }
-.room-cell.dirty { background: var(--red-lt); border-color: #e0bbbb; }
-.room-cell.suite-empty { background: #f5f0ff; border-color: #c8b8e8; }
-.room-cell.suite-occ { background: #ede5ff; border-color: #b8a0e0; }
-.room-cell.maintenance { background: #fff3d0; border-color: #e0c070; }
-/* Animated guests */
-.room-cell.occupied .room-icon { animation: guestBob 3s ease-in-out infinite; animation-delay: var(--bob-delay, 0s); }
+#room-grid {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  overflow-y: auto;
+  align-content: start;
+}
+.room-cell {
+  border-radius: 8px;
+  border: 1.5px solid var(--linen3);
+  background: var(--linen);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+  overflow: hidden;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+}
+.room-cell:hover { transform: translateY(-2px); z-index: 2; box-shadow: 0 6px 20px rgba(44,31,14,0.18); }
+.room-cell .rn {
+  position: absolute; top: 5px; left: 6px;
+  font-size: 0.52rem; font-weight: 700; color: var(--text-lt);
+  letter-spacing: 0.5px; z-index: 3; font-family: 'Jost', sans-serif;
+}
+.room-floor { flex: 1; position: relative; overflow: hidden; }
+.room-floor svg { width: 100%; height: 100%; display: block; }
+.room-status-bar {
+  height: 18px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 6px;
+  font-size: 0.5rem; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; flex-shrink: 0;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+/* Standard states */
+.room-cell.rc-standard-empty  { background: #f5f1eb; border-color: #d4c8b4; }
+.room-cell.rc-standard-empty  .room-status-bar { background: #ede8e0; color: #a09070; }
+.room-cell.rc-standard-active { background: #eaf4ec; border-color: #90c8a0; }
+.room-cell.rc-standard-active .room-status-bar { background: #d4edda; color: #3a7a50; }
+.room-cell.rc-standard-sleep  { background: #eaecf4; border-color: #9aaccc; }
+.room-cell.rc-standard-sleep  .room-status-bar { background: #d8dff0; color: #4a5a90; }
+.room-cell.rc-standard-dirty  { background: #f7eded; border-color: #d8a8a8; }
+.room-cell.rc-standard-dirty  .room-status-bar { background: #f0dada; color: #904040; }
+.room-cell.rc-standard-maint  { background: #fdf5e0; border-color: #d8c070; }
+.room-cell.rc-standard-maint  .room-status-bar { background: #f5e8b8; color: #806010; }
+/* Suite states */
+.room-cell.rc-suite { height: 110px; border-width: 2px; }
+.room-cell.rc-suite-empty  { background: #f3f0fa; border-color: #b8a8dc; }
+.room-cell.rc-suite-empty  .room-status-bar { background: #e8e0f5; color: #6050a0; }
+.room-cell.rc-suite-active { background: #ede8fa; border-color: #9a80d0; }
+.room-cell.rc-suite-active .room-status-bar { background: #ddd4f5; color: #5040a0; }
+.room-cell.rc-suite-sleep  { background: #e8eaf5; border-color: #8898cc; }
+.room-cell.rc-suite-sleep  .room-status-bar { background: #d8dcf0; color: #3848a0; }
+.room-cell.rc-suite-dirty  { background: #f7eded; border-color: #c898c8; }
+.room-cell.rc-suite-dirty  .room-status-bar { background: #f0d8f0; color: #804080; }
+.room-cell.rc-suite-maint  { background: #fdf5e0; border-color: #d8c070; }
+.room-cell.rc-suite-maint  .room-status-bar { background: #f5e8b8; color: #806010; }
+.room-cell.rc-suite::after {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 0; height: 0; border-style: solid;
+  border-width: 0 18px 18px 0;
+  border-color: transparent var(--brass-lt) transparent transparent; z-index: 4;
+}
+/* Penthouse states */
+.room-cell.rc-pent { height: 130px; border-width: 2px; }
+.room-cell.rc-pent-empty  { background: #fdf8ed; border-color: #c8a84a; box-shadow: 0 0 0 1px rgba(184,150,90,0.2); }
+.room-cell.rc-pent-empty  .room-status-bar { background: #f5e8b8; color: #7a5820; }
+.room-cell.rc-pent-active { background: #fdf3e0; border-color: #c09030; box-shadow: 0 2px 12px rgba(180,140,50,0.2); }
+.room-cell.rc-pent-active .room-status-bar { background: #f0dca0; color: #6a4810; }
+.room-cell.rc-pent-sleep  { background: #f0eefa; border-color: #a090d0; }
+.room-cell.rc-pent-sleep  .room-status-bar { background: #ddd8f5; color: #4840a0; }
+.room-cell.rc-pent-dirty  { background: #f7eded; border-color: #d8a8a8; }
+.room-cell.rc-pent-dirty  .room-status-bar { background: #f0dada; color: #904040; }
+.room-cell.rc-pent-maint  { background: #fdf5e0; border-color: #d8c070; }
+.room-cell.rc-pent-maint  .room-status-bar { background: #f5e8b8; color: #806010; }
+.room-cell.rc-pent::after {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 0; height: 0; border-style: solid;
+  border-width: 0 24px 24px 0;
+  border-color: transparent var(--brass) transparent transparent; z-index: 4;
+}
+.room-cell.rc-pent-crown::before {
+  content: '♛'; position: absolute; top: 1px; right: 1px;
+  font-size: 0.52rem; color: rgba(255,255,255,0.95); z-index: 5; line-height: 1;
+}
+.room-cell .guest-figure { animation: guestBob 3s ease-in-out infinite; animation-delay: var(--bob-delay,0s); transform-origin: bottom center; }
+.room-cell.rc-standard-sleep .guest-figure,
+.room-cell.rc-suite-sleep .guest-figure,
+.room-cell.rc-pent-sleep .guest-figure { animation: sleepPulse 4s ease-in-out infinite; }
 @keyframes guestBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
-.room-cell.guest-sleeping .room-icon { animation: sleepPulse 4s ease-in-out infinite; }
-@keyframes sleepPulse { 0%,100%{opacity:1} 50%{opacity:0.65} }
-.room-cell.guest-activity { background: #e0f5e0 !important; border-color: #80c880 !important; }
-.room-cell.guest-sleeping  { background: #e8edf5 !important; border-color: #b0bcd4 !important; }
+@keyframes sleepPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes newGuestPulse { 0%{box-shadow:0 0 0 0 rgba(74,124,89,0.7)} 70%{box-shadow:0 0 0 10px rgba(74,124,89,0)} 100%{box-shadow:0 0 0 0} }
+.room-cell.just-arrived { animation: newGuestPulse 0.9s ease !important; }
 
 /* ── FLOATING LOBBY GUESTS ── */
 #lobby-guests { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
@@ -1540,38 +1618,214 @@ function renderHotel() {
 
   const grid = document.getElementById('room-grid');
   grid.innerHTML = '';
+  const night = G && isNight(G.gameHour);
   G.rooms.forEach(r => {
-    const c = document.createElement('div'); c.className='room-cell';
-    const night = G && isNight(G.gameHour);
-    if (r.status==='maintenance') c.classList.add('maintenance');
-    else if (r.status==='occupied' && (r.type==='suite'||r.type==='penthouse')) c.classList.add(night?'guest-sleeping':'suite-occ');
-    else if ((r.type==='suite'||r.type==='penthouse')&&r.status!=='occupied') c.classList.add('suite-empty');
-    else if (r.status==='occupied') c.classList.add(night?'guest-sleeping':'guest-activity');
-    else if (r.status==='dirty') c.classList.add('dirty');
+    const c = document.createElement('div');
     const bobDelay = (r.id * 0.37) % 2.5;
     c.style.setProperty('--bob-delay', `${bobDelay}s`);
-    const iconSpan = document.createElement('span');
-    iconSpan.className = 'room-icon';
-    iconSpan.textContent = roomIcon(r);
-    c.appendChild(iconSpan);
-    const rnSpan = document.createElement('span');
-    rnSpan.className = 'rn';
-    rnSpan.textContent = r.id;
-    c.appendChild(rnSpan);
-    c.title=`Room ${r.id} [${r.type}] — ${r.status}${r.guest?' · '+r.guest:''}`;
+
+    let prefix;
+    if (r.type === 'penthouse') { prefix = 'rc-pent'; }
+    else if (r.type === 'suite') { prefix = 'rc-suite'; }
+    else prefix = 'rc-standard';
+
+    let state;
+    if (r.status === 'maintenance') state = 'maint';
+    else if (r.status === 'dirty') state = 'dirty';
+    else if (r.status === 'occupied') state = night ? 'sleep' : 'active';
+    else state = 'empty';
+
+    c.className = `room-cell ${prefix} ${prefix}-${state}`;
+    if (r.type === 'penthouse') c.classList.add('rc-pent-crown');
+
+    c.innerHTML = `
+      <span class="rn">${r.id}</span>
+      <div class="room-floor">${buildRoomSVG(r, night)}</div>
+      <div class="room-status-bar">
+        <span>${roomStatusLabel(r, night)}</span>
+        ${r.status==='occupied' ? `<span>${r.timer}n</span>` : ''}
+      </div>
+    `;
+    c.title = `Room ${r.id} [${r.type}] — ${r.status}${r.guest?' · '+r.guest:''}`;
     c.addEventListener('click', e => openRoomPopup(r.id, e));
     grid.appendChild(c);
   });
 }
 
-function roomIcon(r) {
-  const night = G && isNight(G.gameHour);
-  if (r.status==='maintenance') return '🔧';
-  if (r.type==='penthouse') return r.status==='occupied'?(night?'😴':'👑'):'👑';
-  if (r.type==='suite') { if(r.status==='occupied') return night?'😴':'✨'; return '🌟'; }
-  if (r.status==='occupied') return night?'😴':guestActivity(r.id);
-  if (r.status==='dirty') return '🧹';
-  return '🛏';
+// ── SVG floor-plan builder ──
+function buildRoomSVG(r, night) {
+  const w = 100, h = 100;
+  const isOcc = r.status === 'occupied';
+  const isDirty = r.status === 'dirty';
+  const isMaint = r.status === 'maintenance';
+  const type = r.type;
+
+  if (type === 'penthouse') return buildPenthouseSVG(r, night, w, h);
+  if (type === 'suite') return buildSuiteSVG(r, night, w, h);
+  return buildStandardSVG(r, night, w, h);
+}
+
+function svgElem(tag, attrs, inner='') {
+  const a = Object.entries(attrs).map(([k,v])=>`${k}="${v}"`).join(' ');
+  return `<${tag} ${a}>${inner}</${tag}>`;
+}
+
+function buildStandardSVG(r, night, w, h) {
+  const isOcc = r.status==='occupied', isDirty=r.status==='dirty', isMaint=r.status==='maintenance';
+  const wallC = isOcc?(night?'#8898cc':'#80c090'):isDirty?'#d8a8a8':isMaint?'#d8c070':'#c8b8a0';
+  const floorC = isOcc?(night?'#d8dff0':'#e8f5ec'):isDirty?'#f7eded':isMaint?'#fdf5e0':'#f0ece4';
+  const furC = isOcc?(night?'#9090c0':'#5a8a6a'):'#b0a088';
+
+  let parts = [];
+  // Floor
+  parts.push(svgElem('rect',{x:8,y:8,width:84,height:84,rx:2,fill:floorC,stroke:wallC,'stroke-width':2}));
+  // Bed (right side)
+  parts.push(svgElem('rect',{x:52,y:18,width:34,height:44,rx:3,fill:furC,opacity:0.7}));
+  // Pillow
+  parts.push(svgElem('rect',{x:55,y:20,width:12,height:10,rx:2,fill:'white',opacity:0.6}));
+  parts.push(svgElem('rect',{x:70,y:20,width:12,height:10,rx:2,fill:'white',opacity:0.6}));
+  // Bedside table
+  parts.push(svgElem('rect',{x:40,y:22,width:10,height:10,rx:1,fill:furC,opacity:0.5}));
+  // Desk (left)
+  parts.push(svgElem('rect',{x:10,y:18,width:24,height:16,rx:1,fill:furC,opacity:0.5}));
+  // Chair
+  parts.push(svgElem('rect',{x:14,y:38,width:12,height:12,rx:2,fill:furC,opacity:0.4}));
+  // Door
+  parts.push(svgElem('rect',{x:8,y:70,width:2,height:18,fill:wallC}));
+  parts.push(svgElem('path',{d:'M10,88 Q18,88 18,78',fill:'none',stroke:wallC,'stroke-width':1.5,'stroke-dasharray':'2,1'}));
+  // Bathroom block
+  parts.push(svgElem('rect',{x:10,y:62,width:28,height:26,rx:1,fill:furC,opacity:0.2,stroke:furC,'stroke-width':1}));
+  parts.push(svgElem('ellipse',{cx:24,cy:75,rx:8,ry:6,fill:'none',stroke:furC,'stroke-width':1,opacity:0.6}));
+  // Window
+  parts.push(svgElem('rect',{x:58,y:8,width:24,height:3,fill:'#a0c8e0',opacity:0.6}));
+
+  // Guest figure if occupied
+  if (isOcc) {
+    const gx=28, gy=night?52:45;
+    const fc = night?'#7080c0':'#4a7c59';
+    parts.push(`<g class="guest-figure">` +
+      svgElem('circle',{cx:gx,cy:gy-8,r:5,fill:fc,opacity:0.85}) +
+      svgElem('rect',{x:gx-5,y:gy-3,width:10,height:10,rx:2,fill:fc,opacity:0.75}) +
+    '</g>');
+  }
+  if (isDirty) parts.push(svgElem('text',{x:50,y:70,'font-size':18,'text-anchor':'middle',opacity:0.6},'🧹'));
+  if (isMaint) parts.push(svgElem('text',{x:50,y:70,'font-size':18,'text-anchor':'middle',opacity:0.7},'🔧'));
+
+  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${parts.join('')}</svg>`;
+}
+
+function buildSuiteSVG(r, night, w, h) {
+  const isOcc = r.status==='occupied', isDirty=r.status==='dirty', isMaint=r.status==='maintenance';
+  const wallC = isOcc?(night?'#7870b8':'#9a80d0'):isDirty?'#c898c8':isMaint?'#d8c070':'#b8a8dc';
+  const floorC = isOcc?(night?'#e0dcf5':'#ede8fa'):isDirty?'#f7eded':isMaint?'#fdf5e0':'#f3f0fa';
+  const furC = isOcc?(night?'#7060a8':'#7060b0'):'#9070c0';
+  const accentC = '#c0a8e8';
+
+  let parts = [];
+  // Floor with subtle pattern
+  parts.push(svgElem('rect',{x:6,y:6,width:88,height:88,rx:3,fill:floorC,stroke:wallC,'stroke-width':2}));
+  // Decorative border line
+  parts.push(svgElem('rect',{x:9,y:9,width:82,height:82,rx:2,fill:'none',stroke:accentC,'stroke-width':0.8,opacity:0.5}));
+
+  // King bed (larger, centered right)
+  parts.push(svgElem('rect',{x:48,y:14,width:40,height:52,rx:4,fill:furC,opacity:0.7}));
+  parts.push(svgElem('rect',{x:50,y:16,width:16,height:12,rx:2,fill:'white',opacity:0.65}));
+  parts.push(svgElem('rect',{x:70,y:16,width:16,height:12,rx:2,fill:'white',opacity:0.65}));
+  // Bedspread pattern
+  parts.push(svgElem('line',{x1:48,y1:32,x2:88,y2:32,stroke:accentC,'stroke-width':0.8,opacity:0.5}));
+  // Nightstands
+  parts.push(svgElem('rect',{x:36,y:18,width:10,height:12,rx:2,fill:furC,opacity:0.5}));
+  parts.push(svgElem('rect',{x:90,y:18,width:4,height:12,rx:1,fill:furC,opacity:0.3}));
+  // Sitting area (left)
+  parts.push(svgElem('rect',{x:8,y:12,width:26,height:20,rx:3,fill:furC,opacity:0.45}));
+  parts.push(svgElem('rect',{x:10,y:36,width:11,height:11,rx:3,fill:furC,opacity:0.4}));
+  parts.push(svgElem('rect',{x:23,y:36,width:11,height:11,rx:3,fill:furC,opacity:0.4}));
+  // Coffee table
+  parts.push(svgElem('rect',{x:12,y:50,width:20,height:14,rx:2,fill:furC,opacity:0.3}));
+  // Bathroom (bottom left)
+  parts.push(svgElem('rect',{x:8,y:68,width:38,height:24,rx:2,fill:furC,opacity:0.15,stroke:furC,'stroke-width':1}));
+  parts.push(svgElem('ellipse',{cx:20,cy:80,rx:7,ry:5,fill:'none',stroke:furC,'stroke-width':1.2,opacity:0.7}));
+  parts.push(svgElem('rect',{x:30,y:72,width:12,height:16,rx:2,fill:'none',stroke:furC,'stroke-width':1,opacity:0.6}));
+  // Large windows
+  parts.push(svgElem('rect',{x:50,y:6,width:36,height:4,fill:'#a8d0e8',opacity:0.7}));
+  parts.push(svgElem('line',{x1:68,y1:6,x2:68,y2:10,stroke:'white','stroke-width':1,opacity:0.8}));
+
+  if (isOcc) {
+    const gx=26, gy=night?38:30;
+    const fc = night?'#6060a8':'#5040a0';
+    parts.push(`<g class="guest-figure">` +
+      svgElem('circle',{cx:gx,cy:gy-7,r:5.5,fill:fc,opacity:0.9}) +
+      svgElem('rect',{x:gx-5,y:gy-2,width:10,height:11,rx:2,fill:fc,opacity:0.8}) +
+    '</g>');
+  }
+  if (isDirty) parts.push(svgElem('text',{x:50,y:72,'font-size':18,'text-anchor':'middle',opacity:0.6},'🧹'));
+  if (isMaint) parts.push(svgElem('text',{x:50,y:72,'font-size':18,'text-anchor':'middle',opacity:0.7},'🔧'));
+
+  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${parts.join('')}</svg>`;
+}
+
+function buildPenthouseSVG(r, night, w, h) {
+  const isOcc = r.status==='occupied', isDirty=r.status==='dirty', isMaint=r.status==='maintenance';
+  const wallC = isOcc?(night?'#8870a8':'#c09030'):isDirty?'#d8a8a8':isMaint?'#d8c070':'#c8a84a';
+  const floorC = isOcc?(night?'#f0eefa':'#fdf3e0'):isDirty?'#f7eded':isMaint?'#fdf5e0':'#fdf8ed';
+  const furC = isOcc?(night?'#9070b0':'#a07830'):'#b89040';
+  const goldC = '#c8a840';
+
+  let parts = [];
+  // Floor with grid pattern
+  parts.push(svgElem('rect',{x:5,y:5,width:90,height:90,rx:4,fill:floorC,stroke:wallC,'stroke-width':2.5}));
+  // Gold inner border
+  parts.push(svgElem('rect',{x:8,y:8,width:84,height:84,rx:3,fill:'none',stroke:goldC,'stroke-width':1.2,opacity:0.6}));
+  // Floor tile hint
+  parts.push(svgElem('line',{x1:5,y1:50,x2:95,y2:50,stroke:goldC,'stroke-width':0.5,opacity:0.25}));
+  parts.push(svgElem('line',{x1:50,y1:5,x2:50,y2:95,stroke:goldC,'stroke-width':0.5,opacity:0.25}));
+
+  // Master bed (right, large)
+  parts.push(svgElem('rect',{x:50,y:10,width:40,height:50,rx:5,fill:furC,opacity:0.75}));
+  parts.push(svgElem('rect',{x:52,y:12,width:16,height:14,rx:3,fill:'white',opacity:0.7}));
+  parts.push(svgElem('rect',{x:72,y:12,width:16,height:14,rx:3,fill:'white',opacity:0.7}));
+  parts.push(svgElem('line',{x1:50,y1:30,x2:90,y2:30,stroke:goldC,'stroke-width':1,opacity:0.6}));
+  parts.push(svgElem('rect',{x:50,y:30,width:40,height:30,rx:0,fill:furC,opacity:0.2}));
+  // Nightstands (gold-edged)
+  parts.push(svgElem('rect',{x:37,y:13,width:11,height:14,rx:2,fill:furC,opacity:0.6,stroke:goldC,'stroke-width':0.8}));
+  // Living area
+  parts.push(svgElem('rect',{x:8,y:10,width:26,height:22,rx:3,fill:furC,opacity:0.5}));
+  parts.push(svgElem('rect',{x:10,y:36,width:12,height:12,rx:3,fill:furC,opacity:0.45}));
+  parts.push(svgElem('rect',{x:24,y:36,width:12,height:12,rx:3,fill:furC,opacity:0.45}));
+  // Dining area
+  parts.push(svgElem('circle',{cx:22,cy:62,r:10,fill:furC,opacity:0.3,stroke:furC,'stroke-width':1.2}));
+  parts.push(svgElem('circle',{cx:14,cy:58,r:4,fill:furC,opacity:0.35}));
+  parts.push(svgElem('circle',{cx:30,cy:58,r:4,fill:furC,opacity:0.35}));
+  parts.push(svgElem('circle',{cx:22,cy:52,r:4,fill:furC,opacity:0.35}));
+  // Luxury bathroom
+  parts.push(svgElem('rect',{x:50,y:64,width:40,height:26,rx:2,fill:furC,opacity:0.15,stroke:goldC,'stroke-width':1}));
+  parts.push(svgElem('ellipse',{cx:62,cy:77,rx:8,ry:6,fill:'none',stroke:goldC,'stroke-width':1.2,opacity:0.7}));
+  parts.push(svgElem('rect',{x:74,y:67,width:13,height:18,rx:3,fill:'none',stroke:goldC,'stroke-width':1,opacity:0.6}));
+  // Floor-to-ceiling windows
+  parts.push(svgElem('rect',{x:52,y:5,width:36,height:5,fill:'#b0d8f0',opacity:0.8}));
+  parts.push(svgElem('line',{x1:70,y1:5,x2:70,y2:10,stroke:'white','stroke-width':1.2,opacity:0.9}));
+  // Second window
+  parts.push(svgElem('rect',{x:5,y:10,width:3,height:20,fill:'#b0d8f0',opacity:0.6}));
+
+  if (isOcc) {
+    const gx=22, gy=night?44:32;
+    const fc = night?'#8060a8':'#906020';
+    parts.push(`<g class="guest-figure">` +
+      svgElem('circle',{cx:gx,cy:gy-8,r:6,fill:fc,opacity:0.9}) +
+      svgElem('rect',{x:gx-6,y:gy-3,width:12,height:12,rx:2,fill:fc,opacity:0.8}) +
+    '</g>');
+  }
+  if (isDirty) parts.push(svgElem('text',{x:50,y:72,'font-size':20,'text-anchor':'middle',opacity:0.6},'🧹'));
+  if (isMaint) parts.push(svgElem('text',{x:50,y:72,'font-size':20,'text-anchor':'middle',opacity:0.7},'🔧'));
+
+  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${parts.join('')}</svg>`;
+}
+
+function roomStatusLabel(r, night) {
+  if (r.status==='maintenance') return '🔧 Maint.';
+  if (r.status==='dirty') return '🧹 Dirty';
+  if (r.status==='occupied') return night ? '😴 Sleeping' : '✦ Occupied';
+  return r.type==='penthouse'?'♛ Available':r.type==='suite'?'✦ Available':'Available';
 }
 
 // ════════════════════════════
