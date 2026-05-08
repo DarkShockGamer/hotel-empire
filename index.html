@@ -200,13 +200,16 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
   background: var(--linen);
   position: relative;
   cursor: pointer;
-  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+  transition: box-shadow 0.18s, border-color 0.18s;
   overflow: hidden;
   height: 90px;
   display: flex;
   flex-direction: column;
+  will-change: transform;
+  transform: translateZ(0);
 }
-.room-cell:hover { transform: translateY(-2px); z-index: 2; box-shadow: 0 6px 20px rgba(44,31,14,0.18); }
+.room-cell:hover { transform: translateY(-2px) translateZ(0); z-index: 2; box-shadow: 0 6px 20px rgba(44,31,14,0.18); }
+.room-cell:hover .guest-figure { animation-play-state: paused; }
 .room-cell .rn {
   position: absolute; top: 5px; left: 6px;
   font-size: 0.52rem; font-weight: 700; color: var(--text-lt);
@@ -1617,16 +1620,14 @@ function renderHotel() {
   document.getElementById('kpi-sat-sub').textContent = sat>=80?'Excellent':sat>=65?'Good':sat>=50?'Fair':sat>=35?'Poor':'Critical';
 
   const grid = document.getElementById('room-grid');
-  grid.innerHTML = '';
   const night = G && isNight(G.gameHour);
-  G.rooms.forEach(r => {
-    const c = document.createElement('div');
-    const bobDelay = (r.id * 0.37) % 2.5;
-    c.style.setProperty('--bob-delay', `${bobDelay}s`);
 
+  // Build a state key for each room to detect changes
+  G.rooms.forEach((r, idx) => {
+    const bobDelay = (r.id * 0.37) % 2.5;
     let prefix;
-    if (r.type === 'penthouse') { prefix = 'rc-pent'; }
-    else if (r.type === 'suite') { prefix = 'rc-suite'; }
+    if (r.type === 'penthouse') prefix = 'rc-pent';
+    else if (r.type === 'suite') prefix = 'rc-suite';
     else prefix = 'rc-standard';
 
     let state;
@@ -1635,9 +1636,23 @@ function renderHotel() {
     else if (r.status === 'occupied') state = night ? 'sleep' : 'active';
     else state = 'empty';
 
-    c.className = `room-cell ${prefix} ${prefix}-${state}`;
-    if (r.type === 'penthouse') c.classList.add('rc-pent-crown');
+    const newClass = `room-cell ${prefix} ${prefix}-${state}${r.type==='penthouse'?' rc-pent-crown':''}`;
+    const stateKey = `${r.type}|${state}|${r.timer}`;
 
+    // Check if cell already exists and is up to date
+    let c = grid.children[idx];
+    if (c && c.dataset.stateKey === stateKey) return; // no change, skip redraw
+
+    if (!c) {
+      // Create new cell
+      c = document.createElement('div');
+      c.style.setProperty('--bob-delay', `${bobDelay}s`);
+      c.addEventListener('click', e => openRoomPopup(r.id, e));
+      grid.appendChild(c);
+    }
+
+    c.className = newClass;
+    c.dataset.stateKey = stateKey;
     c.innerHTML = `
       <span class="rn">${r.id}</span>
       <div class="room-floor">${buildRoomSVG(r, night)}</div>
@@ -1647,9 +1662,10 @@ function renderHotel() {
       </div>
     `;
     c.title = `Room ${r.id} [${r.type}] — ${r.status}${r.guest?' · '+r.guest:''}`;
-    c.addEventListener('click', e => openRoomPopup(r.id, e));
-    grid.appendChild(c);
   });
+
+  // Remove excess cells if rooms decreased
+  while (grid.children.length > G.rooms.length) grid.removeChild(grid.lastChild);
 }
 
 // ── SVG floor-plan builder ──
