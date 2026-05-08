@@ -458,7 +458,8 @@ body.night-mode .clock-phase { color: #8090c0; }
   display: flex; align-items: center; justify-content: center;
   opacity: 0; pointer-events: none; transition: opacity 0.3s;
 }
-#paused-overlay.show { opacity: 1; pointer-events: all; }
+/* Only visible when both paused AND in-game */
+body.in-game #paused-overlay.show { opacity: 1; pointer-events: all; }
 .paused-badge {
   background: var(--espresso); border: 1px solid rgba(184,150,90,0.4);
   color: var(--brass-lt); padding: 10px 24px; border-radius: 20px;
