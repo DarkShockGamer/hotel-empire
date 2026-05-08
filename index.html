@@ -1850,15 +1850,27 @@ function roomStatusLabel(r, night) {
 function renderStaff() {
   if (!G) return;
   const grid = document.getElementById('staff-grid'); if (!grid) return;
-  grid.innerHTML = '';
-  STAFF_ROSTER.forEach(s => {
+
+  STAFF_ROSTER.forEach((s, idx) => {
     const upgrade = G.upgrades.find(u=>u.id===s.requiresUpgrade);
     const isUnlocked = upgrade && upgrade.purchased;
-    const card = document.createElement('div');
-    card.className = `staff-card${isUnlocked?'':' locked-card'}`;
     const cd = staffCooldowns[s.id]||0;
-    const actionDisabled = !isUnlocked || cd > 0;
     const cdSecs = Math.ceil(cd * (LOOP_MS/1000));
+    // State key — only redraw if something actually changed
+    const stateKey = `${isUnlocked}|${cd > 0 ? cdSecs : 0}`;
+
+    let card = grid.children[idx];
+    if (card && card.dataset.stateKey === stateKey) return;
+
+    const isNew = !card;
+    if (isNew) {
+      card = document.createElement('div');
+      grid.appendChild(card);
+    }
+
+    card.className = `staff-card${isUnlocked?'':' locked-card'}`;
+    card.dataset.stateKey = stateKey;
+    const actionDisabled = !isUnlocked || cd > 0;
     card.innerHTML = `
       <div class="sc-icon">${s.icon}</div>
       <div class="sc-name">${s.name}</div>
@@ -1881,10 +1893,11 @@ function renderStaff() {
         if (staffCooldowns[s.id]>0) return;
         s.action.effect(G);
         staffCooldowns[s.id] = s.action.cooldownTicks;
+        // Force redraw of just this card by clearing its key
+        card.dataset.stateKey = '';
         renderStaff();
       });
     }
-    grid.appendChild(card);
   });
 }
 
