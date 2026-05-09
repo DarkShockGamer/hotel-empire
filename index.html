@@ -189,7 +189,7 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 #room-grid {
   padding: 12px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 8px;
   overflow-y: auto;
   align-content: start;
@@ -202,7 +202,7 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
   cursor: pointer;
   transition: box-shadow 0.18s, border-color 0.18s;
   overflow: hidden;
-  height: 90px;
+  height: 150px;
   display: flex;
   flex-direction: column;
   will-change: transform;
@@ -236,7 +236,7 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
 .room-cell.rc-standard-maint  { background: #fdf5e0; border-color: #d8c070; }
 .room-cell.rc-standard-maint  .room-status-bar { background: #f5e8b8; color: #806010; }
 /* Suite states */
-.room-cell.rc-suite { height: 110px; border-width: 2px; }
+.room-cell.rc-suite { height: 150px; border-width: 2px; }
 .room-cell.rc-suite-empty  { background: #f3f0fa; border-color: #b8a8dc; }
 .room-cell.rc-suite-empty  .room-status-bar { background: #e8e0f5; color: #6050a0; }
 .room-cell.rc-suite-active { background: #ede8fa; border-color: #9a80d0; }
@@ -254,7 +254,7 @@ body.in-game #screen-game { opacity: 1; pointer-events: all; transform: translat
   border-color: transparent var(--brass-lt) transparent transparent; z-index: 4;
 }
 /* Penthouse states */
-.room-cell.rc-pent { height: 130px; border-width: 2px; }
+.room-cell.rc-pent { height: 150px; border-width: 2px; }
 .room-cell.rc-pent-empty  { background: #fdf8ed; border-color: #c8a84a; box-shadow: 0 0 0 1px rgba(184,150,90,0.2); }
 .room-cell.rc-pent-empty  .room-status-bar { background: #f5e8b8; color: #7a5820; }
 .room-cell.rc-pent-active { background: #fdf3e0; border-color: #c09030; box-shadow: 0 2px 12px rgba(180,140,50,0.2); }
@@ -1688,219 +1688,448 @@ function svgElem(tag, attrs, inner='') {
 
 function buildStandardSVG(r, night, w, h) {
   const isOcc = r.status==='occupied', isDirty=r.status==='dirty', isMaint=r.status==='maintenance';
-  const wallC = isOcc?(night?'#8898cc':'#80c090'):isDirty?'#d8a8a8':isMaint?'#d8c070':'#c8b8a0';
+  const wallC  = isOcc?(night?'#8898cc':'#80c090'):isDirty?'#d8a8a8':isMaint?'#d8c070':'#c8b8a0';
   const floorC = isOcc?(night?'#d8dff0':'#e8f5ec'):isDirty?'#f7eded':isMaint?'#fdf5e0':'#f0ece4';
-  const furC = isOcc?(night?'#9090c0':'#5a8a6a'):'#b0a088';
+  const furC   = isOcc?(night?'#7080b8':'#4a7c59'):'#a09078';
+  const wallW  = 3;
+  // viewBox 160x120
+  let p = [];
 
-  let parts = [];
-  // Floor
-  parts.push(svgElem('rect',{x:8,y:8,width:84,height:84,rx:2,fill:floorC,stroke:wallC,'stroke-width':2}));
-  // Bed (right side)
-  parts.push(svgElem('rect',{x:52,y:18,width:34,height:44,rx:3,fill:furC,opacity:0.7}));
-  // Pillow
-  parts.push(svgElem('rect',{x:55,y:20,width:12,height:10,rx:2,fill:'white',opacity:0.6}));
-  parts.push(svgElem('rect',{x:70,y:20,width:12,height:10,rx:2,fill:'white',opacity:0.6}));
-  // Bedside table
-  parts.push(svgElem('rect',{x:40,y:22,width:10,height:10,rx:1,fill:furC,opacity:0.5}));
-  // Desk (left)
-  parts.push(svgElem('rect',{x:10,y:18,width:24,height:16,rx:1,fill:furC,opacity:0.5}));
-  // Chair
-  parts.push(svgElem('rect',{x:14,y:38,width:12,height:12,rx:2,fill:furC,opacity:0.4}));
-  // Door
-  parts.push(svgElem('rect',{x:8,y:70,width:2,height:18,fill:wallC}));
-  parts.push(svgElem('path',{d:'M10,88 Q18,88 18,78',fill:'none',stroke:wallC,'stroke-width':1.5,'stroke-dasharray':'2,1'}));
-  // Bathroom block
-  parts.push(svgElem('rect',{x:10,y:62,width:28,height:26,rx:1,fill:furC,opacity:0.2,stroke:furC,'stroke-width':1}));
-  parts.push(svgElem('ellipse',{cx:24,cy:75,rx:8,ry:6,fill:'none',stroke:furC,'stroke-width':1,opacity:0.6}));
-  // Window
-  parts.push(svgElem('rect',{x:58,y:8,width:24,height:3,fill:'#a0c8e0',opacity:0.6}));
+  // ── Outer walls ──
+  p.push(svgElem('rect',{x:0,y:0,width:160,height:120,fill:wallC}));
+  // Floor interior
+  p.push(svgElem('rect',{x:wallW,y:wallW,width:160-wallW*2,height:120-wallW*2,fill:floorC}));
 
-  // Guest figure if occupied
+  // ── Window (top wall, spans most of top) ──
+  p.push(svgElem('rect',{x:60,y:0,width:72,height:wallW,fill:'#a0d0e8',opacity:0.9}));
+  p.push(svgElem('line',{x1:96,y1:0,x2:96,y2:wallW,stroke:'white','stroke-width':1.2,opacity:0.9}));
+
+  // ── Door (bottom-left wall) ──
+  p.push(svgElem('rect',{x:wallW,y:95,width:18,height:wallW,fill:floorC})); // door gap
+  // Door arc
+  p.push(svgElem('path',{d:`M${wallW},95 Q${wallW+18},95 ${wallW+18},113`,fill:'none',stroke:wallC,'stroke-width':1,'stroke-dasharray':'3,2',opacity:0.7}));
+
+  // ── Bathroom (top-left corner, walled off) ──
+  // Bathroom wall partition (right side of bathroom)
+  p.push(svgElem('line',{x1:52,y1:wallW,x2:52,y2:48,stroke:wallC,'stroke-width':wallW}));
+  // Bathroom floor tint
+  p.push(svgElem('rect',{x:wallW,y:wallW,width:49,height:45,fill:'#e8e4dc',opacity:0.5}));
+  // Toilet (top-left of bathroom) — viewed from above
+  p.push(svgElem('rect',{x:6,y:6,width:14,height:18,rx:2,fill:furC,opacity:0.35}));
+  p.push(svgElem('ellipse',{cx:13,cy:20,rx:6,ry:8,fill:'none',stroke:furC,'stroke-width':1.2,opacity:0.6}));
+  // Sink (top-right of bathroom)
+  p.push(svgElem('rect',{x:26,y:6,width:20,height:14,rx:3,fill:'none',stroke:furC,'stroke-width':1.5,opacity:0.65}));
+  p.push(svgElem('circle',{cx:36,cy:13,r:3,fill:'none',stroke:furC,'stroke-width':1,opacity:0.5}));
+  // Bathtub / shower (bottom of bathroom)
+  p.push(svgElem('rect',{x:6,y:28,width:42,height:17,rx:3,fill:'none',stroke:furC,'stroke-width':1.5,opacity:0.6}));
+  p.push(svgElem('ellipse',{cx:27,cy:36,rx:14,ry:6,fill:'none',stroke:furC,'stroke-width':1,opacity:0.35}));
+
+  // ── Bed (right side, top-down architectural style) ──
+  // Headboard
+  p.push(svgElem('rect',{x:58,y:6,width:74,height:10,rx:2,fill:furC,opacity:0.9}));
+  // Mattress body
+  p.push(svgElem('rect',{x:60,y:16,width:70,height:56,rx:3,fill:furC,opacity:0.55}));
+  // Bedding / duvet
+  p.push(svgElem('rect',{x:63,y:19,width:64,height:48,rx:3,fill:'white',opacity:0.6}));
+  // Pillow left
+  p.push(svgElem('rect',{x:65,y:21,width:26,height:15,rx:4,fill:'white',opacity:0.95}));
+  p.push(svgElem('rect',{x:66,y:22,width:24,height:13,rx:3,fill:'white',stroke:furC,'stroke-width':0.8,opacity:0.5}));
+  // Pillow right
+  p.push(svgElem('rect',{x:99,y:21,width:26,height:15,rx:4,fill:'white',opacity:0.95}));
+  p.push(svgElem('rect',{x:100,y:22,width:24,height:13,rx:3,fill:'white',stroke:furC,'stroke-width':0.8,opacity:0.5}));
+  // Duvet fold line
+  p.push(svgElem('line',{x1:63,y1:36,x2:127,y2:36,stroke:furC,'stroke-width':0.8,opacity:0.35}));
+  // Footboard
+  p.push(svgElem('rect',{x:60,y:72,width:70,height:6,rx:2,fill:furC,opacity:0.7}));
+
+  // ── Nightstands ──
+  p.push(svgElem('rect',{x:58,y:20,width:0,height:0})); // spacer
+  // Left nightstand
+  p.push(svgElem('rect',{x:55,y:20,width:4,height:12,rx:1,fill:furC,opacity:0.6}));
+  // Right nightstand
+  p.push(svgElem('rect',{x:131,y:20,width:24,height:12,rx:1,fill:furC,opacity:0.6}));
+  // Lamp on right nightstand
+  p.push(svgElem('circle',{cx:143,cy:26,r:4,fill:furC,opacity:0.4}));
+
+  // ── Desk + chair (bottom left area) ──
+  p.push(svgElem('rect',{x:56,y:82,width:40,height:20,rx:2,fill:furC,opacity:0.45}));
+  // Chair (below desk)
+  p.push(svgElem('rect',{x:68,y:104,width:16,height:14,rx:3,fill:furC,opacity:0.35}));
+
+  // ── Wardrobe (far right wall) ──
+  p.push(svgElem('rect',{x:134,y:6,width:20,height:52,rx:1,fill:furC,opacity:0.4}));
+  p.push(svgElem('line',{x1:144,y1:6,x2:144,y2:58,stroke:furC,'stroke-width':0.8,opacity:0.5}));
+  p.push(svgElem('line',{x1:134,y1:32,x2:154,y2:32,stroke:furC,'stroke-width':0.5,opacity:0.4}));
+
+  // ── Sofa / seating (bottom right) ──
+  p.push(svgElem('rect',{x:100,y:84,width:52,height:18,rx:4,fill:furC,opacity:0.38}));
+  p.push(svgElem('rect',{x:100,y:84,width:52,height:6,rx:3,fill:furC,opacity:0.25})); // back cushions
+  p.push(svgElem('rect',{x:152,y:84,width:3,height:18,rx:1,fill:furC,opacity:0.35})); // right arm
+
+  // Guest figure
   if (isOcc) {
-    const gx=28, gy=night?52:45;
-    const fc = night?'#7080c0':'#4a7c59';
-    parts.push(`<g class="guest-figure">` +
-      svgElem('circle',{cx:gx,cy:gy-8,r:5,fill:fc,opacity:0.85}) +
-      svgElem('rect',{x:gx-5,y:gy-3,width:10,height:10,rx:2,fill:fc,opacity:0.75}) +
+    const gx=36, gy=night?80:68;
+    const fc = night?'#5060a8':'#2a5a3a';
+    p.push(`<g class="guest-figure">` +
+      svgElem('circle',{cx:gx,cy:gy-8,r:6,fill:fc,opacity:0.85}) +
+      svgElem('rect',{x:gx-6,y:gy-3,width:12,height:11,rx:2,fill:fc,opacity:0.75}) +
     '</g>');
   }
-  if (isDirty) parts.push(svgElem('text',{x:50,y:70,'font-size':18,'text-anchor':'middle',opacity:0.6},'🧹'));
-  if (isMaint) parts.push(svgElem('text',{x:50,y:70,'font-size':18,'text-anchor':'middle',opacity:0.7},'🔧'));
+  if (isDirty) p.push(svgElem('text',{x:80,y:80,'font-size':22,'text-anchor':'middle',opacity:0.6},'🧹'));
+  if (isMaint) p.push(svgElem('text',{x:80,y:80,'font-size':22,'text-anchor':'middle',opacity:0.7},'🔧'));
 
-  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${parts.join('')}</svg>`;
+  return `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">${p.join('')}</svg>`;
 }
 
 function buildSuiteSVG(r, night, w, h) {
   const isOcc = r.status==='occupied', isDirty=r.status==='dirty', isMaint=r.status==='maintenance';
-  const wallC = isOcc?(night?'#7870b8':'#9a80d0'):isDirty?'#c898c8':isMaint?'#d8c070':'#b8a8dc';
+  const wallC  = isOcc?(night?'#7870b8':'#9a80d0'):isDirty?'#c898c8':isMaint?'#d8c070':'#b8a8dc';
   const floorC = isOcc?(night?'#e0dcf5':'#ede8fa'):isDirty?'#f7eded':isMaint?'#fdf5e0':'#f3f0fa';
-  const furC = isOcc?(night?'#7060a8':'#7060b0'):'#9070c0';
+  const furC   = isOcc?(night?'#6050a0':'#6050b0'):'#8060b0';
   const accentC = '#c0a8e8';
+  const wallW   = 3;
 
-  let parts = [];
-  // Floor with subtle pattern
-  parts.push(svgElem('rect',{x:6,y:6,width:88,height:88,rx:3,fill:floorC,stroke:wallC,'stroke-width':2}));
-  // Decorative border line
-  parts.push(svgElem('rect',{x:9,y:9,width:82,height:82,rx:2,fill:'none',stroke:accentC,'stroke-width':0.8,opacity:0.5}));
+  let p = [];
 
-  // Room divider (horizontal wall splitting bedroom from sitting area)
-  parts.push(svgElem('line',{x1:6,y1:56,x2:94,y2:56,stroke:wallC,'stroke-width':1.5,opacity:0.7}));
+  // ── Outer walls ──
+  p.push(svgElem('rect',{x:0,y:0,width:160,height:120,fill:wallC}));
+  p.push(svgElem('rect',{x:wallW,y:wallW,width:160-wallW*2,height:120-wallW*2,fill:floorC}));
 
-  // ── Bedroom 1 (top half) ──
-  // Bed 1
-  parts.push(svgElem('rect',{x:34,y:12,width:52,height:26,rx:3,fill:furC,opacity:0.7}));
-  parts.push(svgElem('rect',{x:36,y:14,width:14,height:10,rx:2,fill:'white',opacity:0.65}));
-  parts.push(svgElem('rect',{x:54,y:14,width:14,height:10,rx:2,fill:'white',opacity:0.65}));
-  parts.push(svgElem('rect',{x:72,y:14,width:10,height:10,rx:2,fill:'white',opacity:0.5}));
-  // Bedspread line
-  parts.push(svgElem('line',{x1:34,y1:26,x2:86,y2:26,stroke:accentC,'stroke-width':0.8,opacity:0.5}));
-  // Nightstand (left of bed 1)
-  parts.push(svgElem('rect',{x:22,y:14,width:9,height:10,rx:2,fill:furC,opacity:0.5}));
-  // Window top
-  parts.push(svgElem('rect',{x:38,y:6,width:42,height:4,fill:'#a8d0e8',opacity:0.7}));
-  parts.push(svgElem('line',{x1:59,y1:6,x2:59,y2:10,stroke:'white','stroke-width':1,opacity:0.8}));
+  // ── Internal vertical wall: left sitting zone (0-58) | right bedroom wing (58-160) ──
+  p.push(svgElem('rect',{x:58,y:wallW,width:wallW,height:82,fill:wallC}));
+  // Door gap in vertical partition at y=32-50
+  p.push(svgElem('rect',{x:58,y:32,width:wallW,height:18,fill:floorC}));
+  p.push(svgElem('path',{d:`M61,32 Q78,32 78,50`,fill:'none',stroke:wallC,'stroke-width':1,'stroke-dasharray':'3,2',opacity:0.6}));
 
-  // ── Bedroom 2 (bottom half) ──
-  // Bed 2
-  parts.push(svgElem('rect',{x:34,y:60,width:52,height:26,rx:3,fill:furC,opacity:0.7}));
-  parts.push(svgElem('rect',{x:36,y:62,width:14,height:10,rx:2,fill:'white',opacity:0.65}));
-  parts.push(svgElem('rect',{x:54,y:62,width:14,height:10,rx:2,fill:'white',opacity:0.65}));
-  parts.push(svgElem('rect',{x:72,y:62,width:10,height:10,rx:2,fill:'white',opacity:0.5}));
-  // Bedspread line
-  parts.push(svgElem('line',{x1:34,y1:74,x2:86,y2:74,stroke:accentC,'stroke-width':0.8,opacity:0.5}));
-  // Nightstand (left of bed 2)
-  parts.push(svgElem('rect',{x:22,y:62,width:9,height:10,rx:2,fill:furC,opacity:0.5}));
+  // ── Horizontal wall: splits bedroom wing top (BR1) / bottom (BR2) at y=62 ──
+  p.push(svgElem('rect',{x:58,y:62,width:99,height:wallW,fill:wallC}));
+  // Door gap at x=58-76
+  p.push(svgElem('rect',{x:58,y:62,width:18,height:wallW,fill:floorC}));
+  p.push(svgElem('path',{d:`M61,65 Q61,78 76,78`,fill:'none',stroke:wallC,'stroke-width':1,'stroke-dasharray':'3,2',opacity:0.6}));
 
-  // ── Shared sitting area (left column) ──
-  parts.push(svgElem('rect',{x:8,y:14,width:12,height:18,rx:2,fill:furC,opacity:0.4}));
-  parts.push(svgElem('rect',{x:8,y:36,width:12,height:18,rx:2,fill:furC,opacity:0.4}));
+  // ── Windows (top wall) ──
+  p.push(svgElem('rect',{x:8,y:0,width:38,height:wallW,fill:'#a8d0e8',opacity:0.85}));
+  p.push(svgElem('line',{x1:27,y1:0,x2:27,y2:wallW,stroke:'white','stroke-width':1.5}));
+  p.push(svgElem('rect',{x:68,y:0,width:36,height:wallW,fill:'#a8d0e8',opacity:0.85}));
+  p.push(svgElem('line',{x1:86,y1:0,x2:86,y2:wallW,stroke:'white','stroke-width':1.5}));
+  p.push(svgElem('rect',{x:114,y:0,width:36,height:wallW,fill:'#a8d0e8',opacity:0.85}));
+  p.push(svgElem('line',{x1:132,y1:0,x2:132,y2:wallW,stroke:'white','stroke-width':1.5}));
 
-  // Bathroom (bottom-left)
-  parts.push(svgElem('rect',{x:8,y:68,width:12,height:20,rx:1,fill:furC,opacity:0.18,stroke:furC,'stroke-width':1}));
-  parts.push(svgElem('ellipse',{cx:14,cy:78,rx:5,ry:4,fill:'none',stroke:furC,'stroke-width':1.2,opacity:0.7}));
+  // ── Entry door (bottom-left) ──
+  p.push(svgElem('rect',{x:wallW,y:100,width:20,height:wallW,fill:floorC}));
+  p.push(svgElem('path',{d:`M${wallW},100 Q${wallW+20},100 ${wallW+20},117`,fill:'none',stroke:wallC,'stroke-width':1,'stroke-dasharray':'3,2',opacity:0.7}));
+
+  // ── LEFT WING: Sitting area ──
+  // Sofa (against top wall, U-shape: back + 2 sides)
+  p.push(svgElem('rect',{x:5,y:6,width:44,height:13,rx:4,fill:furC,opacity:0.45})); // back
+  p.push(svgElem('rect',{x:5,y:6,width:5,height:22,rx:2,fill:furC,opacity:0.42}));  // left arm
+  p.push(svgElem('rect',{x:44,y:6,width:5,height:22,rx:2,fill:furC,opacity:0.42})); // right arm
+  // Sofa seat
+  p.push(svgElem('rect',{x:10,y:10,width:34,height:16,rx:2,fill:furC,opacity:0.28}));
+  // Coffee table (oval)
+  p.push(svgElem('ellipse',{cx:29,cy:37,rx:16,ry:9,fill:furC,opacity:0.28,stroke:furC,'stroke-width':1}));
+  // Armchair opposite sofa
+  p.push(svgElem('rect',{x:7,y:44,width:16,height:13,rx:3,fill:furC,opacity:0.38}));
+  p.push(svgElem('rect',{x:7,y:44,width:16,height:4,rx:2,fill:furC,opacity:0.2}));
+  // TV unit (against bottom of sitting partition wall)
+  p.push(svgElem('rect',{x:5,y:59,width:50,height:5,rx:1,fill:furC,opacity:0.5}));
+  p.push(svgElem('rect',{x:12,y:59,width:36,height:4,fill:'#283040',opacity:0.35,rx:1}));
+
+  // ── Left shared bathroom (bottom-left corner) ──
+  p.push(svgElem('rect',{x:wallW,y:wallW+81,width:55,height:wallW,fill:wallC})); // bath wall
+  p.push(svgElem('rect',{x:wallW,y:77,width:16,height:wallW,fill:floorC}));      // door gap
+  p.push(svgElem('rect',{x:wallW,y:80,width:55,height:37,fill:'#e4e0d8',opacity:0.45}));
+  // Bathtub (top-down)
+  p.push(svgElem('rect',{x:5,y:83,width:30,height:16,rx:4,fill:'none',stroke:furC,'stroke-width':1.5,opacity:0.65}));
+  p.push(svgElem('ellipse',{cx:20,cy:91,rx:11,ry:5,fill:'none',stroke:furC,'stroke-width':1,opacity:0.3}));
+  // Toilet
+  p.push(svgElem('rect',{x:37,y:83,width:11,height:14,rx:2,fill:furC,opacity:0.28}));
+  p.push(svgElem('ellipse',{cx:42,cy:95,rx:4,ry:6,fill:'none',stroke:furC,'stroke-width':1.2,opacity:0.6}));
+  // Sink
+  p.push(svgElem('rect',{x:5,y:101,width:13,height:13,rx:3,fill:'none',stroke:furC,'stroke-width':1.5,opacity:0.65}));
+  p.push(svgElem('circle',{cx:11,cy:107,r:3,fill:'none',stroke:furC,'stroke-width':1,opacity:0.5}));
+
+  // ── BEDROOM 1 — top-right (headboard against top wall) ──
+  // Headboard
+  p.push(svgElem('rect',{x:62,y:wallW,width:75,height:9,rx:2,fill:furC,opacity:0.9}));
+  // Mattress
+  p.push(svgElem('rect',{x:63,y:12,width:73,height:42,rx:3,fill:furC,opacity:0.45}));
+  // Duvet
+  p.push(svgElem('rect',{x:65,y:14,width:69,height:38,rx:3,fill:'white',opacity:0.7}));
+  // Pillow L
+  p.push(svgElem('rect',{x:67,y:16,width:28,height:14,rx:4,fill:'white',opacity:1}));
+  p.push(svgElem('rect',{x:68,y:17,width:26,height:12,rx:3,fill:'white',stroke:accentC,'stroke-width':1,opacity:0.8}));
+  // Pillow R
+  p.push(svgElem('rect',{x:103,y:16,width:28,height:14,rx:4,fill:'white',opacity:1}));
+  p.push(svgElem('rect',{x:104,y:17,width:26,height:12,rx:3,fill:'white',stroke:accentC,'stroke-width':1,opacity:0.8}));
+  // Duvet fold crease
+  p.push(svgElem('line',{x1:65,y1:32,x2:134,y2:32,stroke:accentC,'stroke-width':1,opacity:0.4}));
+  // Footboard
+  p.push(svgElem('rect',{x:63,y:54,width:73,height:5,rx:2,fill:furC,opacity:0.75}));
+  // Nightstand left (in gap between partition wall and bed)
+  // Nightstand right (against right wall)
+  p.push(svgElem('rect',{x:137,y:14,width:16,height:14,rx:2,fill:furC,opacity:0.55}));
+  p.push(svgElem('circle',{cx:145,cy:21,r:3.5,fill:furC,opacity:0.4}));
+  // Wardrobe (right wall BR1)
+  p.push(svgElem('rect',{x:140,y:32,width:16,height:26,rx:1,fill:furC,opacity:0.42}));
+  p.push(svgElem('line',{x1:148,y1:32,x2:148,y2:58,stroke:furC,'stroke-width':1,opacity:0.5}));
+  p.push(svgElem('circle',{cx:148,cy:45,r:1.5,fill:furC,opacity:0.6}));
+
+  // ── BEDROOM 2 — bottom-right (headboard against horizontal partition wall) ──
+  // Headboard (just below h-wall at y=65)
+  p.push(svgElem('rect',{x:62,y:66,width:75,height:9,rx:2,fill:furC,opacity:0.9}));
+  // Mattress
+  p.push(svgElem('rect',{x:63,y:75,width:73,height:38,rx:3,fill:furC,opacity:0.45}));
+  // Duvet
+  p.push(svgElem('rect',{x:65,y:77,width:69,height:34,rx:3,fill:'white',opacity:0.7}));
+  // Pillow L
+  p.push(svgElem('rect',{x:67,y:79,width:28,height:14,rx:4,fill:'white',opacity:1}));
+  p.push(svgElem('rect',{x:68,y:80,width:26,height:12,rx:3,fill:'white',stroke:accentC,'stroke-width':1,opacity:0.8}));
+  // Pillow R
+  p.push(svgElem('rect',{x:103,y:79,width:28,height:14,rx:4,fill:'white',opacity:1}));
+  p.push(svgElem('rect',{x:104,y:80,width:26,height:12,rx:3,fill:'white',stroke:accentC,'stroke-width':1,opacity:0.8}));
+  // Duvet fold crease
+  p.push(svgElem('line',{x1:65,y1:95,x2:134,y2:95,stroke:accentC,'stroke-width':1,opacity:0.4}));
+  // Footboard
+  p.push(svgElem('rect',{x:63,y:113,width:73,height:4,rx:2,fill:furC,opacity:0.75}));
+  // Nightstand right
+  p.push(svgElem('rect',{x:137,y:78,width:16,height:14,rx:2,fill:furC,opacity:0.55}));
+  p.push(svgElem('circle',{cx:145,cy:85,r:3.5,fill:furC,opacity:0.4}));
+  // Wardrobe (right wall BR2)
+  p.push(svgElem('rect',{x:140,y:96,width:16,height:20,rx:1,fill:furC,opacity:0.42}));
+  p.push(svgElem('line',{x1:148,y1:96,x2:148,y2:116,stroke:furC,'stroke-width':1,opacity:0.5}));
 
   if (isOcc) {
-    // Guest 1 (top room)
-    const g1x=20, g1y=night?40:30;
-    const fc = night?'#6060a8':'#5040a0';
-    parts.push(`<g class="guest-figure">` +
-      svgElem('circle',{cx:g1x,cy:g1y-7,r:4.5,fill:fc,opacity:0.9}) +
-      svgElem('rect',{x:g1x-4,y:g1y-2,width:9,height:9,rx:2,fill:fc,opacity:0.8}) +
+    const fc = night?'#5050a0':'#4030a0';
+    p.push(`<g class="guest-figure">` +
+      svgElem('circle',{cx:29,cy:52,r:6,fill:fc,opacity:0.85}) +
+      svgElem('rect',{x:23,y:57,width:12,height:10,rx:2,fill:fc,opacity:0.75}) +
     '</g>');
-    // Guest 2 (bottom room)
-    const g2x=20, g2y=night?88:78;
-    parts.push(`<g class="guest-figure">` +
-      svgElem('circle',{cx:g2x,cy:g2y-7,r:4.5,fill:fc,opacity:0.9}) +
-      svgElem('rect',{x:g2x-4,y:g2y-2,width:9,height:9,rx:2,fill:fc,opacity:0.8}) +
+    p.push(`<g class="guest-figure">` +
+      svgElem('circle',{cx:100,cy:109,r:6,fill:fc,opacity:0.85}) +
+      svgElem('rect',{x:94,y:114,width:12,height:3,rx:2,fill:fc,opacity:0.75}) +
     '</g>');
   }
-  if (isDirty) parts.push(svgElem('text',{x:50,y:56,'font-size':18,'text-anchor':'middle',opacity:0.6},'🧹'));
-  if (isMaint) parts.push(svgElem('text',{x:50,y:56,'font-size':18,'text-anchor':'middle',opacity:0.7},'🔧'));
+  if (isDirty) p.push(svgElem('text',{x:80,y:62,'font-size':22,'text-anchor':'middle',opacity:0.6},'🧹'));
+  if (isMaint) p.push(svgElem('text',{x:80,y:62,'font-size':22,'text-anchor':'middle',opacity:0.7},'🔧'));
 
-  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${parts.join('')}</svg>`;
+  return `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">${p.join('')}</svg>`;
 }
 
 function buildPenthouseSVG(r, night, w, h) {
   const isOcc = r.status==='occupied', isDirty=r.status==='dirty', isMaint=r.status==='maintenance';
-  const wallC = isOcc?(night?'#8870a8':'#c09030'):isDirty?'#d8a8a8':isMaint?'#d8c070':'#c8a84a';
+  const wallC  = isOcc?(night?'#8870a8':'#b08028'):isDirty?'#d8a8a8':isMaint?'#d8c070':'#c8a84a';
   const floorC = isOcc?(night?'#f0eefa':'#fdf3e0'):isDirty?'#f7eded':isMaint?'#fdf5e0':'#fdf8ed';
-  const furC = isOcc?(night?'#9070b0':'#a07830'):'#b89040';
-  const goldC = '#c8a840';
+  const furC   = isOcc?(night?'#806090':'#907020'):'#a08030';
+  const goldC  = '#c8a840';
+  const wallW  = 3;
 
-  let parts = [];
-  // Outer floor
-  parts.push(svgElem('rect',{x:5,y:5,width:90,height:90,rx:4,fill:floorC,stroke:wallC,'stroke-width':2.5}));
-  // Gold inner border
-  parts.push(svgElem('rect',{x:8,y:8,width:84,height:84,rx:3,fill:'none',stroke:goldC,'stroke-width':1.2,opacity:0.6}));
+  let p = [];
 
-  // ── Room dividers ──
-  // Vertical wall at x=52 splitting left living/kitchen from right bedrooms
-  parts.push(svgElem('line',{x1:52,y1:5,x2:52,y2:95,stroke:wallC,'stroke-width':2,opacity:0.8}));
-  // Horizontal wall at y=52 splitting bedroom 1 from bedrooms 2&3 on right
-  parts.push(svgElem('line',{x1:52,y1:52,x2:95,y2:52,stroke:wallC,'stroke-width':2,opacity:0.8}));
+  // ── Outer walls ──
+  p.push(svgElem('rect',{x:0,y:0,width:160,height:120,fill:wallC}));
+  p.push(svgElem('rect',{x:wallW,y:wallW,width:154,height:114,fill:floorC}));
+  // Gold inner accent line
+  p.push(svgElem('rect',{x:5,y:5,width:150,height:110,rx:1,fill:'none',stroke:goldC,'stroke-width':1,opacity:0.5}));
 
-  // ── LEFT WING: Living Area + Kitchen ──
-  // Living area sofa (top-left)
-  parts.push(svgElem('rect',{x:9,y:10,width:26,height:16,rx:3,fill:furC,opacity:0.5}));
-  parts.push(svgElem('rect',{x:11,y:30,width:11,height:10,rx:3,fill:furC,opacity:0.42}));
-  parts.push(svgElem('rect',{x:24,y:30,width:11,height:10,rx:3,fill:furC,opacity:0.42}));
+  // ══ LAYOUT (160×120):
+  //   Left zone (x 0-62): Kitchen top (y 0-52) / Living room bottom (y 52-120)
+  //   Center vertical wall x=62
+  //   Master bedroom (x 62-160, y 0-62) top-right
+  //   Horizontal wall y=62 from x=62 to 160
+  //   Guest BR2 (x 62-112, y 62-120) bottom-mid
+  //   Guest BR3 (x 112-160, y 62-120) bottom-right
+  //   Vertical wall x=112 from y=62 to 120
+
+  // ── WALLS ──
+  // Vertical center wall (x=62, full height)
+  p.push(svgElem('rect',{x:62,y:wallW,width:wallW,height:117,fill:wallC}));
+  // Door gap in center wall (kitchen to master BR): y=18-36
+  p.push(svgElem('rect',{x:62,y:18,width:wallW,height:18,fill:floorC}));
+  p.push(svgElem('path',{d:`M65,18 Q80,18 80,36`,fill:'none',stroke:wallC,'stroke-width':1,'stroke-dasharray':'3,2',opacity:0.55}));
+  // Door gap in center wall (living to bottom hall): y=78-96
+  p.push(svgElem('rect',{x:62,y:78,width:wallW,height:18,fill:floorC}));
+  p.push(svgElem('path',{d:`M65,78 Q80,78 80,96`,fill:'none',stroke:wallC,'stroke-width':1,'stroke-dasharray':'3,2',opacity:0.55}));
+
+  // Horizontal wall (y=62, x=62 to 160)
+  p.push(svgElem('rect',{x:62,y:62,width:98,height:wallW,fill:wallC}));
+  // Door gap BR2: x=65-83
+  p.push(svgElem('rect',{x:65,y:62,width:18,height:wallW,fill:floorC}));
+  p.push(svgElem('path',{d:`M65,65 Q65,80 80,80`,fill:'none',stroke:wallC,'stroke-width':1,'stroke-dasharray':'3,2',opacity:0.55}));
+
+  // Vertical wall between BR2 and BR3 (x=112, y=62-120)
+  p.push(svgElem('rect',{x:112,y:62,width:wallW,height:58,fill:wallC}));
+  // Door gap BR3: y=65-83
+  p.push(svgElem('rect',{x:112,y:65,width:wallW,height:18,fill:floorC}));
+
+  // ── Horizontal kitchen/living divider in left zone (y=52) ──
+  p.push(svgElem('rect',{x:wallW,y:52,width:59,height:wallW,fill:wallC}));
+  // Door gap: x=8-26
+  p.push(svgElem('rect',{x:8,y:52,width:18,height:wallW,fill:floorC}));
+  p.push(svgElem('path',{d:`M8,55 Q8,68 22,68`,fill:'none',stroke:wallC,'stroke-width':1,'stroke-dasharray':'3,2',opacity:0.55}));
+
+  // ── Windows ──
+  p.push(svgElem('rect',{x:8,y:0,width:44,height:wallW,fill:'#b0d8f0',opacity:0.9}));
+  p.push(svgElem('line',{x1:30,y1:0,x2:30,y2:wallW,stroke:'white','stroke-width':1.5}));
+  p.push(svgElem('rect',{x:70,y:0,width:42,height:wallW,fill:'#b0d8f0',opacity:0.9}));
+  p.push(svgElem('line',{x1:91,y1:0,x2:91,y2:wallW,stroke:'white','stroke-width':1.5}));
+  p.push(svgElem('rect',{x:120,y:0,width:32,height:wallW,fill:'#b0d8f0',opacity:0.9}));
+  p.push(svgElem('line',{x1:136,y1:0,x2:136,y2:wallW,stroke:'white','stroke-width':1.5}));
+  // Left side window
+  p.push(svgElem('rect',{x:0,y:8,width:wallW,height:30,fill:'#b0d8f0',opacity:0.7}));
+  p.push(svgElem('line',{x1:0,y1:23,x2:wallW,y2:23,stroke:'white','stroke-width':1.5}));
+
+  // ── Entry door (bottom-left) ──
+  p.push(svgElem('rect',{x:wallW,y:104,width:20,height:wallW,fill:floorC}));
+  p.push(svgElem('path',{d:`M${wallW},104 Q${wallW+20},104 ${wallW+20},117`,fill:'none',stroke:wallC,'stroke-width':1,'stroke-dasharray':'3,2',opacity:0.7}));
+
+  // ══ LEFT-TOP: KITCHEN ══
+  // Counter — along top and left walls (L-shape)
+  p.push(svgElem('rect',{x:wallW,y:wallW,width:59,height:9,rx:1,fill:furC,opacity:0.5,stroke:goldC,'stroke-width':0.8})); // top counter
+  p.push(svgElem('rect',{x:wallW,y:wallW,width:9,height:49,rx:1,fill:furC,opacity:0.5,stroke:goldC,'stroke-width':0.8})); // left counter
+  // Stovetop (on top counter)
+  p.push(svgElem('circle',{cx:22,cy:8,r:3,fill:'none',stroke:goldC,'stroke-width':1.2,opacity:0.8}));
+  p.push(svgElem('circle',{cx:35,cy:8,r:3,fill:'none',stroke:goldC,'stroke-width':1.2,opacity:0.8}));
+  p.push(svgElem('circle',{cx:48,cy:8,r:3,fill:'none',stroke:goldC,'stroke-width':1.2,opacity:0.8}));
+  // Sink (right end of top counter)
+  p.push(svgElem('rect',{x:52,y:wallW,width:9,height:9,rx:1,fill:'none',stroke:goldC,'stroke-width':1.2,opacity:0.7}));
+  p.push(svgElem('circle',{cx:56,cy:7,r:2,fill:'none',stroke:goldC,'stroke-width':0.9,opacity:0.55}));
+  // Fridge (left counter top section)
+  p.push(svgElem('rect',{x:wallW,y:3,width:9,height:14,rx:1,fill:furC,opacity:0.65}));
+  p.push(svgElem('line',{x1:wallW,y1:12,x2:12,y2:12,stroke:goldC,'stroke-width':0.8,opacity:0.5}));
+  // Kitchen island / prep table
+  p.push(svgElem('rect',{x:18,y:18,width:32,height:18,rx:2,fill:furC,opacity:0.3,stroke:goldC,'stroke-width':0.8}));
+  // Bar stools at island
+  p.push(svgElem('circle',{cx:24,cy:15,r:4,fill:furC,opacity:0.35}));
+  p.push(svgElem('circle',{cx:36,cy:15,r:4,fill:furC,opacity:0.35}));
+  p.push(svgElem('circle',{cx:48,cy:15,r:4,fill:furC,opacity:0.35}));
+  // Dining table (round, lower kitchen area)
+  p.push(svgElem('ellipse',{cx:30,cy:42,rx:20,ry:10,fill:furC,opacity:0.28,stroke:furC,'stroke-width':1}));
+  // Chairs around dining table
+  p.push(svgElem('circle',{cx:12,cy:42,r:4,fill:furC,opacity:0.35}));
+  p.push(svgElem('circle',{cx:48,cy:42,r:4,fill:furC,opacity:0.35}));
+  p.push(svgElem('circle',{cx:30,cy:32,r:4,fill:furC,opacity:0.35}));
+  p.push(svgElem('circle',{cx:30,cy:52,r:4,fill:furC,opacity:0.28})); // overlaps wall slightly
+
+  // ══ LEFT-BOTTOM: LIVING ROOM ══
+  // Sofa (L-shape, bottom-left corner)
+  p.push(svgElem('rect',{x:5,y:57,width:46,height:13,rx:4,fill:furC,opacity:0.48})); // long back
+  p.push(svgElem('rect',{x:5,y:57,width:5,height:22,rx:2,fill:furC,opacity:0.42}));   // left arm
+  p.push(svgElem('rect',{x:46,y:57,width:5,height:22,rx:2,fill:furC,opacity:0.42}));  // right arm
+  p.push(svgElem('rect',{x:10,y:61,width:36,height:16,rx:2,fill:furC,opacity:0.28})); // seat
   // Coffee table
-  parts.push(svgElem('rect',{x:13,y:43,width:18,height:8,rx:2,fill:furC,opacity:0.28}));
+  p.push(svgElem('ellipse',{cx:29,cy:88,rx:18,ry:10,fill:furC,opacity:0.26,stroke:furC,'stroke-width':1}));
+  // Armchair
+  p.push(svgElem('rect',{x:7,y:82,width:14,height:14,rx:3,fill:furC,opacity:0.38}));
+  p.push(svgElem('rect',{x:7,y:82,width:14,height:4,rx:2,fill:furC,opacity:0.2}));
+  // Second armchair
+  p.push(svgElem('rect',{x:40,y:82,width:14,height:14,rx:3,fill:furC,opacity:0.38}));
+  p.push(svgElem('rect',{x:40,y:82,width:14,height:4,rx:2,fill:furC,opacity:0.2}));
+  // TV console (against center wall)
+  p.push(svgElem('rect',{x:5,y:100,width:54,height:5,rx:1,fill:furC,opacity:0.52}));
+  p.push(svgElem('rect',{x:12,y:100,width:40,height:4,fill:'#283040',opacity:0.35,rx:1}));
+  // Fireplace / accent wall decor
+  p.push(svgElem('rect',{x:21,y:104,width:18,height:13,rx:2,fill:furC,opacity:0.32,stroke:goldC,'stroke-width':0.8}));
 
-  // Kitchen divider line
-  parts.push(svgElem('line',{x1:9,y1:55,x2:50,y2:55,stroke:goldC,'stroke-width':1,opacity:0.5}));
-  // Kitchen label area — counter L-shape
-  parts.push(svgElem('rect',{x:9,y:57,width:26,height:6,rx:1,fill:furC,opacity:0.4,stroke:goldC,'stroke-width':0.8}));
-  parts.push(svgElem('rect',{x:9,y:63,width:6,height:24,rx:1,fill:furC,opacity:0.4,stroke:goldC,'stroke-width':0.8}));
-  // Stovetop burners
-  parts.push(svgElem('circle',{cx:20,cy:60,r:2.5,fill:'none',stroke:goldC,'stroke-width':1,opacity:0.7}));
-  parts.push(svgElem('circle',{cx:28,cy:60,r:2.5,fill:'none',stroke:goldC,'stroke-width':1,opacity:0.7}));
-  // Kitchen sink
-  parts.push(svgElem('rect',{x:35,y:57,width:13,height:8,rx:1,fill:'none',stroke:goldC,'stroke-width':1,opacity:0.6}));
-  parts.push(svgElem('circle',{cx:41,cy:61,r:2,fill:'none',stroke:goldC,'stroke-width':0.8,opacity:0.5}));
-  // Dining table (bottom-left)
-  parts.push(svgElem('circle',{cx:28,cy:82,r:9,fill:furC,opacity:0.28,stroke:furC,'stroke-width':1}));
-  parts.push(svgElem('circle',{cx:18,cy:78,r:3.5,fill:furC,opacity:0.32}));
-  parts.push(svgElem('circle',{cx:38,cy:78,r:3.5,fill:furC,opacity:0.32}));
-  parts.push(svgElem('circle',{cx:28,cy:73,r:3.5,fill:furC,opacity:0.32}));
-  parts.push(svgElem('circle',{cx:28,cy:91,r:3.5,fill:furC,opacity:0.32}));
+  // ══ MASTER BEDROOM (top-right, x=65-160, y=0-62) ══
+  // Headboard (against top wall)
+  p.push(svgElem('rect',{x:66,y:wallW,width:77,height:10,rx:3,fill:furC,opacity:0.92}));
+  // Mattress
+  p.push(svgElem('rect',{x:67,y:13,width:75,height:40,rx:3,fill:furC,opacity:0.42}));
+  // Duvet
+  p.push(svgElem('rect',{x:69,y:15,width:71,height:36,rx:3,fill:'white',opacity:0.72}));
+  // Pillow L
+  p.push(svgElem('rect',{x:71,y:17,width:28,height:14,rx:4,fill:'white',opacity:1}));
+  p.push(svgElem('rect',{x:72,y:18,width:26,height:12,rx:3,fill:'white',stroke:goldC,'stroke-width':1,opacity:0.8}));
+  // Pillow R
+  p.push(svgElem('rect',{x:109,y:17,width:28,height:14,rx:4,fill:'white',opacity:1}));
+  p.push(svgElem('rect',{x:110,y:18,width:26,height:12,rx:3,fill:'white',stroke:goldC,'stroke-width':1,opacity:0.8}));
+  // Duvet crease
+  p.push(svgElem('line',{x1:69,y1:33,x2:140,y2:33,stroke:goldC,'stroke-width':1,opacity:0.45}));
+  // Footboard
+  p.push(svgElem('rect',{x:67,y:53,width:75,height:6,rx:2,fill:furC,opacity:0.8}));
+  // Nightstand L (between center wall and bed)
+  // Nightstand R (right wall)
+  p.push(svgElem('rect',{x:143,y:15,width:12,height:14,rx:2,fill:furC,opacity:0.58,stroke:goldC,'stroke-width':0.7}));
+  p.push(svgElem('circle',{cx:149,cy:22,r:3,fill:furC,opacity:0.4}));
+  // En-suite bathroom (master, top-right corner, behind wardrobe)
+  p.push(svgElem('rect',{x:138,y:33,width:19,height:26,rx:1,fill:'#e8e4d8',opacity:0.55,stroke:goldC,'stroke-width':0.9}));
+  // Tub (top-down)
+  p.push(svgElem('rect',{x:140,y:35,width:15,height:22,rx:3,fill:'none',stroke:goldC,'stroke-width':1.3,opacity:0.7}));
+  p.push(svgElem('ellipse',{cx:147,cy:46,rx:5,ry:8,fill:'none',stroke:goldC,'stroke-width':1,opacity:0.35}));
+  // Wardrobe (right wall, below en-suite)
+  p.push(svgElem('rect',{x:141,y:34,width:0,height:0})); // placeholder
+  // Walk-in wardrobe (left of en-suite strip)
+  p.push(svgElem('rect',{x:66,y:37,width:14,height:22,rx:1,fill:furC,opacity:0.4}));
+  p.push(svgElem('line',{x1:73,y1:37,x2:73,y2:59,stroke:furC,'stroke-width':1,opacity:0.5}));
+  p.push(svgElem('circle',{cx:73,cy:48,r:1.5,fill:furC,opacity:0.7})); // door knob
 
-  // ── RIGHT-TOP: Master Bedroom ──
-  // Bed 1 (master, right-top quadrant)
-  parts.push(svgElem('rect',{x:55,y:10,width:36,height:34,rx:4,fill:furC,opacity:0.75}));
-  parts.push(svgElem('rect',{x:57,y:12,width:14,height:12,rx:3,fill:'white',opacity:0.7}));
-  parts.push(svgElem('rect',{x:74,y:12,width:14,height:12,rx:3,fill:'white',opacity:0.7}));
-  parts.push(svgElem('line',{x1:55,y1:28,x2:91,y2:28,stroke:goldC,'stroke-width':1,opacity:0.6}));
+  // ══ GUEST BEDROOM 2 (bottom-mid, x=65-112, y=65-120) ══
+  // Headboard (against h-wall y=65)
+  p.push(svgElem('rect',{x:66,y:66,width:43,height:8,rx:2,fill:furC,opacity:0.9}));
+  // Mattress
+  p.push(svgElem('rect',{x:67,y:74,width:41,height:38,rx:3,fill:furC,opacity:0.42}));
+  // Duvet
+  p.push(svgElem('rect',{x:69,y:76,width:37,height:34,rx:3,fill:'white',opacity:0.72}));
+  // Pillow L
+  p.push(svgElem('rect',{x:71,y:78,width:15,height:12,rx:3,fill:'white',opacity:1}));
+  p.push(svgElem('rect',{x:72,y:79,width:13,height:10,rx:2,fill:'white',stroke:goldC,'stroke-width':0.9,opacity:0.8}));
+  // Pillow R
+  p.push(svgElem('rect',{x:90,y:78,width:15,height:12,rx:3,fill:'white',opacity:1}));
+  p.push(svgElem('rect',{x:91,y:79,width:13,height:10,rx:2,fill:'white',stroke:goldC,'stroke-width':0.9,opacity:0.8}));
+  // Crease
+  p.push(svgElem('line',{x1:69,y1:92,x2:106,y2:92,stroke:goldC,'stroke-width':0.9,opacity:0.4}));
+  // Footboard
+  p.push(svgElem('rect',{x:67,y:112,width:41,height:4,rx:2,fill:furC,opacity:0.75}));
+  // Nightstand (right side, against v-wall)
+  p.push(svgElem('rect',{x:97,y:76,width:12,height:12,rx:2,fill:furC,opacity:0.55,stroke:goldC,'stroke-width':0.7}));
+  // Private bathroom BR2 (left corner)
+  p.push(svgElem('rect',{x:wallW+62,y:wallW+62,width:wallW,height:0})); // noop
+  p.push(svgElem('rect',{x:66,y:100,width:43,height:wallW,fill:wallC}));
+  p.push(svgElem('rect',{x:66,y:100,width:14,height:wallW,fill:floorC})); // door gap
+  p.push(svgElem('rect',{x:66,y:103,width:43,height:14,fill:'#e4e0d8',opacity:0.45}));
+  p.push(svgElem('rect',{x:68,y:105,width:18,height:10,rx:3,fill:'none',stroke:goldC,'stroke-width':1.2,opacity:0.65})); // tub
+  p.push(svgElem('rect',{x:90,y:105,width:10,height:10,rx:1,fill:furC,opacity:0.28})); // toilet
+  p.push(svgElem('ellipse',{cx:95,cy:113,rx:4,ry:5,fill:'none',stroke:goldC,'stroke-width':1,opacity:0.55}));
+
+  // ══ GUEST BEDROOM 3 (bottom-right, x=115-160, y=65-120) ══
+  // Headboard (against h-wall)
+  p.push(svgElem('rect',{x:116,y:66,width:40,height:8,rx:2,fill:furC,opacity:0.9}));
+  // Mattress
+  p.push(svgElem('rect',{x:117,y:74,width:38,height:38,rx:3,fill:furC,opacity:0.42}));
+  // Duvet
+  p.push(svgElem('rect',{x:119,y:76,width:34,height:34,rx:3,fill:'white',opacity:0.72}));
+  // Pillow L
+  p.push(svgElem('rect',{x:121,y:78,width:13,height:12,rx:3,fill:'white',opacity:1}));
+  p.push(svgElem('rect',{x:122,y:79,width:11,height:10,rx:2,fill:'white',stroke:goldC,'stroke-width':0.9,opacity:0.8}));
+  // Pillow R
+  p.push(svgElem('rect',{x:139,y:78,width:13,height:12,rx:3,fill:'white',opacity:1}));
+  p.push(svgElem('rect',{x:140,y:79,width:11,height:10,rx:2,fill:'white',stroke:goldC,'stroke-width':0.9,opacity:0.8}));
+  // Crease
+  p.push(svgElem('line',{x1:119,y1:92,x2:153,y2:92,stroke:goldC,'stroke-width':0.9,opacity:0.4}));
+  // Footboard
+  p.push(svgElem('rect',{x:117,y:112,width:38,height:4,rx:2,fill:furC,opacity:0.75}));
   // Nightstand
-  parts.push(svgElem('rect',{x:55,y:46,width:8,height:5,rx:1,fill:furC,opacity:0.5,stroke:goldC,'stroke-width':0.7}));
-  // En-suite bathroom (master)
-  parts.push(svgElem('rect',{x:82,y:5,width:13,height:46,rx:1,fill:furC,opacity:0.12,stroke:goldC,'stroke-width':0.9}));
-  parts.push(svgElem('ellipse',{cx:88,cy:20,rx:5,ry:4,fill:'none',stroke:goldC,'stroke-width':1,opacity:0.6}));
-  parts.push(svgElem('rect',{x:84,y:30,width:9,height:14,rx:2,fill:'none',stroke:goldC,'stroke-width':1,opacity:0.55}));
-  // Large windows (top)
-  parts.push(svgElem('rect',{x:55,y:5,width:25,height:4,fill:'#b0d8f0',opacity:0.8}));
-  parts.push(svgElem('line',{x1:67,y1:5,x2:67,y2:9,stroke:'white','stroke-width':1.2,opacity:0.9}));
-
-  // ── RIGHT-BOTTOM: Two Guest Bedrooms ──
-  // Horizontal split at y=52, vertical at x=73 splitting into two
-  parts.push(svgElem('line',{x1:73,y1:52,x2:73,y2:95,stroke:wallC,'stroke-width':1.5,opacity:0.7}));
-
-  // Bed 2 (guest room bottom-left of right wing)
-  parts.push(svgElem('rect',{x:55,y:55,width:16,height:24,rx:3,fill:furC,opacity:0.7}));
-  parts.push(svgElem('rect',{x:57,y:57,width:12,height:9,rx:2,fill:'white',opacity:0.65}));
-  parts.push(svgElem('line',{x1:55,y1:68,x2:71,y2:68,stroke:goldC,'stroke-width':0.8,opacity:0.5}));
-  // Nightstand 2
-  parts.push(svgElem('rect',{x:57,y:80,width:7,height:5,rx:1,fill:furC,opacity:0.45}));
-  // Bathroom 2 (shared, bottom-left)
-  parts.push(svgElem('rect',{x:55,y:87,width:16,height:8,rx:1,fill:furC,opacity:0.12,stroke:goldC,'stroke-width':0.8}));
-  parts.push(svgElem('ellipse',{cx:63,cy:91,rx:5,ry:3,fill:'none',stroke:goldC,'stroke-width':0.9,opacity:0.6}));
-
-  // Bed 3 (guest room bottom-right of right wing)
-  parts.push(svgElem('rect',{x:75,y:55,width:16,height:24,rx:3,fill:furC,opacity:0.7}));
-  parts.push(svgElem('rect',{x:77,y:57,width:12,height:9,rx:2,fill:'white',opacity:0.65}));
-  parts.push(svgElem('line',{x1:75,y1:68,x2:91,y2:68,stroke:goldC,'stroke-width':0.8,opacity:0.5}));
-  // Nightstand 3
-  parts.push(svgElem('rect',{x:77,y:80,width:7,height:5,rx:1,fill:furC,opacity:0.45}));
-  // Bathroom 3
-  parts.push(svgElem('rect',{x:75,y:87,width:16,height:8,rx:1,fill:furC,opacity:0.12,stroke:goldC,'stroke-width':0.8}));
-  parts.push(svgElem('ellipse',{cx:83,cy:91,rx:5,ry:3,fill:'none',stroke:goldC,'stroke-width':0.9,opacity:0.6}));
-
-  // Side window (left)
-  parts.push(svgElem('rect',{x:5,y:10,width:3,height:22,fill:'#b0d8f0',opacity:0.6}));
+  p.push(svgElem('rect',{x:146,y:76,width:10,height:12,rx:2,fill:furC,opacity:0.55,stroke:goldC,'stroke-width':0.7}));
+  // Private bathroom BR3
+  p.push(svgElem('rect',{x:116,y:100,width:40,height:wallW,fill:wallC}));
+  p.push(svgElem('rect',{x:116,y:100,width:14,height:wallW,fill:floorC}));
+  p.push(svgElem('rect',{x:116,y:103,width:40,height:14,fill:'#e4e0d8',opacity:0.45}));
+  p.push(svgElem('rect',{x:118,y:105,width:18,height:10,rx:3,fill:'none',stroke:goldC,'stroke-width':1.2,opacity:0.65})); // tub
+  p.push(svgElem('rect',{x:140,y:105,width:10,height:10,rx:1,fill:furC,opacity:0.28}));
+  p.push(svgElem('ellipse',{cx:145,cy:113,rx:4,ry:5,fill:'none',stroke:goldC,'stroke-width':1,opacity:0.55}));
 
   if (isOcc) {
-    const fc = night?'#8060a8':'#906020';
-    // Guest in living area
-    const gx=20, gy=night?46:38;
-    parts.push(`<g class="guest-figure">` +
-      svgElem('circle',{cx:gx,cy:gy-7,r:5,fill:fc,opacity:0.9}) +
-      svgElem('rect',{x:gx-5,y:gy-2,width:10,height:10,rx:2,fill:fc,opacity:0.8}) +
+    const fc = night?'#806090':'#806020';
+    p.push(`<g class="guest-figure">` +
+      svgElem('circle',{cx:29,cy:76,r:6,fill:fc,opacity:0.88}) +
+      svgElem('rect',{x:23,y:81,width:12,height:10,rx:2,fill:fc,opacity:0.78}) +
     '</g>');
   }
-  if (isDirty) parts.push(svgElem('text',{x:50,y:56,'font-size':20,'text-anchor':'middle',opacity:0.6},'🧹'));
-  if (isMaint) parts.push(svgElem('text',{x:50,y:56,'font-size':20,'text-anchor':'middle',opacity:0.7},'🔧'));
+  if (isDirty) p.push(svgElem('text',{x:80,y:62,'font-size':22,'text-anchor':'middle',opacity:0.6},'🧹'));
+  if (isMaint) p.push(svgElem('text',{x:80,y:62,'font-size':22,'text-anchor':'middle',opacity:0.7},'🔧'));
 
-  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${parts.join('')}</svg>`;
+  return `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">${p.join('')}</svg>`;
 }
 
 function roomStatusLabel(r, night) {
